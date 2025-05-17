@@ -20,6 +20,10 @@ use App\Http\Controllers\ProfilMahasiswaController;
 use App\Http\Controllers\MonitoringMahasiswaController;
 use App\Http\Controllers\PengajuanMahasiswaController;
 
+//dosen
+use App\Http\Controllers\ProfilDosenController;
+use App\Http\Controllers\MahasiswaDosenController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -140,16 +144,28 @@ Route::get('/', [WelcomeController::class, 'index']);
     Route::middleware('auth','role:dosen_pembimbing')->group(function () {
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
         // PROFILE(dari breeze)
-        Route::prefix('profile')->group(function () {
-            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        // Route::prefix('profile')->group(function () {
+        //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        //     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        //     Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        // });
+
+        Route::prefix('profil')->name('dosen.profil.')->group(function () {
+            Route::get('/dosen', [profilDosenController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
+            Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
         });
 
         
 
 
+        
+
+
     });
+
      // HANYA MAHASISWA
     Route::middleware('auth','role:mahasiswa')->group(function () {
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
