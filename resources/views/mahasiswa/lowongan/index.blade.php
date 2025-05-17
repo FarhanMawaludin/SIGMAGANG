@@ -8,7 +8,7 @@
         @foreach ($lowongan as $item)
             <div class="max-w-sm w-full mx-auto bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div class="p-6">
-                    <img src="{{ asset('storage/' . $item->perusahaan->foto) }}" alt="KAI Logo" class="h-20">
+                    <img src="{{ asset('storage/' . $item->perusahaan->foto) }}" alt="Logo {{ $item->perusahaan->nama }}" class="h-28">
                     <h2 class="text-[14px] font-medium text-gray-400 mb-2">{{ $item->perusahaan->nama }}</h2>
                     <h3 class="text-[18px] font-semibold text-mirage-950 leading-snug mb-2">
                         {{ $item->nama }}

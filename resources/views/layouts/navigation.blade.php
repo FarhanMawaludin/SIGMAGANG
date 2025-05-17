@@ -13,7 +13,7 @@
                         </path>
                     </svg>
                 </button>
-                <a href="https://flowbite.com" class="flex ms-2 md:me-24">
+                <a href="" class="flex ms-2 md:me-24">
                     <img src="{{ asset('images/Logo-Sigmagang.png') }}" class="h-8 me-3" alt="FlowBite Logo" />
                     <span
                         class="self-center text-[18px] font-semibold sm:text-[20px] whitespace-nowrap text-orange-500">SIGMAGANG</span>
