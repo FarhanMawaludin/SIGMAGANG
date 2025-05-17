@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('batas_pendaftaran');
             $table->enum('lokasi', ['malang','luar malang']);
             $table->enum('tipe_magang', ['onsite','remote']);
+            $table->decimal('ipk', 3, 2)->nullable();
             $table->integer('jumlah_magang')->nullable();
             $table->bigInteger('perusahaan_id')->unsigned();
             $table->bigInteger('periode_id')->unsigned();
