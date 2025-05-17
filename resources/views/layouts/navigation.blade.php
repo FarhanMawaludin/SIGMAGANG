@@ -24,7 +24,7 @@
                     <div class="flex items-center gap-4">
                         <div class="flex flex-col items-end">
                             <span class="text-mirage-950 font-medium">{{Auth::user()->name}}</span>
-                            <span class="text-sm text-gray-500">{{Auth::user()->role}}</span>
+                            <span class="text-sm text-gray-500">{{ str_replace('_', ' ', Auth::user()->role) }}</span>
                         </div>
                         <button type="button"
                             class="flex items-center text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
