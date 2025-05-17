@@ -48,12 +48,18 @@ class Lowongan extends Model
         return $this->hasMany(DokumenLowongan::class);
     }
 
-    public function skills(): BelongsToMany
+    public function skill()
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class, 'lowongan_skill', 'lowongan_id', 'skill_id');
     }
+
     public function jenisMagang(): BelongsTo
     {
         return $this->belongsTo(JenisMagang::class);
+    }
+
+    public function pengajuan()
+    {
+        return $this->hasMany(Pengajuan::class, 'lowongan_id');
     }
 }

@@ -141,7 +141,6 @@ Route::get('/', [WelcomeController::class, 'index']);
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
         // PROFILE(dari breeze)
         Route::prefix('profile')->group(function () {
-            
             Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
             Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -155,12 +154,12 @@ Route::get('/', [WelcomeController::class, 'index']);
     Route::middleware('auth','role:mahasiswa')->group(function () {
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
         // PROFILE(dari breeze)
-        Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
-            Route::get('/', [ProfileController::class, 'index'])->name('index');
-            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        });
+        // Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
+        //     Route::get('/', [ProfileController::class, 'index'])->name('index');
+        //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        //     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+        //     Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        // });
 
         Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
             Route::get('/mahasiswa', [profilMahasiswaController::class, 'index'])->name('index');
@@ -168,6 +167,7 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {
             Route::get('/mahasiswa', [LowonganMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/{id}', [LowonganMahasiswaController::class, 'show'])->name('show');
         });
 
         Route::prefix('pengajuan')->name('mahasiswa.pengajuan.')->group(function () {
