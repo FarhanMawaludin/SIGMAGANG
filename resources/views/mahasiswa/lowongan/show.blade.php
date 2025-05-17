@@ -7,7 +7,7 @@
             <div class="flex flex-col items-start gap-1">
                 <!-- Logo di atas -->
                 <img src="{{ asset('storage/' . $lowongan->perusahaan->foto) }}" alt="Logo {{ $lowongan->perusahaan->nama }}"
-                    class="w-24 h-24 object-contain" />
+                    class="w-28 h-28 object-contain" />
 
                 <!-- Informasi Lowongan -->
                 <div class="flex justify-between items-center">
@@ -228,10 +228,8 @@
                 <hr class="mb-4 mt-4 border-gray-200">
 
                 <h2 class="text-xl font-bold text-gray-900 mb-4">Ulasan Pemagang</h2>
-
-                <!-- Card 1 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="Avatar Farhan"
+                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Farhan"
                         class="w-10 h-10 rounded-full object-cover" />
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Farhan Mawaludin</h3>
@@ -241,10 +239,8 @@
                             yang belum pernah saya dapatkan sebelumnya</p>
                     </div>
                 </div>
-
-                <!-- Card 2 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://avatars.githubusercontent.com/u/2?v=4" alt="Avatar Siti"
+                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Siti"
                         class="w-10 h-10 rounded-full object-cover" />
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Siti Markona</h3>
@@ -254,10 +250,8 @@
                             yang belum pernah saya dapatkan sebelumnya</p>
                     </div>
                 </div>
-
-                <!-- Card 3 -->
                 <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://avatars.githubusercontent.com/u/3?v=4" alt="Avatar Markova"
+                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Markova"
                         class="w-10 h-10 rounded-full object-cover" />
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Markova</h3>
