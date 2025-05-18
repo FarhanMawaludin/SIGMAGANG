@@ -87,6 +87,7 @@ Route::get('/', [WelcomeController::class, 'index']);
             Route::get('/', [LowonganController::class, 'index'])->name('index');
             Route::get('/create', [LowonganController::class, 'create'])->name('create');
             Route::post('/', [LowonganController::class, 'store'])->name('store');
+            Route::get('/{id}', [LowonganController::class, 'show'])->name('show');
             Route::get('/{id}/edit', [LowonganController::class, 'edit'])->name('edit');
             Route::put('/{id}', [LowonganController::class, 'update'])->name('update');
             Route::delete('/{id}', [LowonganController::class, 'destroy'])->name('destroy');
