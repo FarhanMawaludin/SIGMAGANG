@@ -91,7 +91,8 @@
                             <div class="flex gap-2 flex-wrap">
                                 <!-- Detail -->
                                 <button
-                                    class="inline-flex items-center bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm cursor-pointer">
+                                    class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm cursor-pointer"
+                                    onclick="location.href='{{ route('admin.lowongan.show', $item->id) }}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

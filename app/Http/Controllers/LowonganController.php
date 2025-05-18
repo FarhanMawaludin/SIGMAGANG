@@ -7,6 +7,7 @@ use App\Models\Perusahaan;
 use App\Models\Periode;
 use App\Models\Prodi;
 use App\Models\Skill;
+use App\Models\JenisMagang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -94,6 +95,24 @@ class LowonganController extends Controller
         }catch(\Exception $e){
             return redirect()->back()->withInput()->with('error', 'Gagal menambahkan lowongan.');
         }
+    }
+
+    public function show($id)
+    {
+        $activemenu = 'lowongan';
+        $lowongan = Lowongan::with(['perusahaan','periode','prodi', 'jenismagang'])->findOrFail($id);
+        $perusahaan = Perusahaan::all();
+        $periode = Periode::all();
+        $prodi = Prodi::all();
+        $jenismagang = JenisMagang::all();
+        return view('admin.lowongan.show', [
+            'activemenu' => $activemenu,
+            'lowongan' => $lowongan,
+            'perusahaan' => $perusahaan,
+            'periode' => $periode,
+            'prodi' => $prodi,
+            'jenismagang' => $jenismagang
+        ]);
     }
 
     public function edit($id)

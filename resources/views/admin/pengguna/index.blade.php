@@ -103,7 +103,7 @@
                         <td class="px-6 py-4 space-x-2">
                             <!-- Detail -->
                             <button
-                                class="inline-flex items-center bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm cursor-pointer" onclick="location.href='{{ route('admin.pengguna.show', $userItem->id) }}'">
+                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm cursor-pointer" onclick="location.href='{{ route('admin.pengguna.show', $userItem->id) }}'">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
