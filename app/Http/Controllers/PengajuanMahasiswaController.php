@@ -8,21 +8,30 @@ use App\Models\Pengajuan;
 
 class PengajuanMahasiswaController extends Controller
 {
-    public function index(){
-        $activemenu='pengajuan';
-        return view('mahasiswa.pengajuan.index',[
-            'activemenu'=>$activemenu
+    public function index()
+    {
+        $activemenu = 'pengajuan';
+        return view('mahasiswa.pengajuan.index', [
+            'activemenu' => $activemenu
         ]);
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
-            'lowongan_id'=>'required',
-            'mahasiswa_id'=>'required',
+            'lowongan_id' => 'required|exists:lowongan,id',
         ]);
-        $pengajuan = Pengajuan::create([
-            'lowongan_id'=>$request->lowongan_id,
-            'mahasiswa_id'=>$request->mahasiswa_id,
+
+        $mahasiswa = auth()->user()->mahasiswa;
+
+        if (!$mahasiswa) {
+            return back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
+        Pengajuan::create([
+            'lowongan_id' => $request->lowongan_id,
+            'mahasiswa_id' => $mahasiswa->id,
         ]);
+
         return redirect()->route('mahasiswa.pengajuan.index')->with('success', 'Pengajuan berhasil dibuat');
     }
 }
