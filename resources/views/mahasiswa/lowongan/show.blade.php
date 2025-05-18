@@ -49,7 +49,7 @@
             <div class="text-right flex flex-col items-center">
                 <form action="{{route('mahasiswa.pengajuan.store')}}" method="POST">
                     @csrf
-                    <input type="hidden" name="mahasiswa_id" value="{{ auth()->user()->id }}">
+                    {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
                     <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
                     <button type="submit"
                         class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar Sekarang</button>
