@@ -193,6 +193,8 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('monitoring')->name('mahasiswa.monitoring.')->group(function () {
             Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
+
         });
     });
 
