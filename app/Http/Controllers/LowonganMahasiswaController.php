@@ -8,6 +8,7 @@ use App\Models\Perusahaan;
 use App\Models\JenisMagang;
 use App\Models\Skill;
 use App\Models\Prodi;
+use App\Models\Pengajuan;
 
 class LowonganMahasiswaController extends Controller
 {
@@ -38,8 +39,12 @@ class LowonganMahasiswaController extends Controller
 
         $perusahaan = Perusahaan::all();
         $jenismagang = Jenismagang::all();
+        $pengajuan = Pengajuan::where('mahasiswa_id', auth()->user()->id)
+        ->where('status', '!=', 'rejected')
+        ->latest()
+        ->first();
         $prodi = Prodi::all();
-        return view('mahasiswa.lowongan.index', compact('activemenu', 'lowongan','jenismagang','prodi', 'search', 'category', 'perusahaan'));
+        return view('mahasiswa.lowongan.index', compact('activemenu', 'lowongan','jenismagang','prodi', 'search', 'category', 'perusahaan', 'pengajuan'));
     }
 
     public function show($id)

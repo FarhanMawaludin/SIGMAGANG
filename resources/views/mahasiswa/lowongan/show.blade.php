@@ -47,9 +47,13 @@
 
             <!-- Button -->
             <div class="text-right flex flex-col items-center">
-                <a href="#"
-                    class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar
-                    Sekarang</a>
+                <form action="{{route('mahasiswa.pengajuan.store')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="mahasiswa_id" value="{{ auth()->user()->id }}">
+                    <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
+                    <button type="submit"
+                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar Sekarang</button>
+                </form>
                 <p class="text-sm text-gray-500 mt-2">{{ $lowongan->jumlah_magang }} Posisi •
                     {{ $lowongan->pengajuan_count }} Pelamar</p>
             </div>

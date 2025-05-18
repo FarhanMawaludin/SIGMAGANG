@@ -4,6 +4,18 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800">Rekomendasi Lowongan</h1>
     </div>
+    @if ($pengajuan)
+    <div class="mb-4">
+        <h2 class="text-lg font-semibold text-gray-800">Pengajuan Terakhir</h2>
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <p class="text-gray-600">
+                Anda telah mengajukan magang di <b>{{ $pengajuan->lowongan->perusahaan->nama }}</b>
+                pada <b>{{ \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d F Y') }}</b>
+                (Status: <b>{{ ucfirst($pengajuan->status) }}</b>)
+            </p>
+        </div>
+    </div>
+@else
     <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         @foreach ($lowongan as $item)
             <div class="max-w-sm w-full mx-auto bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -60,4 +72,5 @@
             </div>
         @endforeach
     </div>
+    @endif
 @endsection

@@ -22,7 +22,6 @@ return new class extends Migration
             $table->bigInteger('dosen_id')->unsigned()->nullable();
             $table->foreign('dosen_id')->references('id')->on('dosen_pembimbing')->onDelete('set null');   
             $table->timestamps();
-            $table->unique(['mahasiswa_id', 'lowongan_id'], 'unique_pengajuan');
         });
     }
 
