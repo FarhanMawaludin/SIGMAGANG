@@ -40,4 +40,16 @@ class MahasiswaDosenController extends Controller
             'search' => $search,
         ]);
     }
+    public function show($id)
+    {
+        $activemenu = 'mahasiswa';
+        $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])
+            ->where('dosen_id', auth()->user()->dosen->id)
+            ->where('id', $id)
+            ->firstOrFail();
+        return view('dosen.mahasiswa.show', [
+            'activemenu' => $activemenu,
+            'pengajuan' => $pengajuan,
+        ]);
+}
 }
