@@ -190,11 +190,13 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('pengajuan')->name('mahasiswa.pengajuan.')->group(function () {
             Route::get('/mahasiswa', [PengajuanMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/{id}', [PengajuanMahasiswaController::class, 'show'])->name('show');
             Route::post('/mahasiswa/store', [PengajuanMahasiswaController::class, 'store'])->name('store');
         });
 
         Route::prefix('monitoring')->name('mahasiswa.monitoring.')->group(function () {
             Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
         });
     });
 
