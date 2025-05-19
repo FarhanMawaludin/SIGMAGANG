@@ -82,7 +82,7 @@
                 <td class="px-6 py-4">{{ $item->periode ?? '-' }}</td>
                 <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
                 <td class="px-6 py-4 text-center">
-                    <a href="{{ route('dosen.pengajuan.show', $item->id) }}"
+                    <a href="{{ route('dosen.mahasiswa.show', $item->id) }}"
                         class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
                         Detail
                     </a>
