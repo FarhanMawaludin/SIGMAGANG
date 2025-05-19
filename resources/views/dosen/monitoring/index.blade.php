@@ -1,4 +1,4 @@
-@extends('layouts.mahasiswa-app')   
+@extends('layouts.dosen-app')   
 
 @section('content')
 monitoring
