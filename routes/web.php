@@ -20,10 +20,6 @@ use App\Http\Controllers\ProfilMahasiswaController;
 use App\Http\Controllers\MonitoringMahasiswaController;
 use App\Http\Controllers\PengajuanMahasiswaController;
 
-//dosen
-use App\Http\Controllers\ProfilDosenController;
-use App\Http\Controllers\MahasiswaDosenController;
-
 
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +35,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [WelcomeController::class, 'index']);
+
 // Route::middleware(['auth','verified'])->group(function () {
 //     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 // });
@@ -87,7 +84,6 @@ Route::get('/', [WelcomeController::class, 'index']);
             Route::get('/', [LowonganController::class, 'index'])->name('index');
             Route::get('/create', [LowonganController::class, 'create'])->name('create');
             Route::post('/', [LowonganController::class, 'store'])->name('store');
-            Route::get('/{id}', [LowonganController::class, 'show'])->name('show');
             Route::get('/{id}/edit', [LowonganController::class, 'edit'])->name('edit');
             Route::put('/{id}', [LowonganController::class, 'update'])->name('update');
             Route::delete('/{id}', [LowonganController::class, 'destroy'])->name('destroy');
@@ -145,38 +141,27 @@ Route::get('/', [WelcomeController::class, 'index']);
     Route::middleware('auth','role:dosen_pembimbing')->group(function () {
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
         // PROFILE(dari breeze)
-        // Route::prefix('profile')->group(function () {
-        //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        //     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-        //     Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        // });
-
-        Route::prefix('profil')->name('dosen.profil.')->group(function () {
-            Route::get('/dosen', [profilDosenController::class, 'index'])->name('index');
+        Route::prefix('profile')->group(function () {
+            
+            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
         });
-
-        Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
-            Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
-        });
-
-        
-
 
         
 
 
     });
-
      // HANYA MAHASISWA
     Route::middleware('auth','role:mahasiswa')->group(function () {
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
         // PROFILE(dari breeze)
-        // Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
-        //     Route::get('/', [ProfileController::class, 'index'])->name('index');
-        //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        //     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-        //     Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-        // });
+        Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
+            Route::get('/', [ProfileController::class, 'index'])->name('index');
+            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        });
 
         Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
             Route::get('/mahasiswa', [profilMahasiswaController::class, 'index'])->name('index');
@@ -184,18 +169,16 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {
             Route::get('/mahasiswa', [LowonganMahasiswaController::class, 'index'])->name('index');
-            Route::get('/mahasiswa/{id}', [LowonganMahasiswaController::class, 'show'])->name('show');
         });
 
         Route::prefix('pengajuan')->name('mahasiswa.pengajuan.')->group(function () {
-            Route::get('/mahasiswa', [PengajuanMahasiswaController::class, 'index'])->name('index');
-            Route::post('/mahasiswa/store', [PengajuanMahasiswaController::class, 'store'])->name('store');
-        });
+        Route::get('/mahasiswa', [PengajuanMahasiswaController::class, 'index'])->name('index');
+        Route::get('/mahasiswa/{id}', [PengajuanMahasiswaController::class, 'show'])->name('show');
+    });
+
 
         Route::prefix('monitoring')->name('mahasiswa.monitoring.')->group(function () {
             Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
-            Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
-
         });
     });
 
