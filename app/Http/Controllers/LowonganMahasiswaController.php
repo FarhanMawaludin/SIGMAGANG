@@ -19,7 +19,9 @@ class LowonganMahasiswaController extends Controller
         $search = $request->input('search');
         $category = $request->input('category', 'all');
 
-        $query = Lowongan::with(['perusahaan', 'jenismagang', 'prodi'])->withCount('pengajuan');
+        $query = Lowongan::with(['perusahaan', 'jenismagang', 'prodi'])->withCount('pengajuan')
+        ->where('jumlah_magang', '>', 0)
+        ->where('batas_pendaftaran', '>=', now());
 
         if ($search) {
             $query->where(function ($q) use ($search) {

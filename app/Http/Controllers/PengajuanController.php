@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\DosenPembimbing;
-
+use App\Models\Lowongan;
+use Illuminate\Support\Facades\DB;
 class PengajuanController extends Controller
 {
     public function index(Request $request)
@@ -95,6 +96,11 @@ public function update(Request $request, $id)
     }
 
     $pengajuan->save();
+    if($pengajuan->save()){
+        Lowongan::where('id', $pengajuan->lowongan_id)->update([
+            'jumlah_magang' => DB::raw('jumlah_magang - 1')
+        ]);
+    }
 
     return redirect()->route('admin.pengajuan.index')->with('success', 'Pengajuan berhasil diproses.');
 }

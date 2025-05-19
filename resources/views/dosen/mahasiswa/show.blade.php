@@ -36,6 +36,26 @@
                     <td class="px-6 py-4">{{ $pengajuan->mahasiswa->user->email }}</td>
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium">Program Studi</td>
+                    <td class="px-6 py-4">{{ $pengajuan->mahasiswa->prodi->nama}}</td>
+                </tr>
+                <tr class="bg-white border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium">Lowongan</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->nama }}</td>
+                </tr>
+                <tr class="bg-white border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium">Perusahaan</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->perusahaan->nama}}</td>
+                </tr>
+                <tr class="bg-white border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium">Tipe Magang</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->tipe_magang}}</td>
+                </tr>
+                <tr class="bg-white border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium">Periode</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->periode->deskripsi}}</td>
+                </tr>
+                <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Role</td>
                     <td class="px-6 py-4">
                         <span
