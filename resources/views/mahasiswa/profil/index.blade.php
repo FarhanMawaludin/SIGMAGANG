@@ -98,7 +98,7 @@
             </div>
             <div>
                 <p class="text-gray-500">Semester</p>
-                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->semester    }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->semester }}</p>
             </div>
         </div>
 
