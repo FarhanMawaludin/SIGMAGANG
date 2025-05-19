@@ -19,11 +19,6 @@ class ProfilMahasiswaController extends Controller
         return view('mahasiswa.profil.index', compact('user', 'mahasiswa', 'activemenu'));
     }
 
-    // app/Models/User.php
-    public function mahasiswa()
-    {
-        return $this->hasOne(Mahasiswa::class);
-    }
 
     public function updateInformasi(Request $request)
     {
