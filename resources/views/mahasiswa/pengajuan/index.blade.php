@@ -94,7 +94,7 @@
                     </span>
                 </td>
                 <td class="px-6 py-4 text-center">
-                    <a href="{{ route('admin.pengajuan.edit', $item->id) }}"
+                    <a href="{{ route('mahasiswa.pengajuan.show', $item->id) }}"
                         class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
                         Lihat
                     </a>

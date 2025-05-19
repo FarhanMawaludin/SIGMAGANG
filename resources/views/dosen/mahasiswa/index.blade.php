@@ -78,8 +78,8 @@
                     <div class="font-medium text-gray-900">{{ $item->mahasiswa->user->name ?? '-' }}</div>
                     <div class="text-xs text-gray-500">{{ $item->mahasiswa->nim ?? '-' }}</div>
                 </td>
-                <td class="px-6 py-4">{{ $item->mahasiswa->prodi ?? '-' }}</td>
-                <td class="px-6 py-4">{{ $item->periode ?? '-' }}</td>
+                <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama ?? '-' }}</td>
+                <td class="px-6 py-4">{{ $item->lowongan->periode->deskripsi ?? '-' }}</td>
                 <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
                 <td class="px-6 py-4 text-center">
                     <a href="{{ route('dosen.mahasiswa.show', $item->id) }}"
