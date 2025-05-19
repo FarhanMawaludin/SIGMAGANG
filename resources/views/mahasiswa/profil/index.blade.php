@@ -82,19 +82,23 @@
             </div>
             <div>
                 <p class="text-gray-500">Kemampuan</p>
-                <p class="font-semibold text-gray-900">{{ $user->kemampuan }}</p>
+                <div class="flex flex-wrap gap-2">
+                    @foreach ($user->mahasiswa->skills as $skill)
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $skill->nama }}</span>
+                    @endforeach
+                </div>
             </div>
             <div>
                 <p class="text-gray-500">Jenis Magang</p>
-                <p class="font-semibold text-gray-900">{{ $user->jenis_magang }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->jenisMagang->jenis_magang }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Prodi</p>
-                <p class="font-semibold text-gray-900">{{ $user->prodi }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->prodi->nama }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Semester</p>
-                <p class="font-semibold text-gray-900">{{ $user->semester }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->semester }}</p>
             </div>
         </div>
 
