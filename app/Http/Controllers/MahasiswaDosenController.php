@@ -13,10 +13,12 @@ class MahasiswaDosenController extends Controller
         $category = $request->input('category', 'all');
         $search = $request->input('search');
 
-        $query = Pengajuan::with(['mahasiswa.user', 'lowongan'])
-            ->whereHas('lowongan', function ($q) {
-                $q->whereNotNull('id');
-            });
+    $query = Pengajuan::with(['mahasiswa.user', 'lowongan'])
+    ->where('dosen_id', auth()->user()->dosen->id)
+
+    ->whereHas('lowongan', function ($q) {
+        $q->whereNotNull('id');
+    });
 
         if ($category !== 'all') {
             $query->where('status', $category);
