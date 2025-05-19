@@ -20,6 +20,11 @@ use App\Http\Controllers\ProfilMahasiswaController;
 use App\Http\Controllers\MonitoringMahasiswaController;
 use App\Http\Controllers\PengajuanMahasiswaController;
 
+//dosen
+use App\Http\Controllers\ProfilDosenController;
+use App\Http\Controllers\MahasiswaDosenController;
+use App\Http\Controllers\MonitoringDosenController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -148,8 +153,21 @@ Route::get('/', [WelcomeController::class, 'index']);
             Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
         });
 
-        
+        Route::prefix('profil')->name('dosen.profil.')->group(function () {
+            Route::get('/dosen', [profilDosenController::class, 'index'])->name('index');
+        });
 
+        Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
+            Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
+        });
+
+        Route::prefix('monitoring')->name('dosen.mahasiswa.')->group(function () {
+            Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
+        });
+
+        // Route::prefix('monitoring')->name('dosen.monitoring.')->group(function () {
+        //     Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
+        // });
 
     });
      // HANYA MAHASISWA
@@ -179,6 +197,7 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('monitoring')->name('mahasiswa.monitoring.')->group(function () {
             Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
         });
     });
 
