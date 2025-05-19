@@ -16,9 +16,13 @@ class Skill extends Model
         return $this->belongsToMany(Lowongan::class);
     }   
     public function mahasiswa() {
-        return $this->belongsToMany(Mahasiswa::class);
+        return $this->belongsToMany(Mahasiswa::class, 'mahasiswa_skill');
     }   
     public function dosen_pembimbing() {
         return $this->belongsToMany(DosenPembimbing::class);
     }   
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'mahasiswa_skill');
+    }
 }

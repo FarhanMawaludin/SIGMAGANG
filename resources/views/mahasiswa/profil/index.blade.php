@@ -82,19 +82,23 @@
             </div>
             <div>
                 <p class="text-gray-500">Kemampuan</p>
-                <p class="font-semibold text-gray-900">{{ $user->kemampuan }}</p>
+                <p class="font-semibold text-gray-900">
+                    @foreach ($mahasiswa->skills as $skill)
+                        {{ $loop->first ? '' : ', ' }}{{ $skill->nama }}
+                    @endforeach
+                </p>
             </div>
             <div>
                 <p class="text-gray-500">Jenis Magang</p>
-                <p class="font-semibold text-gray-900">{{ $user->jenis_magang }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->jenismagang->jenis_magang }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Prodi</p>
-                <p class="font-semibold text-gray-900">{{ $user->prodi }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->prodi->nama }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Semester</p>
-                <p class="font-semibold text-gray-900">{{ $user->semester }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->semester    }}</p>
             </div>
         </div>
 
