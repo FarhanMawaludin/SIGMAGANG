@@ -160,10 +160,16 @@ Route::get('/', [WelcomeController::class, 'index']);
         Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
             Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
         });
+        Route::prefix('dosen')->middleware(['auth', 'role:dosen'])->group(function () {
+        Route::get('/mahasiswa', [MahasiswaDosenController::class, 'index'])->name('dosen.mahasiswa.index');
+        });
 
+        
         Route::prefix('monitoring')->name('dosen.mahasiswa.')->group(function () {
             Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
         });
+
+
 
         // Route::prefix('monitoring')->name('dosen.monitoring.')->group(function () {
         //     Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
