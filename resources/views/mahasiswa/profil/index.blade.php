@@ -10,8 +10,8 @@
         {{-- "{{ asset('storage/foto_profil/' . $user->foto_profil) }}" --}}
         <div>
             <h3 class="text-lg font-semibold text-gray-900">{{ $user->name }}</h3>
-            <p class="text-gray-500">{{ $user->nim }}</p>
-            <p class="text-gray-400">{{ $user->prodi }}</p>
+            <p class="text-gray-500">{{ $user->mahasiswa->nim }}</p>
+            <p class="text-gray-400">{{ $user->mahasiswa->prodi->nama }}</p>
         </div>
     </div>
 
@@ -31,7 +31,7 @@
             </div>
             <div>
                 <p class="text-gray-500">NIM</p>
-                <p class="font-semibold text-gray-900">{{ $user->nim }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->nim }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Email</p>
@@ -39,15 +39,15 @@
             </div>
             <div>
                 <p class="text-gray-500">No Telepon</p>
-                <p class="font-semibold text-gray-900">{{ $user->telepon }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->no_telp }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Prodi</p>
-                <p class="font-semibold text-gray-900">{{ $user->prodi }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->prodi->nama }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Semester</p>
-                <p class="font-semibold text-gray-900">{{ $user->semester }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->semester }}</p>
             </div>
         </div>
     </div>
@@ -64,27 +64,31 @@
         <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-sm text-gray-700">
             <div>
                 <p class="text-gray-500">IPK</p>
-                <p class="font-semibold text-gray-900">{{ $user->ipk }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->ipk }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Preferensi Lokasi</p>
-                <p class="font-semibold text-gray-900">{{ $user->preferensi_lokasi }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->preferensi_lokasi }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Kemampuan</p>
-                <p class="font-semibold text-gray-900">{{ $user->kemampuan }}</p>
+                <p class="font-semibold text-gray-900">
+                    @foreach ($mahasiswa->skills as $skill)
+                        {{ $loop->first ? '' : ', ' }}{{ $skill->nama }}
+                    @endforeach
+                </p>
             </div>
             <div>
                 <p class="text-gray-500">Jenis Magang</p>
-                <p class="font-semibold text-gray-900">{{ $user->jenis_magang }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->jenismagang->jenis_magang }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Prodi</p>
-                <p class="font-semibold text-gray-900">{{ $user->prodi }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->prodi->nama }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Semester</p>
-                <p class="font-semibold text-gray-900">{{ $user->semester }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->semester    }}</p>
             </div>
         </div>
 
