@@ -143,6 +143,7 @@ Route::get('/', [WelcomeController::class, 'index']);
     // HANYA DOSEN
     Route::middleware('auth','role:dosen_pembimbing')->group(function () {
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
+
         // PROFILE(dari breeze)
         // Route::prefix('profile')->group(function () {
         //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -156,6 +157,8 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
             Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
+            Route::get('/dosen/{id}', [MahasiswaDosenController::class, 'show'])->name('show');
+            Route::get('/dosen/{id}/edit', [MahasiswaDosenController::class, 'edit'])->name('edit');
         });
 
         
