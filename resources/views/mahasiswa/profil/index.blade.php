@@ -82,15 +82,15 @@
             </div>
             <div>
                 <p class="text-gray-500">Kemampuan</p>
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($user->mahasiswa->skills as $skill)
-                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $skill->nama }}</span>
+                <p class="font-semibold text-gray-900">
+                    @foreach ($mahasiswa->skills as $skill)
+                        {{ $loop->first ? '' : ', ' }}{{ $skill->nama }}
                     @endforeach
-                </div>
+                </p>
             </div>
             <div>
                 <p class="text-gray-500">Jenis Magang</p>
-                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->jenisMagang->jenis_magang }}</p>
+                <p class="font-semibold text-gray-900">{{ $user->mahasiswa->jenismagang->jenis_magang }}</p>
             </div>
             <div>
                 <p class="text-gray-500">Prodi</p>
