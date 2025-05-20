@@ -159,7 +159,6 @@ Route::get('/', [WelcomeController::class, 'index']);
         Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
             Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
             Route::get('/dosen/{id}', [MahasiswaDosenController::class, 'show'])->name('show');
-            Route::get('/dosen/{id}/edit', [MahasiswaDosenController::class, 'edit'])->name('edit');
         });
 
         Route::prefix('monitoring')->name('dosen.monitoring.')->group(function () {
