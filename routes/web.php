@@ -173,7 +173,11 @@ Route::get('/', [WelcomeController::class, 'index']);
      // HANYA MAHASISWA
     Route::middleware('auth','role:mahasiswa')->group(function () {
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
-        // PROFILE(dari breeze)
+        Route::get('profil/edit', [ProfilMahasiswaController::class, 'editProfil'])->name('profil.edit-profil');
+        Route::put('profil/update', [ProfilMahasiswaController::class, 'updateInformasi'])->name('profil.update-profil');
+        Route::get('preferensi/edit', [ProfilMahasiswaController::class, 'editPreferensi'])->name('preferensi.edit-prefensi');
+        Route::put('preferensi/update', [ProfilMahasiswaController::class, 'updatePreferensi'])->name('preferensi.update-prefensi  ');
+        // PROFILE(dari breeze)                              
         // Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
         //     Route::get('/', [ProfileController::class, 'index'])->name('index');
         //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -182,7 +186,7 @@ Route::get('/', [WelcomeController::class, 'index']);
         // });
 
         Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
-            Route::get('/mahasiswa', [profilMahasiswaController::class, 'index'])->name('index');
+        Route::get('/mahasiswa', [ProfilMahasiswaController::class, 'index'])->name('index');
         });
 
         Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {

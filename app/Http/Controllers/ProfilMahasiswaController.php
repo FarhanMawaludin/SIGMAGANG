@@ -4,23 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use App\Models\JenisMagang;
 use App\Models\Skill;
 
 class ProfilMahasiswaController extends Controller
 {
+    /**
+     * Tampilkan halaman profil mahasiswa
+     */
     public function index()
     {
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
-        $activemenu = 'profil';
+        $allSkills = Skill::all();
 
-        return view('mahasiswa.profil.index', compact('user', 'mahasiswa', 'activemenu'));
+        return view('mahasiswa.profil.index', [
+            'user' => $user,
+            'mahasiswa' => $mahasiswa,
+            'allSkills' => $allSkills,
+            'activemenu' => 'profil',
+        ]);
     }
-
-
-    public function updateInformasi(Request $request)
+    
+    public function updateProfil(Request $request)
     {
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
@@ -47,6 +52,34 @@ class ProfilMahasiswaController extends Controller
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
     }
 
+    public function updateInformasi(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validasi input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'no_telp' => 'nullable|string|max:20',
+            'semester' => 'nullable|integer|min:1',
+        ]);
+
+        // Update user dan relasi mahasiswa
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->save();
+
+        $mahasiswa = $user->mahasiswa;
+        $mahasiswa->no_telp = $validated['no_telp'];
+        $mahasiswa->semester = $validated['semester'];
+        $mahasiswa->save();
+
+        return redirect()->route('mahasiswa.profil.index')->with('success', 'Profil berhasil diperbarui');
+    }
+
+    /**
+     * Update preferensi magang mahasiswa
+     */
     public function updatePreferensi(Request $request)
     {
         $user = Auth::user();
@@ -63,7 +96,6 @@ class ProfilMahasiswaController extends Controller
             'file_surat_pengantar' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        // Update ke tabel mahasiswa
         $data = [
             'ipk' => $request->ipk,
             'preferensi_lokasi' => $request->preferensi_lokasi,
@@ -71,6 +103,7 @@ class ProfilMahasiswaController extends Controller
             'kemampuan' => $request->kemampuan,
         ];
 
+        // Proses upload file
         foreach (['file_cv', 'file_transkrip', 'file_sertifikat', 'file_surat_pengantar'] as $fileField) {
             if ($request->hasFile($fileField)) {
                 $file = $request->file($fileField)->store('dokumen_magang', 'public');
@@ -81,5 +114,29 @@ class ProfilMahasiswaController extends Controller
         $mahasiswa->update($data);
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
+    }
+
+    /**
+     * Form edit data pribadi
+     */
+    public function editProfil()
+    {
+        $user = Auth::user();
+        return view('mahasiswa.profil.edit-profil', [
+            'user' => $user,
+            'activemenu' => 'profil',
+        ]);
+    }
+
+    /**
+     * Form edit preferensi magang
+     */
+    public function editPreferensi()
+    {
+        $user = Auth::user();
+        return view('mahasiswa.profil.edit-preferensi', [
+            'user' => $user,
+            'activemenu' => 'profil',
+        ]);
     }
 }
