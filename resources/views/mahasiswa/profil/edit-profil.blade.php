@@ -1,48 +1,72 @@
 @extends('layouts.mahasiswa-app')
 
 @section('content')
-<div class="p-6 max-w-3xl mx-auto">
-    <h2 class="text-2xl font-semibold text-gray-900 mb-6">Edit Profil Pribadi</h2>
+<form method="POST" action="{{ route('profil.update-profil') }}" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
 
-    <form action="{{ route('mahasiswa.profil.update') }}" method="POST">
-        @csrf
-        @method('PUT')
+        <h2 class="text-[28px] font-semibold text-gray-900 mb-4">Edit Profil Mahasiswa</h2>
+        <div class="border-b border-gray-900/10 pb-12 p-6 bg-white border border-gray-200 rounded-lg">
+            <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">Nama Lengkap</label>
-                <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full border-gray-300 rounded-lg shadow-sm" required>
+                {{-- Nama Lengkap --}}
+                <div class="sm:col-span-3">
+                    <label for="name" class="block text-sm font-medium text-gray-900">Nama Lengkap</label>
+                    <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required
+                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                </div>
+
+                {{-- NIM (readonly) --}}
+                <div class="sm:col-span-3">
+                    <label class="block text-sm font-medium text-gray-900">NIM</label>
+                    <input type="text" value="{{ $user->mahasiswa->nim }}" readonly
+                        class="mt-2 block w-full bg-gray-100 px-3 py-1.5 rounded-md border border-gray-300 text-gray-700 sm:text-sm">
+                </div>
+
+                {{-- Email --}}
+                <div class="sm:col-span-3">
+                    <label for="email" class="block text-sm font-medium text-gray-900">Email</label>
+                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required
+                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                </div>
+
+                {{-- No Telepon --}}
+                <div class="sm:col-span-3">
+                    <label for="no_telp" class="block text-sm font-medium text-gray-900">No Telepon</label>
+                    <input type="text" name="no_telp" id="no_telp" value="{{ old('no_telp', $user->mahasiswa->no_telp) }}"
+                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                </div>
+
+                {{-- Prodi (readonly) --}}
+                <div class="sm:col-span-3">
+                    <label class="block text-sm font-medium text-gray-900">Program Studi</label>
+                    <input type="text" value="{{ $user->mahasiswa->prodi->nama }}" readonly
+                        class="mt-2 block w-full bg-gray-100 px-3 py-1.5 rounded-md border border-gray-300 text-gray-700 sm:text-sm">
+                </div>
+
+                {{-- Semester --}}
+                <div class="sm:col-span-3">
+                    <label for="semester" class="block text-sm font-medium text-gray-900">Semester</label>
+                    <input type="text" name="semester" id="semester" value="{{ old('semester', $user->mahasiswa->semester) }}"
+                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm">
+                </div>
+
+                {{-- Foto Upload --}}
+                <div class="col-span-full">
+                    <label for="foto" class="block text-sm font-medium text-gray-900">Upload Foto Profil</label>
+                    <input type="file" id="foto" name="foto" accept="image/*"
+                        class="mt-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                    <p class="mt-1 text-sm text-gray-500">JPG, PNG, atau GIF. Max 800x400px.</p>
+                </div>
             </div>
 
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">NIM</label>
-                <input type="text" value="{{ $user->mahasiswa->nim }}" class="w-full border-gray-300 rounded-lg shadow-sm bg-gray-100" readonly>
-            </div>
-
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border-gray-300 rounded-lg shadow-sm" required>
-            </div>
-
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">No Telepon</label>
-                <input type="text" name="no_telp" value="{{ old('no_telp', $user->mahasiswa->no_telp) }}" class="w-full border-gray-300 rounded-lg shadow-sm">
-            </div>
-
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">Prodi</label>
-                <input type="text" value="{{ $user->mahasiswa->prodi->nama }}" class="w-full border-gray-300 rounded-lg shadow-sm bg-gray-100" readonly>
-            </div>
-
-            <div>
-                <label class="block mb-1 text-sm font-medium text-gray-700">Semester</label>
-                <input type="text" name="semester" value="{{ old('semester', $user->mahasiswa->semester) }}" class="w-full border-gray-300 rounded-lg shadow-sm">
+            {{-- Tombol --}}
+            <div class="mt-6 flex items-center justify-start gap-x-6">
+                <a href="{{ route('dashboard') }}"
+                    class="text-sm font-semibold text-gray-900 hover:border border-gray-900 rounded-md px-3 py-2">Batal</a>
+                <button type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Simpan Perubahan</button>
             </div>
         </div>
-
-        <div class="mt-6">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg">Simpan Perubahan</button>
-        </div>
-    </form>
-</div>
+</form>
 @endsection

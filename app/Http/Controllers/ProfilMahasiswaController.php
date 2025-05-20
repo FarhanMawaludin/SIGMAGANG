@@ -24,16 +24,8 @@ class ProfilMahasiswaController extends Controller
             'activemenu' => 'profil',
         ]);
     }
-
-    <<<<<<< Updated upstream
-
-    public function updateInformasi(Request $request)
-=======
-    /**
-     * Update informasi pribadi mahasiswa
-     */
+    
     public function updateProfil(Request $request)
->>>>>>> Stashed changes
     {
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
