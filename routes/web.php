@@ -186,7 +186,7 @@ Route::get('/', [WelcomeController::class, 'index']);
         });
 
         Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {
-            Route::get('/mahasiswa', [LowonganMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/mahasiswa', [LowonganMahasiswaController::class, 'index'])->name('index');
             Route::get('/mahasiswa/{id}', [LowonganMahasiswaController::class, 'show'])->name('show');
         });
 
