@@ -58,8 +58,8 @@
         </table>
 
         <!-- Pagination jika digunakan -->
-        <div class="p-4">
+        {{-- <div class="p-4">
             {{ $logMingguan->links('pagination::tailwind') }}
-        </div>
+        </div> --}}
     </div>
 @endsection
