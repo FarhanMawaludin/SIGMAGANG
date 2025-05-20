@@ -14,51 +14,64 @@ class MonitoringMahasiswaController extends Controller
     {
         $activemenu = 'monitoring';
         $user = Auth::user();
-        // dd($user);
 
-        $pengajuan =Pengajuan::with('mahasiswa.user')
+        $pengajuan = Pengajuan::with('mahasiswa.user')
             ->where('mahasiswa_id', $user->id)
             ->where('status', 'accepted')
             ->first();
-        // dd($pengajuan->toArray());
 
         if (!$pengajuan) {
-            $logs = collect();
-            return view('mahasiswa.monitoring.index', compact('activemenu', 'logs'))
-                ->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
+            $logMingguan = collect();
+            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan'))
+            ->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
         }
 
-        $logMingguanIDs = LogMingguan::where('pengajuan_id', $pengajuan->id)->pluck('id');
-
-        $logs = LogHarian::with('logMingguan.pengajuan.mahasiswa.user')
-            ->whereIn('log_mingguan_id', $logMingguanIDs)
-            ->orderByDesc('tanggal')
+        $logMingguan = LogMingguan::where('pengajuan_id', $pengajuan->id)
+            ->orderByDesc('tanggal_awal')
             ->paginate(10);
 
-        return view('mahasiswa.monitoring.index', compact('activemenu', 'logs'));
+        return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan'));
     }
 
+   public function create()
+{
+    $activemenu = 'monitoring';
+    $user = auth()->user();
+    $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        ->where('status', 'accepted')
+        ->first();
 
-
-    public function create()
-    {
-        $activemenu = 'monitoring';
-        return view('mahasiswa.monitoring.create', ['activemenu' => $activemenu]);
+    $lastMinggu = 0;
+    if ($pengajuan) {
+        $lastMinggu = LogMingguan::where('pengajuan_id', $pengajuan->id)->max('minggu') ?? 0;
+        $lastLog = LogMingguan::where('pengajuan_id', $pengajuan->id)
+            ->orderByDesc('minggu')
+            ->first();
+        $minTanggalAwal = $lastLog ? \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDay()->format('Y-m-d') : null;
+        $maxTanggalAkhir = \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDays(6)->format('Y-m-d');
     }
+
+    return view('mahasiswa.monitoring.create', [
+        'activemenu' => $activemenu,
+        'nextMinggu' => $lastMinggu + 1,
+        'minTanggalAwal' => $minTanggalAwal,
+        'maxTanggalAkhir' => $maxTanggalAkhir,
+    ]);
+}
+    
 
     public function store(Request $request)
     {
         $request->validate([
-            'aktivitas'     => 'required|string|max:1000',
-            'tanggal'       => 'required|date',
-            'jam_mulai'     => 'required|date_format:H:i',
-            'jam_selesai'   => 'required|date_format:H:i|after:jam_mulai',
+            'minggu'         => 'required|integer|min:1',
+            'tanggal_awal'   => 'required|date',
+            'tanggal_akhir'  => 'required|date|after_or_equal:tanggal_awal',
         ]);
 
         $user = Auth::user();
 
         // Ambil pengajuan aktif milik mahasiswa
-        $pengajuan = \App\Models\Pengajuan::where('mahasiswa_id', $user->id)
+        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
             ->where('status', 'accepted')
             ->first();
 
@@ -66,25 +79,96 @@ class MonitoringMahasiswaController extends Controller
             return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
         }
 
-        // Cari log mingguan aktif berdasarkan tanggal
-        $logMingguan = \App\Models\LogMingguan::where('pengajuan_id', $pengajuan->id)
-            ->whereDate('tanggal_awal', '<=', $request->tanggal)
-            ->whereDate('tanggal_akhir', '>=', $request->tanggal)
-            ->first();
+     
+        $exists = LogMingguan::where('pengajuan_id', $pengajuan->id)
+            ->where('minggu', $request->minggu)
+            ->exists();
 
-        if (!$logMingguan) {
-            return redirect()->back()->with('error', 'Log mingguan belum dibuat untuk tanggal tersebut.');
+        if ($exists) {
+            return redirect()->back()->with('error', 'Log mingguan untuk minggu ini sudah ada.');
         }
 
-        // Simpan log harian
-        \App\Models\LogHarian::create([
-            'aktivitas'       => $request->aktivitas,
-            'tanggal'         => $request->tanggal,
-            'jam_mulai'       => $request->jam_mulai,
-            'jam_selesai'     => $request->jam_selesai,
-            'log_mingguan_id' => $logMingguan->id,
+        
+      LogMingguan::create([
+            'pengajuan_id'   => $pengajuan->id,
+            'minggu'         => $request->minggu,
+            'tanggal_awal'   => $request->tanggal_awal,
+            'tanggal_akhir'  => $request->tanggal_akhir,
         ]);
 
         return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log harian berhasil ditambahkan.');
+    }
+    public function show($id)
+    {
+        $activemenu = 'monitoring';
+        $logMingguan = LogMingguan::with('logHarian')->findOrFail($id);
+
+        return view('mahasiswa.monitoring.show', compact('activemenu', 'logMingguan'));
+    }
+    public function create_harian($id){
+        $activemenu = 'monitoring';
+    $user = Auth::user();   
+    $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        ->where('status', 'accepted')
+        ->first();
+    $logMingguan = LogMingguan::with('logHarian')->findOrFail($id);
+
+    // GUNAKAN tanggal_awal dan tanggal_akhir dari minggu yang dipilih
+    $minTanggalAwal = $logMingguan->tanggal_awal;
+    $maxTanggalAkhir = $logMingguan->tanggal_akhir;
+
+    return view('mahasiswa.monitoring.create_harian', compact('activemenu', 'logMingguan','minTanggalAwal','maxTanggalAkhir'));
+    }
+    public function store_harian(Request $request,$id){
+        $request->validate([
+            'tanggal'      => 'required|date',
+            'aktivitas'     => 'required|string',
+            'jam_mulai'    => 'required|date_format:H:i',
+            'jam_selesai'  => 'required|date_format:H:i|after:jam_mulai',
+        ]);
+
+        $user = Auth::user();
+
+        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+            ->where('status', 'accepted')
+            ->first();
+
+        if (!$pengajuan) {
+            return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
+        }
+
+        $logMingguan = LogMingguan::where('id', $id)
+            ->where('pengajuan_id', $pengajuan->id)
+            ->first();
+
+        if (!$logMingguan) {
+            return redirect()->back()->with('error', 'Log mingguan tidak ditemukan.');
+        }
+
+        if (
+            $request->tanggal < $logMingguan->tanggal_awal ||
+            $request->tanggal > $logMingguan->tanggal_akhir
+        ) {
+            return redirect()->back()->with('error', 'Tanggal log harian harus berada dalam rentang minggu yang dipilih.');
+        }
+
+        $exists = LogHarian::where('log_mingguan_id', $logMingguan->id)
+            ->where('tanggal', $request->tanggal)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->back()->with('error', 'Log harian untuk tanggal ini sudah ada.');
+        }
+
+        LogHarian::create([
+            'log_mingguan_id' => $logMingguan->id,
+            'tanggal'         => $request->tanggal,
+            'aktivitas'        => $request->aktivitas,
+            'jam_mulai'       => $request->jam_mulai,
+            'jam_selesai'     => $request->jam_selesai,
+        ]);
+
+        return redirect()->route('mahasiswa.monitoring.show', $logMingguan->id)
+            ->with('success', 'Log harian berhasil ditambahkan.');
     }
 }
