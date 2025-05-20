@@ -18,7 +18,7 @@ class Mahasiswa extends Model
         'prodi',
         'ipk',
         'lokasi_preferensi',
-        'user_id'       
+        'user_id'
     ];
 
     public function user(): BelongsTo
@@ -29,15 +29,22 @@ class Mahasiswa extends Model
     {
         return $this->belongsTo(Prodi::class);
     }
-    public function skills() {
+    public function skills()
+    {
         return $this->belongsToMany(Skill::class);
     }
-    public function documents() {
+    public function documents()
+    {
         return $this->morphMany(Dokumen::class, 'documentable');
     }
     public function jenisMagang()
-{
-    return $this->belongsTo(JenisMagang::class);
-}
+    {
+        return $this->belongsTo(JenisMagang::class);
+    }
 
+    public function pengajuan()
+    {
+        return $this->hasMany(Pengajuan::class);
+    }
+    // baru
 }

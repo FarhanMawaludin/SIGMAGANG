@@ -23,6 +23,7 @@ use App\Http\Controllers\PengajuanMahasiswaController;
 //dosen
 use App\Http\Controllers\ProfilDosenController;
 use App\Http\Controllers\MahasiswaDosenController;
+use App\Http\Controllers\MonitoringDosenController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -160,10 +161,10 @@ Route::get('/', [WelcomeController::class, 'index']);
             Route::get('/dosen/{id}', [MahasiswaDosenController::class, 'show'])->name('show');
         });
 
-        
-
-
-        
+        Route::prefix('monitoring')->name('dosen.monitoring.')->group(function () {
+            Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
+            Route::get('/dosen/create', [MonitoringDosenController::class, 'create'])->name('create');
+        });
 
 
     });
@@ -197,6 +198,7 @@ Route::get('/', [WelcomeController::class, 'index']);
         Route::prefix('monitoring')->name('mahasiswa.monitoring.')->group(function () {
             Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
             Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
+            Route::post('/mahasiswa/store', [MonitoringMahasiswaController::class, 'store'])->name('store');
         });
     });
 

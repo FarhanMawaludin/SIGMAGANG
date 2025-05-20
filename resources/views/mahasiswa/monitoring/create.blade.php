@@ -1,31 +1,30 @@
 @extends('layouts.mahasiswa-app')
 
 @section('content')
-    <form method="POST" action="{{ route('admin.lowongan.store') }}">
+    <form method="POST" action="{{ route('mahasiswa.monitoring.store') }}">
         @csrf
         <div class="space-y-12">
             <h2 class="text-[28px] font-semibold text-gray-900 mb-4">Form Log Aktivitas</h2>
             <div class="border-b border-gray-900/10 pb-12 p-6 bg-white border border-gray-200 rounded-lg">
                 <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
+
                     <!-- Hari/Tanggal -->
                     <div class="sm:col-span-3">
                         <label class="block text-sm font-medium text-gray-900">Hari/Tanggal</label>
                         <div class="mt-2">
-                            <!-- Input disabled untuk ditampilkan -->
                             <input type="text"
                                 value="{{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 disabled>
 
-                            <!-- Input hidden yang dikirim ke server -->
-                            <input type="hidden" name="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                            <!-- GANTI 'date' KE 'tanggal' -->
+                            <input type="hidden" name="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
 
-                            @error('date')
+                            @error('tanggal')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
-
 
                     <!-- Jam Mulai -->
                     <div class="sm:col-span-1">
@@ -53,18 +52,21 @@
                         </div>
                     </div>
 
-
+                    <!-- Deskripsi Aktivitas -->
                     <div class="col-span-full">
-                        <label for="deskripsi" class="block text-sm/6 font-medium text-gray-900">Deskripsi</label>
+                        <label for="aktivitas" class="block text-sm/6 font-medium text-gray-900">Deskripsi Aktivitas</label>
                         <div class="mt-2">
-                            <textarea id="deskripsi" name="deskripsi" rows="5"
+                            <!-- GANTI NAME dari 'deskripsi' ke 'aktivitas' -->
+                            <textarea id="aktivitas" name="aktivitas" rows="5"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                placeholder="Tulis Deskripsi"></textarea>
-                            @error('deskripsi')
+                                placeholder="Tulis Deskripsi Aktivitas"></textarea>
+                            @error('aktivitas')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
+
+                    <!-- Tombol Aksi -->
                     <div class="mt-4 flex items-center justify-start gap-x-6">
                         <button type="button"
                             class="text-sm/6 font-semibold text-gray-900 hover:text-gray-900 hover:border border-gray-900 rounded-md px-3 py-2"
@@ -74,6 +76,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </form>
 
     <!-- Flatpickr JS -->
