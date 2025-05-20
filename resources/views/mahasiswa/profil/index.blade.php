@@ -19,13 +19,8 @@
     <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
         <div class="flex justify-between items-center mb-5">
             <h3 class="text-lg font-semibold text-gray-900">Informasi Pribadi</h3>
-            <a href="#"
-                class="inline-flex items-center gap-1 text-yellow-500 font-semibold border border-yellow-400 px-4 py-1 rounded hover:bg-yellow-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 20h9"></path>
-                    <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"></path>
-                </svg>
+            <a href="#" class="inline-flex items-center gap-1 text-yellow-500 font-semibold border border-yellow-400 px-4 py-1 rounded hover:bg-yellow-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg>
                 Edit
             </a>
         </div>
@@ -61,13 +56,8 @@
     <div class="bg-white rounded-lg border border-gray-200 p-6">
         <div class="flex justify-between items-center mb-5">
             <h3 class="text-lg font-semibold text-gray-900">Preferensi Magang</h3>
-            <a href="#"
-                class="inline-flex items-center gap-1 text-yellow-500 font-semibold border border-yellow-400 px-4 py-1 rounded hover:bg-yellow-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" stroke="currentColor"
-                    stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 20h9"></path>
-                    <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"></path>
-                </svg>
+            <a href="#" class="inline-flex items-center gap-1 text-yellow-500 font-semibold border border-yellow-400 px-4 py-1 rounded hover:bg-yellow-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg>
                 Edit
             </a>
         </div>
