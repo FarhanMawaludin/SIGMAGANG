@@ -78,10 +78,9 @@
             <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
                 <td class="px-6 py-4">{{ $pengajuan->firstItem() + $key }}</td>
                 <td class="px-6 py-4">
-                    <div class="font-medium text-gray-900">{{ $item->mahasiswa->user->name ?? '-' }}</div>
-                    <div class="text-xs text-gray-500">{{ $item->mahasiswa->nim ?? '-' }}</div>
+                    <div class="font-medium md:text-base break-words truncate md:whitespace-normal">{{ $item->mahasiswa->user->name ?? '-' }}</div>
                 </td>
-                <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
+                <td class="px-6 py-4 ">{{ $item->lowongan->nama ?? '-' }}</td>
                 <td class="px-6 py-4">
                     <span class="inline-block px-2 py-1 text-xs font-semibold rounded 
                         {{ 
