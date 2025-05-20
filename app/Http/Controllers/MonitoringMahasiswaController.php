@@ -47,8 +47,13 @@ class MonitoringMahasiswaController extends Controller
         $lastLog = LogMingguan::where('pengajuan_id', $pengajuan->id)
             ->orderByDesc('minggu')
             ->first();
+            if($lastMinggu == 0){
+                $minTanggalAwal = null;
+                $maxTanggalAkhir = null;
+            }else{
         $minTanggalAwal = $lastLog ? \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDay()->format('Y-m-d') : null;
         $maxTanggalAkhir = \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDays(6)->format('Y-m-d');
+            }
     }
 
     return view('mahasiswa.monitoring.create', [
@@ -113,7 +118,7 @@ class MonitoringMahasiswaController extends Controller
         ->first();
     $logMingguan = LogMingguan::with('logHarian')->findOrFail($id);
 
-    // GUNAKAN tanggal_awal dan tanggal_akhir dari minggu yang dipilih
+  
     $minTanggalAwal = $logMingguan->tanggal_awal;
     $maxTanggalAkhir = $logMingguan->tanggal_akhir;
 
