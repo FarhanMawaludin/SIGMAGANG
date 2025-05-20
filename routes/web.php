@@ -203,6 +203,10 @@ Route::get('/', [WelcomeController::class, 'index']);
             Route::get('/mahasiswa/{id}/show', [MonitoringMahasiswaController::class, 'show'])->name('show');
             Route::get('/mahasiswa/{id}/create_harian', [MonitoringMahasiswaController::class, 'create_harian'])->name('create_harian');
             Route::post('/mahasiswa/{id}/store_harian', [MonitoringMahasiswaController::class, 'store_harian'])->name('store_harian');
+            Route::get('/mahasiswa/monitoring/{mingguan}/harian/{harian}/edit', [MonitoringMahasiswaController::class, 'edit_harian'])->name('edit_harian');
+            Route::get('/mahasiswa/{mingguan}/harian/{harian}/detail', [MonitoringMahasiswaController::class, 'detail_harian'])->name('detail_harian');
+            Route::put('/mahasiswa/{id}/update_harian', [MonitoringMahasiswaController::class, 'update_harian'])->name('update_harian');
+            
         });
     });
 
