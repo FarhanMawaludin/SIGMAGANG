@@ -19,6 +19,7 @@
                 <th class="px-6 py-3">No</th>
                 <th class="px-6 py-3">Tanggal</th>
                 <th class="px-6 py-3">Aktivitas</th>
+                <th class="px-6 py-3">Aksi</th> 
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,17 @@
                     <td class="px-6 py-4">{{ $loop->iteration }}</td>
                     <td class="px-6 py-4">{{ \Carbon\Carbon::parse($log->tanggal)->format('d M Y') }}</td>
                     <td class="px-6 py-4">{{ $log->aktivitas }}</td>
+                    <td class="px-6 py-4">
+                        <a href="{{ route('mahasiswa.monitoring.edit_harian', [$logMingguan->id, $log->id]) }}"
+                            class="inline-flex items-center bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700 transition">
+                            Edit
+                        </a>
+                        <a href="{{ route('mahasiswa.monitoring.detail_harian', [$logMingguan->id, $log->id]) }}"
+                             class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
+                            Detail
+                        </a>
+                    </td>
+                    
                 </tr>
             @empty
                 <tr>

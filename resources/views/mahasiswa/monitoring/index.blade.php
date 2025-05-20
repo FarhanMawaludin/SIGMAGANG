@@ -17,6 +17,7 @@
                     <th scope="col" class="px-6 py-3">Nama</th>
                     <th scope="col" class="px-6 py-3">Tanggal Mingguan</th>
                     <th scope="col" class="px-6 py-3">Minggu Ke</th>
+                    <th scope="col" class="px-6 py-3">Dosen Pembimbing</th>
                     <th scope="col" class="px-6 py-3">Aksi</th>
                 </tr>
             </thead>
@@ -40,6 +41,8 @@
                         <td class="px-6 py-4">
                             {{ $log->minggu }}
                         </td>
+                        <td class="px-6 py-4">
+                            {{ $log->pengajuan->dosen->user->name ?? 'Dosen Tidak Ditemukan' }}
                         <td class="px-6 py-4">
                         <a href="{{ route('mahasiswa.monitoring.show', $log->id) }}"
                         class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
