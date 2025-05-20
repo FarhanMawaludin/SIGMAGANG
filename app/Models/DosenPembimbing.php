@@ -23,7 +23,7 @@ class DosenPembimbing extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function documents() {
@@ -36,4 +36,6 @@ class DosenPembimbing extends Model
     public function pengajuan() {
         return $this->hasMany(Pengajuan::class);
     }
+
+    //baru
 }
