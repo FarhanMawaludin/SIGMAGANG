@@ -12,10 +12,11 @@
                     <div class="sm:col-span-2">
                         <label for="tanggal_awal" class="block text-sm font-medium text-gray-900">Tanggal Awal</label>
                         <div class="mt-2">
-                            <input type="date" id="tanggal_awal" name="tanggal_awal" readonly
+                            <input type="date" id="tanggal_awal" name="tanggal_awal"
+                                @if($nextMinggu != 1) readonly @endif
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 min="{{ $minTanggalAwal }}"
-                                value="{{ $minTanggalAwal }}">
+                                value="{{ old('tanggal_awal', $minTanggalAwal) }}">
                             @error('tanggal_awal')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -26,10 +27,11 @@
                     <div class="sm:col-span-2">
                         <label for="tanggal_akhir" class="block text-sm font-medium text-gray-900">Tanggal Akhir</label>
                         <div class="mt-2">
-                            <input type="date" id="tanggal_akhir" name="tanggal_akhir" readonly
+                            <input type="date" id="tanggal_akhir" name="tanggal_akhir"
+                                @if($nextMinggu != 1) readonly @endif
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 min="{{ $maxTanggalAkhir }}"
-                                value="{{ $maxTanggalAkhir }}">
+                                value="{{ old('tanggal_akhir', $maxTanggalAkhir) }}">
                             @error('tanggal_akhir')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
