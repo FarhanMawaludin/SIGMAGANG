@@ -36,7 +36,7 @@
             <li class="text-xs px-2 text-gray-800 uppercase">Manajemen Magang</li>
 
             <li>
-                <a href="{{ url('/lowongan/mahasiswa') }}"
+                <a href="{{ url('/lowongan/mahasiswa/mahasiswa') }}"
                     class="flex items-center p-2 rounded-lg group {{ $activemenu == 'lowongan' ? 'text-white bg-blue-600' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
                     <svg class="w-5 h-5 {{ $activemenu == 'lowongan' ? 'text-white' : 'text-gray-400 dark:text-white' }}"
                         fill="none" viewBox="0 0 24 24">

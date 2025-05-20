@@ -23,6 +23,7 @@ use App\Http\Controllers\PengajuanMahasiswaController;
 //dosen
 use App\Http\Controllers\ProfilDosenController;
 use App\Http\Controllers\MahasiswaDosenController;
+use App\Http\Controllers\MonitoringDosenController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -87,6 +88,7 @@ Route::get('/', [WelcomeController::class, 'index']);
             Route::get('/', [LowonganController::class, 'index'])->name('index');
             Route::get('/create', [LowonganController::class, 'create'])->name('create');
             Route::post('/', [LowonganController::class, 'store'])->name('store');
+            Route::get('/{id}', [LowonganController::class, 'show'])->name('show');
             Route::get('/{id}/edit', [LowonganController::class, 'edit'])->name('edit');
             Route::put('/{id}', [LowonganController::class, 'update'])->name('update');
             Route::delete('/{id}', [LowonganController::class, 'destroy'])->name('destroy');
@@ -143,6 +145,7 @@ Route::get('/', [WelcomeController::class, 'index']);
     // HANYA DOSEN
     Route::middleware('auth','role:dosen_pembimbing')->group(function () {
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
+
         // PROFILE(dari breeze)
         // Route::prefix('profile')->group(function () {
         //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -156,12 +159,13 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
             Route::get('/dosen', [MahasiswaDosenController::class, 'index'])->name('index');
+            Route::get('/dosen/{id}', [MahasiswaDosenController::class, 'show'])->name('show');
         });
 
-        
-
-
-        
+        Route::prefix('monitoring')->name('dosen.monitoring.')->group(function () {
+            Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
+            Route::get('/dosen/create', [MonitoringDosenController::class, 'create'])->name('create');
+        });
 
 
     });
@@ -186,17 +190,27 @@ Route::get('/', [WelcomeController::class, 'index']);
         });
 
         Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {
-            Route::get('/mahasiswa', [LowonganMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/mahasiswa', [LowonganMahasiswaController::class, 'index'])->name('index');
             Route::get('/mahasiswa/{id}', [LowonganMahasiswaController::class, 'show'])->name('show');
         });
 
         Route::prefix('pengajuan')->name('mahasiswa.pengajuan.')->group(function () {
             Route::get('/mahasiswa', [PengajuanMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/{id}', [PengajuanMahasiswaController::class, 'show'])->name('show');
             Route::post('/mahasiswa/store', [PengajuanMahasiswaController::class, 'store'])->name('store');
         });
 
         Route::prefix('monitoring')->name('mahasiswa.monitoring.')->group(function () {
             Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
+            Route::post('/mahasiswa/store', [MonitoringMahasiswaController::class, 'store'])->name('store');
+            Route::get('/mahasiswa/{id}/show', [MonitoringMahasiswaController::class, 'show'])->name('show');
+            Route::get('/mahasiswa/{id}/create_harian', [MonitoringMahasiswaController::class, 'create_harian'])->name('create_harian');
+            Route::post('/mahasiswa/{id}/store_harian', [MonitoringMahasiswaController::class, 'store_harian'])->name('store_harian');
+            Route::get('/mahasiswa/monitoring/{mingguan}/harian/{harian}/edit', [MonitoringMahasiswaController::class, 'edit_harian'])->name('edit_harian');
+            Route::get('/mahasiswa/{mingguan}/harian/{harian}/detail', [MonitoringMahasiswaController::class, 'detail_harian'])->name('detail_harian');
+            Route::put('/mahasiswa/{id}/update_harian', [MonitoringMahasiswaController::class, 'update_harian'])->name('update_harian');
+            
         });
     });
 

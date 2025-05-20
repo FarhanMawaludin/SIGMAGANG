@@ -7,6 +7,7 @@ use App\Models\Pengajuan;
 use App\Models\Perusahaan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -26,34 +27,71 @@ class DashboardController extends Controller
             'pengajuan_count' => $pengajuan_count,
             'perusahaan_count' => $perusahaan_count,
             'activemenu' => $activemenu
-            
+
         );
-         return view('dashboard',$data);
+        return view('dashboard', $data);
     }
     public function dosen()
     {
         $activemenu = 'dashboard';
         $data = array(
-            
+
             'activemenu' => $activemenu
         );
-         return view('dosen-dashboard',$data);
+        return view('dosen-dashboard', $data);
     }
-    public function mahasiswa()
+
+
+    public function mahasiswa(Request $request)
     {
         $activemenu = 'dashboard';
-        $data = array(
+
+        $search = $request->search;
+        $user = Auth::user();
+        $category = $request->category ?? 'all';
+        $mahasiswa = $user->mahasiswa;
+
+        $query = Pengajuan::with(['mahasiswa.user', 'lowongan'])
+            ->where('status', 'pending')
+            ->whereHas('mahasiswa', function ($q) {
+                $q->where('user_id', auth()->id());
             
-            'activemenu' => $activemenu
-        );
-         return view('mahasiswa-dashboard',$data);
+            });
+
+        if ($search) {
+            $query->whereHas('mahasiswa.user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%');
+            });
+        }
+
+        if ($category !== 'all') {
+            $query->where('status', $category);
+        }
+
+        $pengajuan = $query->paginate(10);
+
+        return view('mahasiswa-dashboard', [
+            'activemenu' => $activemenu,
+            'pengajuan' => $pengajuan,
+            'mahasiswa' => $mahasiswa
+        ]);
     }
+
+    // public function mahasiswa()
+    // {
+    //     $activemenu = 'dashboard';
+    //     $data = array(
+
+    //         'activemenu' => $activemenu
+    //     );
+    //     return view('mahasiswa-dashboard', $data);
+    // }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        // 
     }
 
     /**
