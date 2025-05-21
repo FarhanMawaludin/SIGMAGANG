@@ -17,9 +17,7 @@ return new class extends Migration
             $table->integer('minggu');
             $table->date('tanggal_awal');
             $table->date('tanggal_akhir');
-            $table->text('mahasiswa_feedback')->nullable();
             $table->text('dosen_feedback')->nullable();
-            $table->integer('evaluasi_nilai')->nullable();
             $table->foreign('pengajuan_id')->references('id')->on('pengajuan')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

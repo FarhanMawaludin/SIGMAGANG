@@ -12,36 +12,54 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class MonitoringDosenController extends Controller
 {
-    public function index()
-    {
-        $activemenu = 'monitoring';
-        $user = Auth::user();
-        
-        $dosenId = $user->dosen->id;
-        // dd($dosenId);
+
+public function index()
+{
+    $activemenu = 'monitoring';
+    $user = Auth::user();
+    $dosenId = $user->dosen->id;
 
 
-        $pengajuanIDs = Pengajuan::where('dosen_id', $dosenId) 
-            ->where('status', 'accepted')
-            ->pluck('id');
-        // dd($pengajuanIDs->toArray());
+    $pengajuanList = Pengajuan::with(['mahasiswa.user', 'lowongan.perusahaan', 'lowongan.jenisMagang'])
+        ->where('dosen_id', $dosenId)
+        ->where('status', 'accepted')
+        ->paginate(10);
 
-        if ($pengajuanIDs->isEmpty()) {
-            $logs = collect();
-            return view('dosen.monitoring.index', compact('activemenu', 'logs'))
-                ->with('error', 'Belum ada mahasiswa yang Anda bimbing.');
-        }
+    return view('dosen.monitoring.index', compact('activemenu', 'pengajuanList'));
+}
+   public function show($pengajuan_id)
+{
+    $activemenu = 'monitoring';
+    $user = Auth::user();
 
-        // Ambil semua ID dari log mingguan berdasarkan pengajuan
-        $logMingguanIDs = LogMingguan::whereIn('pengajuan_id', $pengajuanIDs)->pluck('id');
-        // dd($logMingguanIDs->toArray());
+    $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan.perusahaan', 'lowongan.jenisMagang'])
+        ->where('id', $pengajuan_id)
+        ->where('dosen_id', $user->dosen->id)
+        ->first();
 
-        // Ambil semua log harian dari log mingguan
-        $logs = LogHarian::whereIn('log_mingguan_id', $logMingguanIDs)
-            ->orderByDesc('tanggal')
-            ->paginate(10);
-        // dd($logs);
-
-        return view('dosen.monitoring.index', compact('activemenu', 'logs'));
+    if (!$pengajuan) {
+        return redirect()->route('dosen.monitoring.index')->with('error', 'Pengajuan tidak ditemukan.');
     }
+    $logMingguan = LogMingguan::with('logHarian')
+        ->where('pengajuan_id', $pengajuan->id)
+        ->orderBy('minggu')
+        ->paginate(10);
+
+    return view('dosen.monitoring.show', compact('activemenu', 'pengajuan', 'logMingguan'));
+}
+public function show_harian($logMingguanId)
+{
+    $activemenu = 'monitoring';
+    $user = Auth::user();
+
+
+    $logMingguan = LogMingguan::with(['logHarian', 'pengajuan.mahasiswa.user'])
+        ->where('id', $logMingguanId)
+        ->whereHas('pengajuan', function($q) use ($user) {
+            $q->where('dosen_id', $user->dosen->id);
+        })
+        ->firstOrFail();
+
+    return view('dosen.monitoring.show_harian', compact('activemenu', 'logMingguan'));
+}
 }
