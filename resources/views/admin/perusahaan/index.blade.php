@@ -93,7 +93,7 @@
                             <div class="flex items-center gap-2 flex-wrap md:flex-nowrap">
                                 <!-- Detail -->
                                 <a href="{{ route('admin.perusahaan.show', $perusahaanItem->id) }}"
-                                    class="flex items-center bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm whitespace-nowrap">
+                                    class="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 text-sm whitespace-nowrap">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -104,7 +104,7 @@
 
                                 <!-- Edit -->
                                 <a href="{{ route('admin.perusahaan.edit', $perusahaanItem->id) }}"
-                                    class="flex items-center bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-700 text-sm whitespace-nowrap">
+                                    class="flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-orange-700 text-sm whitespace-nowrap">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -119,7 +119,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="button"
-                                        class="inline-flex items-center bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 text-sm cursor-pointer btn-delete"
+                                        class="inline-flex items-center bg-red-500 text-white px-4 py-2 rounded-lg  hover:bg-red-700 text-sm cursor-pointer btn-delete"
                                         data-id="{{ $perusahaanItem->id }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor">

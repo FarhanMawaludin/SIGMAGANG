@@ -406,7 +406,7 @@
             // set the labels option to true to show the labels on the X and Y axis
             xaxis: {
                 show: true,
-                categories: ['2021', '2022', '2023', '2024', '2025'],
+                categories: @json($years),
                 labels: {
                     show: true,
                     style: {
@@ -436,7 +436,7 @@
             },
             series: [{
                 name: "Developer Edition",
-                data: [150, 141, 145, 152, 135],
+                data: @json($totals),
                 color: "#1A56DB",
             }],
             chart: {

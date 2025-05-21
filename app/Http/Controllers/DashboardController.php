@@ -16,21 +16,58 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user_count = User::where('role', 'mahasiswa')->count();
-        $lowongan_count = Lowongan::count();
-        $pengajuan_count = Pengajuan::count();
-        $perusahaan_count = Perusahaan::count();
+        // user
+        $mahasiswa = User::where('role', 'mahasiswa')->get();
+        $user_count = $mahasiswa->count();
+
+        // lowongan
+        $lowongan = Lowongan::all();
+        $lowongan_count = $lowongan->count();
+
+        // pengajuan
+        $query = Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'lowongan'])->where('status', 'pending');
+        $pengajuan = $query->paginate(5);
+        $pengajuan_count = $query->count();
+        $pending_count = Pengajuan::where('status', 'pending')->count();
+        $accepted_count = Pengajuan::where('status', 'accepted')->count();
+        $rejected_count = Pengajuan::where('status', 'rejected')->count();
+
+        // statistik
+        $accepted_per_year = Pengajuan::selectRaw('YEAR(created_at) as year, COUNT(*) as total')
+            ->where('status', 'accepted')
+            ->groupByRaw('YEAR(created_at)')
+            ->orderBy('year')
+            ->get();
+
+        $years = $accepted_per_year->pluck('year')->toArray();
+        $totals = $accepted_per_year->pluck('total')->toArray();
+
+        // perusahaan
+        $perusahaan = Perusahaan::all();
+        $perusahaan_count = $perusahaan->count();
+
         $activemenu = 'dashboard';
+
         $data = array(
             'user_count' => $user_count,
             'lowongan_count' => $lowongan_count,
             'pengajuan_count' => $pengajuan_count,
+            'pending_count' => $pending_count,
+            'accepted_count' => $accepted_count,
+            'rejected_count' => $rejected_count,
             'perusahaan_count' => $perusahaan_count,
+            'mahasiswa' => $mahasiswa,
+            'lowongan' => $lowongan,
+            'pengajuan' => $pengajuan,
+            'perusahaan' => $perusahaan,
+            'years' => $years,
+            'totals' => $totals,
             'activemenu' => $activemenu
-
         );
+
         return view('dashboard', $data);
     }
+
     public function dosen()
     {
         $activemenu = 'dashboard';
@@ -55,7 +92,6 @@ class DashboardController extends Controller
             ->where('status', 'pending')
             ->whereHas('mahasiswa', function ($q) {
                 $q->where('user_id', auth()->id());
-            
             });
 
         if ($search) {
