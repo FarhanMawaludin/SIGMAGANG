@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
-        <div class="max-w-sm w-full p-4 bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 w-full">
+        <div class=" w-full p-4 bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center space-x-4">
                 <div class="p-2 rounded-full bg-orange-500 text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -22,7 +22,7 @@
                 <p class="text-sm text-gray-600 dark:text-gray-300">12 mahasiswa bertambah</p>
             </div>
         </div>
-        <div class="max-w-sm w-full p-4 bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700">
+        <div class=" w-full p-4 bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center space-x-4">
                 <div class="p-2 rounded-full bg-orange-500 text-white">
                     <svg class="w-6 h-6 " fill="none" viewBox="0 0 24 24">
@@ -42,7 +42,7 @@
                 <p class="text-sm text-gray-600 dark:text-gray-300">12 lowongan bertambah</p>
             </div>
         </div>
-        <div class="max-w-sm w-full p-4 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+        <div class=" w-full p-4 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center space-x-4">
                 <div class="p-2 rounded-full bg-orange-500 text-white">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@
                 <p class="text-sm text-gray-600 dark:text-gray-300">12 pengajuan bertambah</p>
             </div>
         </div>
-        <div class="max-w-sm w-full p-4 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+        <div class="w-full p-4 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
             <div class="flex items-center space-x-4">
                 <div class="p-2 rounded-full bg-orange-500 text-white">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24">
@@ -102,19 +102,19 @@
                     <dl class="bg-orange-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
                         <dt
                             class="w-8 h-8 rounded-full bg-orange-100 dark:bg-gray-500 text-orange-600 dark:text-orange-300 text-sm font-medium flex items-center justify-center mb-1">
-                            12</dt>
+                            {{ $pending_count }}</dt>
                         <dd class="text-orange-600 dark:text-orange-300 text-sm font-medium">Menunggu</dd>
                     </dl>
                     <dl class="bg-teal-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
                         <dt
                             class="w-8 h-8 rounded-full bg-teal-100 dark:bg-gray-500 text-teal-600 dark:text-teal-300 text-sm font-medium flex items-center justify-center mb-1">
-                            23</dt>
+                            {{ $accepted_count }}</dt>
                         <dd class="text-teal-600 dark:text-teal-300 text-sm font-medium">Diterima</dd>
                     </dl>
                     <dl class="bg-blue-50 dark:bg-gray-600 rounded-lg flex flex-col items-center justify-center h-[78px]">
                         <dt
                             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-gray-500 text-blue-600 dark:text-blue-300 text-sm font-medium flex items-center justify-center mb-1">
-                            64</dt>
+                            {{ $rejected_count }}</dt>
                         <dd class="text-blue-600 dark:text-blue-300 text-sm font-medium">Ditolak</dd>
                     </dl>
                 </div>
@@ -177,12 +177,8 @@
                 </div>
             </div>
         </div>
-
-
-
-
         {{-- line chart --}}
-        <div class=" w-full h-full bg-white rounded-lg  border border-gray-200 dark:bg-gray-800 z-100">
+        <div class=" w-full h-full bg-white rounded-lg  border border-gray-200 dark:bg-gray-800 ">
             <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                 <div>
                     <p class="text-base font-normal text-gray-500 dark:text-gray-400">Jumlah</p>
@@ -289,120 +285,101 @@
     {{-- tabel --}}
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800">Mahasiswa Menunggu</h1>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 cursor-pointer"
+            onclick="location.href='{{ url('pengajuan') }}'">
             Lihat Semua Pengajuan
         </button>
     </div>
 
     <div class="overflow-x-auto relative rounded-lg border border-gray-200">
-        <table class="w-full text-sm text-left text-gray-700">
+        <table class="w-full text-sm text-left text-gray-700 min-w-[768px]">
             <thead class="text-xs uppercase bg-gray-100 text-gray-700">
                 <tr>
-                    <th scope="col" class="px-6 py-3">No</th>
-                    <th scope="col" class="px-6 py-3">Nama</th>
-                    <th scope="col" class="px-6 py-3">Prodi</th>
-                    <th scope="col" class="px-6 py-3">Lowongan</th>
-                    <th scope="col" class="px-6 py-3">Status</th>
-                    <th scope="col" class="px-6 py-3">Dosen Pembimbing</th>
-                    <th scope="col" class="px-6 py-3">Aksi</th>
+                    <th class="px-6 py-3">No</th>
+                    <th class="px-6 py-3">Nama</th>
+                    <th class="px-6 py-3">Prodi</th>
+                    <th class="px-6 py-3">Lowongan</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3">Dosen Pembimbing</th>
+                    <th class="px-6 py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b border-gray-200">
-                    <td class="px-6 py-4">1</td>
-                    <td class="flex items-center gap-2 px-6 py-4">
-                        <div class="w-10 h-10 bg-purple-600 text-white flex items-center justify-center rounded-full">JC
-                        </div>
-                        <div>
-                            <div class="font-semibold">Jane Cooper</div>
-                            <div class="text-sm text-gray-500">2341728765</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">D-IV Teknik Informatika</td>
-                    <td class="px-6 py-4">Front-End Intern</td>
-                    <td class="px-6 py-4">
-                        <span class="bg-orange-100 text-orange-600 text-xs font-medium px-3 py-1 rounded-full">●
-                            Menunggu</span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-500">(Belum dipilih)</td>
-                    <td class="px-6 py-4">
-                        <button class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-500">Cek
-                            Pengajuan</button>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b border-gray-200">
-                    <td class="px-6 py-4">1</td>
-                    <td class="flex items-center gap-2 px-6 py-4">
-                        <div class="w-10 h-10 bg-purple-600 text-white flex items-center justify-center rounded-full">JC
-                        </div>
-                        <div>
-                            <div class="font-semibold">Jane Cooper</div>
-                            <div class="text-sm text-gray-500">2341728765</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">D-IV Teknik Informatika</td>
-                    <td class="px-6 py-4">Front-End Intern</td>
-                    <td class="px-6 py-4">
-                        <span class="bg-orange-100 text-orange-600 text-xs font-medium px-3 py-1 rounded-full">●
-                            Menunggu</span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-500">(Belum dipilih)</td>
-                    <td class="px-6 py-4">
-                        <button class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-500">Cek
-                            Pengajuan</button>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b border-gray-200">
-                    <td class="px-6 py-4">1</td>
-                    <td class="flex items-center gap-2 px-6 py-4">
-                        <div class="w-10 h-10 bg-purple-600 text-white flex items-center justify-center rounded-full">JC
-                        </div>
-                        <div>
-                            <div class="font-semibold">Jane Cooper</div>
-                            <div class="text-sm text-gray-500">2341728765</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">D-IV Teknik Informatika</td>
-                    <td class="px-6 py-4">Front-End Intern</td>
-                    <td class="px-6 py-4">
-                        <span class="bg-orange-100 text-orange-600 text-xs font-medium px-3 py-1 rounded-full">●
-                            Menunggu</span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-500">(Belum dipilih)</td>
-                    <td class="px-6 py-4">
-                        <button class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-500">Cek
-                            Pengajuan</button>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b border-gray-200">
-                    <td class="px-6 py-4">1</td>
-                    <td class="flex items-center gap-2 px-6 py-4">
-                        <div class="w-10 h-10 bg-purple-600 text-white flex items-center justify-center rounded-full">JC
-                        </div>
-                        <div>
-                            <div class="font-semibold">Jane Cooper</div>
-                            <div class="text-sm text-gray-500">2341728765</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">D-IV Teknik Informatika</td>
-                    <td class="px-6 py-4">Front-End Intern</td>
-                    <td class="px-6 py-4">
-                        <span class="bg-orange-100 text-orange-600 text-xs font-medium px-3 py-1 rounded-full">●
-                            Menunggu</span>
-                    </td>
-                    <td class="px-6 py-4 text-gray-500">(Belum dipilih)</td>
-                    <td class="px-6 py-4">
-                        <button class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-500">Cek
-                            Pengajuan</button>
-                    </td>
-                </tr>
+                @if ($pengajuan->isEmpty())
+                    <tr class="bg-white border-b border-gray-200">
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                            Tidak ada pengajuan.
+                        </td>
+                    </tr>
+                @else
+                    @foreach ($pengajuan as $index => $item)
+                        <tr class="bg-white border-b border-gray-200">
+                            <td class="px-6 py-4">{{ $index + 1 }}</td>
+                            <td class="flex items-center gap-3 px-6 py-4">
+                                @if ($item->foto)
+                                    <img src="{{ asset('images/logo/' . $item->foto) }}" alt="Foto {{ $item->name }}"
+                                        class="w-10 h-10 rounded-full object-cover shrink-0">
+                                @else
+                                    <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
+                                        class="w-10 h-10 rounded-full border border-gray-200 object-cover shrink-0">
+                                @endif
+                                <div>
+                                    <div class="font-semibold">{{ $item->mahasiswa->user->name ?? 'Nama Tidak Tersedia' }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">{{ $item->mahasiswa->nim ?? 'NIM Tidak Tersedia' }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama ?? '-' }}</td>
+                            <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
+                            <td class="px-6 py-4">
+                                @php
+                                    $statusClasses = [
+                                        'pending' => 'bg-orange-100 text-orange-600',
+                                        'accepted' => 'bg-green-100 text-green-600',
+                                        'rejected' => 'bg-red-100 text-red-600',
+                                    ];
+                                    $statusText = [
+                                        'pending' => 'Menunggu',
+                                        'accepted' => 'Diterima',
+                                        'rejected' => 'Ditolak',
+                                    ];
+                                    $status = strtolower($item->status);
+                                @endphp
+                                <span
+                                    class="{{ $statusClasses[$status] ?? 'bg-gray-100 text-gray-600' }} text-xs font-medium px-3 py-1 rounded-full">
+                                    {{ $statusText[$status] ?? ucfirst($item->status) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-500">
+                                {{ $item->dosen->user->name ?? '(Belum dipilih)' }}
+                            </td>
+                            <td class="w-[200px] px-6 py-4">
+                                <button
+                                    class="inline-flex items-center bg-orange-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
+                                    onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Cek Pengajuan
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>
     <script>
         const getChartOptions = () => {
             return {
-                series: [90, 85, 70],
+                series: [
+                    {{ $pending_count }},
+                    {{ $accepted_count }},
+                    {{ $rejected_count }}
+                ],
                 colors: ["#1C64F2", "#16BDCA", "#FDBA8C"],
                 chart: {
                     height: "350",
@@ -453,16 +430,6 @@
                         }
                     },
                     theme: 'light',
-                    style: {
-                        fontSize: '14px',
-                        fontFamily: 'Inter, sans-serif',
-                        padding: '10px !important',
-                        background: '#ffffff',
-                        borderRadius: '5px',
-                    },
-                    marker: {
-                        show: false,
-                    },
                 },
                 yaxis: {
                     show: false,
@@ -482,12 +449,12 @@
     </script>
 
 
+
     <script>
         const options = {
-            // set the labels option to true to show the labels on the X and Y axis
             xaxis: {
                 show: true,
-                categories: ['2021', '2022', '2023', '2024', '2025'],
+                categories: @json($years),
                 labels: {
                     show: true,
                     style: {
@@ -496,10 +463,10 @@
                     }
                 },
                 axisBorder: {
-                    show: false,
+                    show: false
                 },
                 axisTicks: {
-                    show: false,
+                    show: false
                 },
             },
             yaxis: {
@@ -516,8 +483,8 @@
                 }
             },
             series: [{
-                name: "Developer Edition",
-                data: [150, 141, 145, 152, 135],
+                name: "Accepted",
+                data: @json($totals),
                 color: "#1A56DB",
             }],
             chart: {
@@ -529,16 +496,16 @@
                 type: "area",
                 fontFamily: "Inter, sans-serif",
                 dropShadow: {
-                    enabled: false,
+                    enabled: false
                 },
                 toolbar: {
-                    show: false,
+                    show: false
                 },
             },
             tooltip: {
                 enabled: true,
                 x: {
-                    show: false,
+                    show: false
                 },
             },
             fill: {
@@ -551,10 +518,10 @@
                 },
             },
             dataLabels: {
-                enabled: false,
+                enabled: false
             },
             stroke: {
-                width: 3,
+                width: 3
             },
             markers: {
                 size: 4,
@@ -566,13 +533,12 @@
                 show: false
             },
             grid: {
-                show: false,
+                show: false
             },
         }
 
         document.addEventListener("DOMContentLoaded", function() {
             const chartContainer = document.getElementById("labels-chart");
-            console.log("Chart container:", chartContainer);
 
             if (chartContainer && typeof ApexCharts !== 'undefined') {
                 const chart = new ApexCharts(chartContainer, options);

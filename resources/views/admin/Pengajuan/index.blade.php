@@ -88,14 +88,15 @@
                         <td class="px-6 py-4">{{ $item->dosen->user->name ?? 'Belum dipilih' }}</td>
                         <td class="px-6 py-4 space-x-2">
                             <!-- Detail -->
-                               <button onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'"
-                                class="inline-flex items-center bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 text-sm cursor-pointer">
+                            <button
+                                class="inline-flex items-center bg-orange-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
+                                onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="hidden md:inline">Cek Data</span>
+                                Cek Pengajuan
                             </button>
                         </td>
                     </tr>
