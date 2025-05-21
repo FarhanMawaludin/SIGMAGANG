@@ -15,9 +15,7 @@ class LogMingguan extends Model
         'minggu',
         'tanggal_awal',
         'tanggal_akhir',
-        'mahasiswa_feedback',
         'dosen_feedback',
-        'evaluasi_nilai',
     ];
 
     public function pengajuan()

@@ -164,7 +164,8 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('monitoring')->name('dosen.monitoring.')->group(function () {
             Route::get('/dosen', [MonitoringDosenController::class, 'index'])->name('index');
-            Route::get('/dosen/create', [MonitoringDosenController::class, 'create'])->name('create');
+            Route::get('/dosen/{id}', [MonitoringDosenController::class, 'show'])->name('show');
+            Route::get('/dosen/{id}/harian', [MonitoringDosenController::class, 'show_harian'])->name('show_harian');
         });
 
 
