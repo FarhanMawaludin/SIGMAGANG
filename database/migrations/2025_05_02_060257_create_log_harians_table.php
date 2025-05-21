@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('aktivitas');
             $table->date('tanggal');
+            $table->time('jam_mulai');
+            $table->time('jam_selesai');
             $table->bigInteger('log_mingguan_id')->unsigned();
             $table->foreign('log_mingguan_id')->references('id')->on('log_mingguan')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
