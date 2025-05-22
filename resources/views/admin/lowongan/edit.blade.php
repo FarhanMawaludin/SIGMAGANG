@@ -127,7 +127,7 @@
                                     <input id="skill-{{ $skill->id }}" name="skills[]" value="{{ $skill->id }}"
                                         type="checkbox"
                                         class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                        {{ in_array($skill->id, $lowongan->skills()->pluck('skill_id')->toArray()) ? 'checked' : '' }}>
+                                        {{ in_array($skill->id, $lowongan->skills->pluck('id')->toArray()) ? 'checked' : '' }}>
                                     <label for="skill-{{ $skill->id }}" class="ml-2 block text-sm text-gray-900">
                                         {{ $skill->nama }}
                                     </label>

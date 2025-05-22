@@ -118,7 +118,7 @@ class LowonganController extends Controller
     public function edit($id)
     {
         $activemenu = 'lowongan';
-        $lowongan = Lowongan::findOrFail($id);
+        $lowongan = Lowongan::with('skills')->findOrFail($id);
         $perusahaans = Perusahaan::all();
         $periodes = Periode::all();
         $prodis = Prodi::all();
