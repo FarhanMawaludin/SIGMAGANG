@@ -5,7 +5,7 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800">Log Mingguan</h1>
         <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button" onclick="location.href='{{ route('mahasiswa.monitoring.create') }}'">Tambah Log
         </button>
     </div>
@@ -36,7 +36,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            {{ \Carbon\Carbon::parse($log->tanggal_awal)->format('d M Y') }} - 
+                            {{ \Carbon\Carbon::parse($log->tanggal_awal)->format('d M Y') }} -
                             {{ \Carbon\Carbon::parse($log->tanggal_akhir)->format('d M Y') }}
                         </td>
                         <td class="px-6 py-4">
@@ -48,12 +48,19 @@
                         <td class="px-6 py-4">
                             {{ $log->dosen_feedback ?? 'Belum ada feedback' }}
                         </td>
-                            <td class="px-6 py-4">
-                        <a href="{{ route('mahasiswa.monitoring.show', $log->id) }}"
-                        class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
-                        Detail
-                    </a>
-                </td>
+                        <td class="px-6 py-4">
+                            <button
+                                class="inline-flex items-center bg-blue-600 text-white  px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer" 
+                                onclick="location.href='{{ route('mahasiswa.monitoring.show', $log->id) }}'">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                
+                                <span class="hidden md:inline">Detail</span>
+                            </button>
+                        </td>
                     </tr>
                 @empty
                     <tr>

@@ -8,9 +8,9 @@
         <div class="space-y-12">
             <h2 class="text-[28px] font-semibold text-gray-900 mb-4">Edit Log Harian</h2>
             <div class="border-b border-gray-900/10 pb-12 p-6 bg-white border border-gray-200 rounded-lg">
-                <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
+                <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <!-- Tanggal Log Harian -->
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-4">
                         <label for="tanggal" class="block text-sm font-medium text-gray-900">Tanggal</label>
                         <div class="mt-2">
                             <input type="date" id="tanggal" name="tanggal"
@@ -47,12 +47,12 @@
                         </div>
                     </div>
                     <!-- Aktivitas -->
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-full">
                         <label for="aktivitas" class="block text-sm font-medium text-gray-900">Aktivitas</label>
                         <div class="mt-2">
-                            <input type="text" id="aktivitas" name="aktivitas"
+                            <textarea type="text" id="aktivitas" name="aktivitas" rows="5"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                placeholder="Aktivitas harian" value="{{ old('aktivitas', $logHarian->aktivitas) }}">
+                                placeholder="Tulis Aktivitas" >{{ old('aktivitas', $logHarian->aktivitas) }}</textarea>
                             @error('aktivitas')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
