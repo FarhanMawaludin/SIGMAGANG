@@ -81,7 +81,7 @@
                 @forelse ($periode as $key => $item)
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $key + 1 }}</td>
-                        <td class="px-6 py-4">{{ $item->deskripsi }}</td>
+                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->deskripsi }}</td>
                         <td class="px-6 py-4">{{ $item->tanggal_mulai }}</td>
                         <td class="px-6 py-4">{{ $item->tanggal_selesai }}</td>
                         {{-- <td class="px-6 py-4">{{ ucfirst($periode->status) }}</td> --}}

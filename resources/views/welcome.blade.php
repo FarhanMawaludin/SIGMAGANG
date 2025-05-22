@@ -6,11 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sigmagang - Landing Page</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 
 <body class="font-sans text-gray-800 bg-white">
     <!-- Navbar -->
-    <nav class="bg-white border-gray-200 dark:bg-gray-900 shadow-sm ">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 shadow-sm sticky top-0 z-50">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="{{ asset('images/Logo-Sigmagang.png') }}" class="h-8" alt="Sigmagang Logo" />
@@ -19,12 +25,12 @@
             <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                 <div class="flex items-center gap-2">
                     <button type="button"
-                        class="text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         onclick="location.href='{{ route('login') }}'">
                         Masuk
                     </button>
                     <button type="button"
-                        class="text-blue-500 bg-white border border-blue-500 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="text-blue-500 bg-white border border-blue-600 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         onclick="location.href='{{ route('register') }}'">
                         Buat Akun
                     </button>
@@ -41,57 +47,39 @@
                 </button>
             </div>
             <div class="items-left justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
-                <ul
+                <ul id="menu"
                     class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
-                        <a href="#"
-                            class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:dark:text-blue-500"
+                        <a href="#beranda"
+                            class="block py-2 px-3 md:p-0 rounded-sm text-blue-600 md:text-blue-600 md:dark:text-blue-500"
                             aria-current="page">Beranda</a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="block py-2 px-3 md:p-0 text-gray-400 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Fitur</a>
+                        <a href="#fitur"
+                            class="block py-2 px-3 md:p-0 rounded-sm text-gray-400 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Fitur</a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="block py-2 px-3 md:p-0 text-gray-400 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Panduan</a>
+                        <a href="#panduan"
+                            class="block py-2 px-3 md:p-0 rounded-sm text-gray-400 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Panduan</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    {{-- <nav class="flex justify-between items-center px-6 py-4 border border-gray-200 sticky top-0 z-50 bg-white">
-        <div class="flex items-center gap-2">
-            <img src="{{ asset('images/Logo-Sigmagang.png') }}" alt="logo" class="w-8 h-10 mr-0">
-            <span class="text-[20px] font-bold text-orange-500 mr-12">SIGMAGANG</span>
-            <div class="hidden md:flex gap-8 text-sm text-gray-400">
-                <a href="#" class="text-blue-500 font-medium">Beranda</a>
-                <a href="#">Fitur</a>
-                <a href="#">Panduan</a>
-            </div>
-        </div>
-        <div class="flex gap-3 text-sm">
-            <button
-                class="px-6 py-2 border border-blue-500 rounded-md text-blue-500 font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out"
-                onclick="location.href='{{ url('login') }}'">Masuk</button>
-            <button
-                class="px-6 py-2 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-800  transition-all duration-300 ease-in-out"
-                onclick="location.href='{{ url('register') }}'">Buat Akun</button>
-        </div>
-    </nav> --}}
-
     <!-- Hero Section -->
     <section
-        class="relative px-6 py-12 md:py-12 max-w-7xl mx-auto overflow-hidden flex flex-col-reverse md:flex-row items-center gap-10">
+        class="relative px-6 py-12 md:py-12 max-w-7xl mx-auto overflow-hidden flex flex-col-reverse md:flex-row items-center gap-10"
+        id="beranda">
 
         <!-- Teks -->
-        <div class="w-full md:w-1/2 relative z-10 text-center md:text-left">
+        <div class="w-full md:w-1/2 relative z-10 text-center md:text-left" data-aos="fade-right"
+            data-aos-duration="1000" data-aos-once="true">
             <h1 class="text-3xl sm:text-4xl md:text-[50px] text-mirage-950 font-extrabold leading-snug space-y-2">
                 <div>Temukan Magang</div>
                 <div class="mt-24">Sesuai Minat dan</div>
                 <div class="mt-12">
-                    <span class="text-blue-500">Keahlianmu!</span>
+                    <span class="text-blue-600">Keahlianmu!</span>
                 </div>
             </h1>
             <p class="text-gray-400 font-normal text-base  sm:text-[16px] mt-4">
@@ -99,40 +87,24 @@
             </p>
             <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mt-6">
                 <button
-                    class="bg-blue-500 text-white px-6 py-3 font-semibold rounded-md text-sm hover:bg-blue-800 transition-all duration-300 ease-in-out">
+                    class="bg-blue-600 text-white px-6 py-3 font-semibold rounded-md text-sm hover:bg-blue-800 transition-all duration-300 ease-in-out"
+                    onclick="location.href='{{ route('login') }}'">
                     Mulai Sekarang
                 </button>
-                <button
-                    class="border border-blue-300 text-blue-500 text-sm px-6 py-3 font-semibold rounded-md hover:bg-blue-500 hover:text-white transition-all duration-300 ease-in-out">
-                    Pelajari lebih lanjut
-                </button>
+                <a href="#panduan">
+                    <button
+                        class="border border-blue-300 text-blue-600 text-sm px-6 py-3 font-semibold rounded-md hover:bg-blue-600 hover:text-white transition-all duration-300 ease-in-out">
+                        Pelajari lebih lanjut
+                    </button>
+                </a>
+
             </div>
         </div>
 
         <!-- Gambar -->
-        <div class="w-full md:w-1/2">
+        <div class="w-full md:w-1/2" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
             <div class="relative mx-auto max-w-[400px] md:max-w-[600px]">
                 <img src="{{ asset('images/landing Page 1.png') }}" alt="Team" class="w-full h-auto" />
-
-                {{-- <!-- Badge Mitra -->
-            <div
-                class="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow flex items-center gap-2 text-sm">
-                <div class="text-orange-500 text-lg">🏫</div>
-                <div>
-                    <p class="font-semibold">Mitra Kampus</p>
-                    <p class="text-xs text-gray-500">500++</p>
-                </div>
-            </div>
-
-            <!-- Badge Lowongan -->
-            <div
-                class="absolute bottom-0 right-2 bg-white px-4 py-2 rounded-lg shadow flex items-center gap-2 text-sm">
-                <div class="text-orange-500 text-lg">📋</div>
-                <div>
-                    <p class="font-semibold">Lowongan tersedia</p>
-                    <p class="text-xs text-gray-500">1000++</p>
-                </div>
-            </div> --}}
             </div>
         </div>
     </section>
@@ -174,8 +146,8 @@
 
 
     <!-- Fitur -->
-    <section class="px-6 py-16 bg-gray-50">
-        <div class="text-center max-w-2xl mx-auto mb-12">
+    <section class="px-6 py-16 bg-gray-50" id="fitur">
+        <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up" data-aos-duration="800">
             <h2 class="text-[28px] font-bold">
                 Cari Magang Sesuai Kompetensimu, <span class="text-orange-500">Tanpa Ribet</span>
             </h2>
@@ -184,21 +156,25 @@
                 minat, dan tujuan karirmu.
             </p>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <div class="bg-white p-6 rounded-lg shadow text-center hover:border-2 border-blue-500">
+            <div class="bg-white p-6 rounded-lg shadow text-center hover:border-2 border-blue-600" data-aos="zoom-in"
+                data-aos-duration="600" data-aos-delay="100">
                 <img src="{{ asset('images/Rekomendasi.png') }}" alt="Otomatis" class="h-32 mx-auto mb-6">
                 <h3 class="text-[20px] text-mirage-950 font-bold">Rekomendasi Magang Otomatis</h3>
                 <p class="text-sm text-gray-500 mt-2">Sistem akan mencocokkan lowongan magang dengan profil mahasiswa
                     (kompetensi, lokasi, minat, keahlian).
                 </p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow text-center hover:border-2 border-blue-500">
+            <div class="bg-white p-6 rounded-lg shadow text-center hover:border-2 border-blue-600" data-aos="zoom-in"
+                data-aos-duration="600" data-aos-delay="200">
                 <img src="{{ asset('images/Logbook.png') }}" alt="Logbook" class="h-32 mx-auto mb-6">
                 <h3 class="text-[20px] text-mirage-950 font-bold">Logbook & Evaluasi Magang</h3>
                 <p class="text-sm text-gray-500 mt-2">Mahasiswa bisa mencatat kegiatan magang (harian/mingguan) dan
                     memberikan feedback setelah selesai.</p>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow text-center hover:border-2 border-blue-500">
+            <div class="bg-white p-6 rounded-lg shadow text-center hover:border-2 border-blue-600" data-aos="zoom-in"
+                data-aos-duration="600" data-aos-delay="300">
                 <img src="{{ asset('images/Sertifikat.png') }}" alt="Sertifikat" class="h-32 mx-auto mb-6">
                 <h3 class="text-[20px] text-mirage-950 font-bold">Unduh Sertifikat & Dokumen</h3>
                 <p class="text-sm text-gray-500 mt-2">mahasiswa dapat mengunduh sertifikat dan dokumen penting terkait
@@ -206,7 +182,9 @@
                 </p>
             </div>
         </div>
-    </section><!-- Lowongan Terpopuler -->
+    </section>
+
+    <!-- Lowongan Terpopuler -->
     <section class="px-6 py-16">
         <div class="text-center mb-12">
             <h2 class="text-[28px] font-bold">Lowongan Magang <span class="text-orange-500">Terpopuler</span></h2>
@@ -260,7 +238,7 @@
                     </div>
 
                     <button type="button"
-                        class="w-full text-white bg-blue-500 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
+                        class="w-full text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
                         Lihat Detail
                     </button>
                 </div>
@@ -312,7 +290,7 @@
                     </div>
 
                     <button type="button"
-                        class="w-full text-white bg-blue-500 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
+                        class="w-full text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
                         Lihat Detail
                     </button>
                 </div>
@@ -364,7 +342,7 @@
                     </div>
 
                     <button type="button"
-                        class="w-full text-white bg-blue-500 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
+                        class="w-full text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
                         Lihat Detail
                     </button>
                 </div>
@@ -416,7 +394,7 @@
                     </div>
 
                     <button type="button"
-                        class="w-full text-white bg-blue-500 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
+                        class="w-full text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
                         Lihat Detail
                     </button>
                 </div>
@@ -424,7 +402,7 @@
         </div>
         <div class="text-center mt-10">
             <button type="button"
-                class="flex items-center mx-auto gap-2 text-blue-500 bg-white border border-blue-500 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"">
+                class="flex items-center mx-auto gap-2 text-blue-600 bg-white border border-blue-500 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"">
                 Lihat Lebih Banyak
                 <svg class="w-6 h-6 text-current group-hover:text-white transition-all duration-300 ease-in-out"
                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -437,7 +415,7 @@
     </section>
 
     <!-- 5 Langkah Magang -->
-    <section class="bg-blue-500 py-12 px-6">
+    <section class="bg-blue-500 py-12 px-6" id="panduan">
         <div class="max-w-7xl mx-auto">
             <!-- H2 di tengah atas -->
             <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-white">
@@ -455,7 +433,8 @@
                     <div class="flex flex-col gap-4">
 
                         <!-- Step 1 -->
-                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md">
+                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md" data-aos="zoom-in"
+                            data-aos-delay="100">
                             <div
                                 class="flex-shrink-0 w-10 h-10 min-w-10 min-h-10 aspect-square rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-lg">
                                 1
@@ -468,7 +447,8 @@
                         </div>
 
                         <!-- Step 2 -->
-                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md">
+                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md" data-aos="zoom-in"
+                            data-aos-delay="200">
                             <div
                                 class="flex-shrink-0 w-10 h-10 min-w-10 min-h-10 aspect-square rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-lg">
                                 2
@@ -482,7 +462,8 @@
                         </div>
 
                         <!-- Step 3 -->
-                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md">
+                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md" data-aos="zoom-in"
+                            data-aos-delay="300">
                             <div
                                 class="flex-shrink-0 w-10 h-10 min-w-10 min-h-10 aspect-square rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-lg">
                                 3
@@ -495,7 +476,8 @@
                         </div>
 
                         <!-- Step 4 -->
-                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md">
+                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md" data-aos="zoom-in"
+                            data-aos-delay="400">
                             <div
                                 class="flex-shrink-0 w-10 h-10 min-w-10 min-h-10 aspect-square rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-lg">
                                 4
@@ -509,7 +491,8 @@
                         </div>
 
                         <!-- Step 5 -->
-                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md">
+                        <div class="bg-blue-400 rounded-lg p-4 flex items-center gap-4 shadow-md" data-aos="zoom-in"
+                            data-aos-delay="500">
                             <div
                                 class="flex-shrink-0 w-10 h-10 min-w-10 min-h-10 aspect-square rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-lg">
                                 5
@@ -531,7 +514,35 @@
         © 2025 Sigmagang. Semua hak dilindungi.
     </footer>
 
+    <script>
+        const links = document.querySelectorAll('#menu a');
+
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                // Reset semua ke style nonaktif
+                links.forEach(l => {
+                    l.classList.remove('text-blue-600', 'md:text-blue-600',
+                    'md:dark:text-blue-500');
+                    l.classList.add('text-gray-400');
+                });
+
+                // Tambah class aktif ke yang diklik
+                this.classList.add('text-blue-600', 'md:text-blue-600', 'md:dark:text-blue-500');
+                this.classList.remove('text-gray-400');
+            });
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            offset: 100,
+            once: false // agar animasi bisa muncul lagi saat discroll naik turun
+        });
+    </script>
 
 
 

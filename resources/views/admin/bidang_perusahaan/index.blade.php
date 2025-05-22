@@ -25,7 +25,7 @@
             @forelse ($bidang_perusahaan as $index => $item)
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4">{{ $item->nama_bidang }}</td>
+                    <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->nama_bidang }}</td>
                     <td class="px-6 py-4">
                         <div class="flex gap-2">
                             <!-- Edit -->
