@@ -193,6 +193,7 @@ Route::get('/', [WelcomeController::class, 'index']);
         Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
         Route::get('/mahasiswa', [ProfilMahasiswaController::class, 'index'])->name('index');
         Route::get('/mahasiswa/edit/{id}', [ProfilMahasiswaController::class, 'edit'])->name('edit');
+        Route::put('/mahasiswa/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
         Route::get('/mahasiswa/edit_preferensi/{id}', [ProfilMahasiswaController::class, 'editPreferensi'])->name('edit_preferensi');
         Route::put('/mahasiswa/update_preferensi/{id}', [ProfilMahasiswaController::class, 'updatePreferensi'])->name('update_preferensi');
 
