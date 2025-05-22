@@ -155,6 +155,11 @@ Route::get('/', [WelcomeController::class, 'index']);
 
         Route::prefix('profil')->name('dosen.profil.')->group(function () {
             Route::get('/dosen', [profilDosenController::class, 'index'])->name('index');
+                Route::get('/dosen', [ProfilDosenController::class, 'index'])->name('index');
+                Route::get('/dosen/edit/{id}', [ProfilDosenController::class, 'edit'])->name('edit');
+                Route::put('/dosen/update/{id}', [ProfilDosenController::class, 'update'])->name('update');
+                Route::get('/dosen/edit_preferensi/{id}', [ProfilDosenController::class, 'editPreferensi'])->name('edit_preferensi');
+                Route::put('/dosen/update_preferensi/{id}', [ProfilDosenController::class, 'updatePreferensi'])->name('update_preferensi');
         });
 
         Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
@@ -191,14 +196,11 @@ Route::get('/', [WelcomeController::class, 'index']);
         // });
 
         Route::prefix('profil')->name('mahasiswa.profil.')->group(function () {
-        Route::get('/mahasiswa', [ProfilMahasiswaController::class, 'index'])->name('index');
-        Route::get('/mahasiswa/edit/{id}', [ProfilMahasiswaController::class, 'edit'])->name('edit');
-        Route::put('/mahasiswa/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
-        Route::get('/mahasiswa/edit_preferensi/{id}', [ProfilMahasiswaController::class, 'editPreferensi'])->name('edit_preferensi');
-        Route::put('/mahasiswa/update_preferensi/{id}', [ProfilMahasiswaController::class, 'updatePreferensi'])->name('update_preferensi');
-
-
-        
+            Route::get('/mahasiswa', [ProfilMahasiswaController::class, 'index'])->name('index');
+            Route::get('/mahasiswa/edit/{id}', [ProfilMahasiswaController::class, 'edit'])->name('edit');
+            Route::put('/mahasiswa/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
+            Route::get('/mahasiswa/edit_preferensi/{id}', [ProfilMahasiswaController::class, 'editPreferensi'])->name('edit_preferensi');
+            Route::put('/mahasiswa/update_preferensi/{id}', [ProfilMahasiswaController::class, 'updatePreferensi'])->name('update_preferensi');
         });
 
         Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {
