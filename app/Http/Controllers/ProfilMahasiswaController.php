@@ -53,7 +53,7 @@ class ProfilMahasiswaController extends Controller
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
     }
 
-    public function updateInformasi(Request $request)
+    public function update(Request $request)
     {
         $user = Auth::user();
 

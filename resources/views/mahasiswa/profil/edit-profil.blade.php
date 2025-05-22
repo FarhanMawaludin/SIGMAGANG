@@ -1,7 +1,7 @@
 @extends('layouts.mahasiswa-app')
 
 @section('content')
-<form method="POST" action="{{ route('profil.update-profil') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('mahasiswa.profil.update',$user->id) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
