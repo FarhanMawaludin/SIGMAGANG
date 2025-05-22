@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold text-gray-800">Log Aktivitas Mahasiswa Bimbingan</h1>
+        <h1 class="text-2xl font-bold text-gray-800">Log Aktivitas Mingguan Mahasiswa Bimbingan</h1>
     </div>
 
     {{-- Tampilkan pesan error jika ada --}}
@@ -33,6 +33,7 @@
                     <th class="px-6 py-3">Nama Mahasiswa</th>
                     <th class="px-6 py-3">Minggu</th>
                     <th class="px-6 py-3">Tanggal</th>
+                    <th class="px-6 py-3">Feedback</th>
                     <th class="px-6 py-3">Detail Harian</th>            
                 </tr>
             </thead>
@@ -49,6 +50,7 @@
                         <td class="px-6 py-4">
                             {{ \Carbon\Carbon::parse($log->tanggal_awal)->translatedFormat('l, d F Y') }} - {{ \Carbon\Carbon::parse($log->tanggal_akhir)->translatedFormat('l, d F Y') }}
                         </td>
+                        <td class="px-6 py-4">{{$log->dosen_feedback ?? 'Belum ada feedback'}}</td>
                         <td class="px-6 py-4">
                             <a href="{{ route('dosen.monitoring.show_harian', $log->id) }}"
                                 class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
