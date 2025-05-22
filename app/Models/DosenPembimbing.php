@@ -36,6 +36,10 @@ class DosenPembimbing extends Model
     public function pengajuan() {
         return $this->hasMany(Pengajuan::class);
     }
+     public function jenisMagang()
+    {
+        return $this->belongsTo(JenisMagang::class);
+    }
 
     //baru
 }

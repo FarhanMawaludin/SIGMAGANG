@@ -62,4 +62,45 @@ public function show_harian($logMingguanId)
 
     return view('dosen.monitoring.show_harian', compact('activemenu', 'logMingguan'));
 }
+public function create_feedback($logHarianId)
+{
+    $activemenu = 'monitoring';
+    $user = Auth::user();
+
+    $logHarian = LogHarian::with(['logMingguan', 'logMingguan.pengajuan.mahasiswa.user'])
+        ->where('id', $logHarianId)
+        ->whereHas('logMingguan', function($q) use ($user) {
+            $q->whereHas('pengajuan', function($q2) use ($user) {
+                $q2->where('dosen_id', $user->dosen->id);
+            });
+        })
+        ->firstOrFail();
+
+    return view('dosen.monitoring.create_feedback', compact('activemenu', 'logHarian'));
+}
+
+public function update_feedback(Request $request, $logHarianId)
+{
+    $request->validate([
+        'dosen_feedback' => 'required|string|max:255',
+    ]);
+    $user = Auth::user();
+    $logHarian = LogHarian::with(['logMingguan', 'logMingguan.pengajuan.mahasiswa.user'])
+        ->where('id', $logHarianId)
+        ->whereHas('logMingguan', function($q) use ($user) {
+            $q->whereHas('pengajuan', function($q2) use ($user) {
+                $q2->where('dosen_id', $user->dosen->id);
+            });
+        })
+        ->firstOrFail();
+
+    // Update pada logMingguan, bukan logHarian
+    $logMingguan = $logHarian->logMingguan;
+    $logMingguan->dosen_feedback = $request->input('dosen_feedback');
+    $logMingguan->save();
+
+    return redirect()
+        ->route('dosen.monitoring.show_harian', $logMingguan->id)
+        ->with('success', 'Feedback berhasil disimpan.');
+}
 }

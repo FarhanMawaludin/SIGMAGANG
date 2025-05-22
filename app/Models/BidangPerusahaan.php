@@ -11,4 +11,9 @@ class BidangPerusahaan extends Model
     protected $table = 'bidang_perusahaan';
     protected $primaryKey = 'id';
     protected $fillable = ['nama_bidang'];
+
+    public function perusahaan()
+    {
+        return $this->hasMany(Perusahaan::class);
+    }
 }
