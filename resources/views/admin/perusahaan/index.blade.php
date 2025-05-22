@@ -83,7 +83,7 @@
                                     <img src="{{ asset('images/Sertifikat.png') }}" alt="Logo Default"
                                         class="w-10 h-10 rounded-full border border-gray-200 object-cover">
                                 @endif
-                                <div class="font-medium truncate">{{ $perusahaanItem->nama }}</div>
+                                <div class="font-medium md:text-base break-words  md:whitespace-normal truncate">{{ $perusahaanItem->nama }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">{{ $perusahaanItem->alamat }}</td>

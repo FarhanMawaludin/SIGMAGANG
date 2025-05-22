@@ -81,7 +81,7 @@
                 @forelse ($jenismagang as $key => $item)
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $jenismagang->firstItem() + $key }}</td>
-                        <td class="px-6 py-4">{{ $item->jenis_magang }}</td>
+                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->jenis_magang }}</td>
                         <td class="px-6 py-4 space-x-2">
                             <!-- Edit -->
                             <a href="{{ route('jenismagang.edit', $item->id) }}"

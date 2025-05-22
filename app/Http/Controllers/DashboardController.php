@@ -19,10 +19,22 @@ class DashboardController extends Controller
         // user
         $mahasiswa = User::where('role', 'mahasiswa')->get();
         $user_count = $mahasiswa->count();
+        $todayCount = User::where('role', 'mahasiswa')
+            ->whereDate('created_at', today())
+            ->count();
+
+        $yesterdayCount = User::where('role', 'mahasiswa')
+            ->whereDate('created_at', today()->subDay())
+            ->count();
+
+        $user_increase = $todayCount - $yesterdayCount;
 
         // lowongan
         $lowongan = Lowongan::all();
         $lowongan_count = $lowongan->count();
+        $todayCount = Lowongan::whereDate('created_at', today())->count();
+        $yesterdayCount = Lowongan::whereDate('created_at', today()->subDay())->count();
+        $lowongan_increase = $todayCount - $yesterdayCount;
 
         // pengajuan
         $query = Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'lowongan'])->where('status', 'pending');
@@ -31,6 +43,9 @@ class DashboardController extends Controller
         $pending_count = Pengajuan::where('status', 'pending')->count();
         $accepted_count = Pengajuan::where('status', 'accepted')->count();
         $rejected_count = Pengajuan::where('status', 'rejected')->count();
+        $todayCount = Pengajuan::whereDate('created_at', today())->count();
+        $yesterdayCount = Pengajuan::whereDate('created_at', today()->subDay())->count();
+        $pengajuan_increase = $todayCount - $yesterdayCount;
 
         // statistik
         $accepted_per_year = Pengajuan::selectRaw('YEAR(created_at) as year, COUNT(*) as total')
@@ -38,13 +53,32 @@ class DashboardController extends Controller
             ->groupByRaw('YEAR(created_at)')
             ->orderBy('year')
             ->get();
-
         $years = $accepted_per_year->pluck('year')->toArray();
         $totals = $accepted_per_year->pluck('total')->toArray();
 
         // perusahaan
         $perusahaan = Perusahaan::all();
         $perusahaan_count = $perusahaan->count();
+        $todayCount = Perusahaan::whereDate('created_at', today())->count();
+        $yesterdayCount = Perusahaan::whereDate('created_at', today()->subDay())->count();
+        $perusahaan_increase = $todayCount - $yesterdayCount;
+
+        // tambahan: statistik bulanan berdasarkan tahun terpilih
+        $selectedYear = request('year') ?? null;
+
+        $monthlyData = [];
+        if ($selectedYear) {
+            $monthlyAcceptedPengajuan = Pengajuan::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                ->where('status', 'accepted')
+                ->whereYear('created_at', $selectedYear)
+                ->groupByRaw('MONTH(created_at)')
+                ->orderBy('month')
+                ->pluck('total', 'month');
+
+            for ($i = 1; $i <= 12; $i++) {
+                $monthlyData[] = $monthlyAcceptedPengajuan[$i] ?? 0;
+            }
+        }
 
         $activemenu = 'dashboard';
 
@@ -57,11 +91,17 @@ class DashboardController extends Controller
             'rejected_count' => $rejected_count,
             'perusahaan_count' => $perusahaan_count,
             'mahasiswa' => $mahasiswa,
+            'user_increase' => $user_increase,
             'lowongan' => $lowongan,
+            'lowongan_increase' => $lowongan_increase,
             'pengajuan' => $pengajuan,
+            'pengajuan_increase' => $pengajuan_increase,
             'perusahaan' => $perusahaan,
+            'perusahaan_increase' => $perusahaan_increase,
             'years' => $years,
             'totals' => $totals,
+            'monthlyData' => $monthlyData,
+            'selectedYear' => $selectedYear,
             'activemenu' => $activemenu
         );
 
