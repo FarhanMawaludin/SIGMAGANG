@@ -18,9 +18,7 @@ class LogMingguanSeeder extends Seeder
                 'minggu' => 1,
                 'tanggal_awal' => '2025-05-01',
                 'tanggal_akhir' => '2025-05-07',
-                'mahasiswa_feedback' => 'Bagus',
                 'dosen_feedback' => 'Bagus',
-                'evaluasi_nilai' => 4,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -29,9 +27,7 @@ class LogMingguanSeeder extends Seeder
                 'minggu' => 1,
                 'tanggal_awal' => '2025-05-01',
                 'tanggal_akhir' => '2025-05-07',
-                'mahasiswa_feedback' => 'Bagus',
                 'dosen_feedback' => 'Bagus',
-                'evaluasi_nilai' => 4,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -40,9 +36,7 @@ class LogMingguanSeeder extends Seeder
                 'minggu' => 1,
                 'tanggal_awal' => '2025-05-01',
                 'tanggal_akhir' => '2025-05-07',
-                'mahasiswa_feedback' => 'Bagus',
                 'dosen_feedback' => 'Bagus',
-                'evaluasi_nilai' => 4,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

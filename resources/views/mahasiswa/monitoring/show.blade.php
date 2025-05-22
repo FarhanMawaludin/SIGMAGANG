@@ -1,8 +1,5 @@
-{{-- filepath: c:\coolyeah\SEM4\SIGMAGANG-NEW\resources\views\mahasiswa\monitoring\show.blade.php --}}
+
 @extends('layouts.mahasiswa-app')
-
-@section('title', 'Detail Log Mingguan')
-
 @section('content')
 <div class="flex justify-between items-center mb-4">
     <h1 class="text-2xl font-bold text-gray-800">Log Harian Minggu ke-{{ $logMingguan->minggu }}</h1>
@@ -26,7 +23,7 @@
             @forelse ($logMingguan->logHarian as $index => $log)
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4">{{ $loop->iteration }}</td>
-                    <td class="px-6 py-4">{{ \Carbon\Carbon::parse($log->tanggal)->format('d M Y') }}</td>
+                    <td class="px-6 py-4">{{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('l, d F Y')}}</td>
                     <td class="px-6 py-4">{{ $log->aktivitas }}</td>
                     <td class="px-6 py-4">
                         <a href="{{ route('mahasiswa.monitoring.edit_harian', [$logMingguan->id, $log->id]) }}"

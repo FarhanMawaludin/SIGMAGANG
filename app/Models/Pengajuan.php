@@ -17,6 +17,7 @@ class Pengajuan extends Model
         'lowongan_id',
         'status',
         'skor_spk',
+        'mahasiswa_feedback',
         'dosen_id'
     ];
 
