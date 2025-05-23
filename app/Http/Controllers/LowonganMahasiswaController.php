@@ -71,7 +71,7 @@ class LowonganMahasiswaController extends Controller
     public function show($id)
     {
         $activemenu = 'lowongan';
-        $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills']) // ← perbaikan di sini
+        $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills'])
             ->withCount('pengajuan')
             ->findOrFail($id);
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Mahasiswa;
 use App\Models\Lowongan;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SwaraRecommendationController extends Controller
 {
@@ -48,10 +49,23 @@ class SwaraRecommendationController extends Controller
 
         usort($hasil, fn($a, $b) => $b['skor'] <=> $a['skor']);
 
+        $currentPage = request()->get('page', 1);
+        $perPage = 10;
+        $offset = ($currentPage - 1) * $perPage;
+        $itemsForCurrentPage = array_slice($hasil, $offset, $perPage);
+
+        $hasilPaginated = new LengthAwarePaginator(
+            $itemsForCurrentPage,
+            count($hasil),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
         return view('mahasiswa.rekomendasi.index', [
             'activemenu' => $activemenu,
             'mahasiswa' => $mahasiswa,
-            'hasil' => $hasil,
+            'hasil' => $hasilPaginated,
             'bobot' => $bobot,
         ]);
     }
