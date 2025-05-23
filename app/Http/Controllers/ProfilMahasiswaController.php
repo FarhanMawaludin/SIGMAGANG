@@ -48,6 +48,7 @@ class ProfilMahasiswaController extends Controller
         $mahasiswa->update([
             'no_telp' => $request->no_telp,
             'semester' => $request->semester,
+            'nim' => $request->nim
         ]);
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
@@ -63,6 +64,7 @@ class ProfilMahasiswaController extends Controller
             'email' => 'required|email|max:255',
             'no_telp' => 'nullable|string|max:20',
             'semester' => 'nullable|integer|min:1',
+            'nim' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -80,6 +82,7 @@ class ProfilMahasiswaController extends Controller
         $mahasiswa = $user->mahasiswa;
         $mahasiswa->no_telp = $validated['no_telp'];
         $mahasiswa->semester = $validated['semester'];
+        $mahasiswa->nim = $validated['nim'];
         $mahasiswa->save();
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Profil berhasil diperbarui');
@@ -96,7 +99,8 @@ class ProfilMahasiswaController extends Controller
         $request->validate([
             'ipk' => 'required|numeric|between:0,4.00',
             'preferensi_lokasi' => 'required|string|max:100',
-            'jenis_magang' => 'required|string|max:100',
+            'jenis_magang_id' => 'required|exists:jenis_magang,id',
+            'tipe_magang' => 'required|in:onsite,remote',
             'kemampuan' => 'nullable|string|max:255',
             'file_cv' => 'nullable|file|mimes:pdf|max:2048',
             'file_transkrip' => 'nullable|file|mimes:pdf|max:2048',
@@ -107,8 +111,9 @@ class ProfilMahasiswaController extends Controller
         $data = [
             'ipk' => $request->ipk,
             'preferensi_lokasi' => $request->preferensi_lokasi,
-            'jenis_magang' => $request->jenis_magang,
+            'jenis_magang_id' => $request->jenis_magang_id,
             'kemampuan' => $request->kemampuan,
+            'tipe_magang' => $request->tipe_magang
         ];
 
         // Proses upload file

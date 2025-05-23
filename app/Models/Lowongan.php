@@ -49,10 +49,10 @@ class Lowongan extends Model
         return $this->hasMany(DokumenLowongan::class);
     }
 
- public function skills()
-{
-    return $this->belongsToMany(Skill::class, 'lowongan_skill', 'lowongan_id', 'skill_id');
-}
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'lowongan_skill', 'lowongan_id', 'skill_id');
+    }
 
     public function jenisMagang(): BelongsTo
     {
