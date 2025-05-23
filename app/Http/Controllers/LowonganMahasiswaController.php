@@ -71,6 +71,8 @@ class LowonganMahasiswaController extends Controller
     public function show($id)
     {
         $activemenu = 'lowongan';
+        $pengajuan = Pengajuan::where('mahasiswa_id', auth()->user()->mahasiswa->id)
+            ->first();
         $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills'])
             ->withCount('pengajuan')
             ->findOrFail($id);
@@ -78,6 +80,7 @@ class LowonganMahasiswaController extends Controller
         return view('mahasiswa.lowongan.show', [
             'activemenu' => $activemenu,
             'lowongan' => $lowongan,
+            'pengajuan' => $pengajuan,
         ]);
     }
 }
