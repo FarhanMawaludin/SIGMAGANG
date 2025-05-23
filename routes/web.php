@@ -20,6 +20,7 @@ use App\Http\Controllers\ProfilMahasiswaController;
 use App\Http\Controllers\MonitoringMahasiswaController;
 use App\Http\Controllers\PengajuanMahasiswaController;
 use App\Http\Controllers\SwaraRecommendationController;
+use App\Http\Controllers\FuzzyRecommedationController;
 
 //dosen
 use App\Http\Controllers\ProfilDosenController;
@@ -199,6 +200,9 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa', [MonitoringMahasiswaController::class, 'index'])->name('index');
         Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
         Route::post('/mahasiswa/store', [MonitoringMahasiswaController::class, 'store'])->name('store');
+        Route::get('/mahasiswa/selesai', [MonitoringMahasiswaController::class, 'selesai'])->name('selesai');
+        Route::get('/mahasiswa/review', [MonitoringMahasiswaController::class, 'review'])->name('review');
+        Route::put('/mahasiswa/review_update', [MonitoringMahasiswaController::class, 'review_update'])->name('review.update');
         Route::get('/mahasiswa/{id}/show', [MonitoringMahasiswaController::class, 'show'])->name('show');
         Route::get('/mahasiswa/{id}/create_harian', [MonitoringMahasiswaController::class, 'create_harian'])->name('create_harian');
         Route::post('/mahasiswa/{id}/store_harian', [MonitoringMahasiswaController::class, 'store_harian'])->name('store_harian');
@@ -208,6 +212,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
     });
 
     Route::get('/rekomendasi/swara', [SwaraRecommendationController::class, 'rekomendasi'])->name('mahasiswa.rekomendasi.index');
+    Route::get('/rekomendasi/fuzzy', [FuzzyRecommedationController::class, 'rekomendasi'])->name('mahasiswa.rekomendasi.fuzzy');
 });
 
 require __DIR__ . '/auth.php';

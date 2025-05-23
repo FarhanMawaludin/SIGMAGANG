@@ -5,11 +5,31 @@
         <h1 class="text-2xl font-bold text-gray-800">Rekomendasi Lowongan</h1>
         <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
             class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button" onclick="location.href='{{ route('mahasiswa.rekomendasi.index') }}'">Rekomendasi
+            type="button">Rekomendasi
+            <svg class="w-4 h-4 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor" viewBox="0 0 20 20">
+                <path
+                    d="M5.23 7.21a.75.75 0 0 1 .97-.07L10 10.293l3.8-3.8a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.23 8.27a.75.75 0 0 1-.07-.97Z" />
+            </svg>
         </button>
+        <div id="dropdownDivider"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
+                <li>
+                    <a href="{{ route('mahasiswa.rekomendasi.index') }}"
+                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Rekomendasi
+                        Swara</a>
+                </li>
+                <li>
+                    <a href="{{ route('mahasiswa.rekomendasi.fuzzy') }}"
+                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Rekomendasi
+                        Fuzzy</a>
+                </li>
+            </ul>
+        </div>
     </div>
 
-    @if ($pengajuan)
+    {{-- @if ($pengajuan)
         <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
             role="alert">
             <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +61,7 @@
                 </p>
             </div>
         </div>
-    @else
+    @else --}}
         <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             @foreach ($lowongan as $item)
                 <div class="max-w-sm w-full mx-auto bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -100,5 +120,5 @@
                 </div>
             @endforeach
         </div>
-    @endif
+    {{-- @endif --}}
 @endsection

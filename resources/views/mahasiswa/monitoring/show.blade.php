@@ -61,16 +61,18 @@
                     class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm">
                     &larr; Kembali ke Log Mingguan
                 </a>
+                 @if ($logMingguan->pengajuan->status == 'accepted')
                 <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
                     class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button"
                     onclick="location.href='{{ route('mahasiswa.monitoring.create_harian', $logMingguan->id) }}'">Tambah Log
                     Harian
                 </button>
-                {{-- <a href="{{ route('mahasiswa.monitoring.create_harian', $logMingguan->id) }}"
-                    class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
-                    + Tambah Log Harian
-                </a> --}}
+                @else
+                    <div class="text-gray-500">
+                        Magang telah selesai, tidak dapat menambah log harian.
+                    </div>
+                @endif
             </div>
         @endif
     </div>
