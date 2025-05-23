@@ -46,6 +46,24 @@
             </div>
 
             <!-- Button -->
+            @if ($pengajuan->status != 'rejected')
+                <div class="text-right flex flex-col items-center">
+               
+                    {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
+                    <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
+                    <button type="submit"
+                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition cursor-not-allowed disabled:">Daftar
+                        Sekarang</button>
+                        @if ($pengajuan->status == 'accepted'|| $pengajuan->status == 'completed')
+                        <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
+                                class="font-medium text-green-600">{{ $pengajuan->status }}</span></p>
+                        @elseif ($pengajuan->status == 'pending')
+                        <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
+                                class="font-medium text-yellow-600">{{ $pengajuan->status }}</span></p>
+                        @endif
+            </div>
+        </div> 
+        @else
             <div class="text-right flex flex-col items-center">
                 <form action="{{ route('mahasiswa.pengajuan.store') }}" method="POST">
                     @csrf
@@ -59,7 +77,7 @@
                     {{ $lowongan->pengajuan_count }} Pelamar</p>
             </div>
         </div>
-
+@endif
         <!-- Tabs -->
         <div class="mb-4">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabExample" data-tabs-toggle="#tabContent"
