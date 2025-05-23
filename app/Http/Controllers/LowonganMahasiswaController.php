@@ -76,11 +76,15 @@ class LowonganMahasiswaController extends Controller
         $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills'])
             ->withCount('pengajuan')
             ->findOrFail($id);
+        $review = Pengajuan::where('lowongan_id', $id)
+            ->where('status', 'completed')
+            ->get();
 
         return view('mahasiswa.lowongan.show', [
             'activemenu' => $activemenu,
             'lowongan' => $lowongan,
             'pengajuan' => $pengajuan,
+            'review' => $review,
         ]);
     }
 }

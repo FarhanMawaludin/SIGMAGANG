@@ -342,4 +342,42 @@ class MonitoringMahasiswaController extends Controller
         ]);
         return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log mingguan berhasil ditandai selesai.');
     }
+    public function review()
+    {
+        $activemenu = 'monitoring';
+        $user = Auth::user();
+
+        $pengajuan = Pengajuan::with('mahasiswa.user')
+            ->where('mahasiswa_id', $user->id)
+            ->where('status', 'completed')
+            ->first();
+
+        if (!$pengajuan) {
+            return redirect()->back()->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
+        }
+
+        return view('mahasiswa.monitoring.review', compact('activemenu', 'pengajuan'));
+    }
+    public function review_update(Request $request)
+    {
+        $request->validate([
+            'mahasiswa_feedback' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+
+        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+            ->where('status', 'completed')
+            ->first();
+
+        if (!$pengajuan) {
+            return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
+        }
+
+        $pengajuan->update([
+            'mahasiswa_feedback' => $request->mahasiswa_feedback,
+        ]);
+
+        return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Review berhasil ditambahkan.');
+    }
 }

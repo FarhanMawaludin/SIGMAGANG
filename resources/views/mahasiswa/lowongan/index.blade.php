@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    @if ($pengajuan)
+    {{-- @if ($pengajuan)
         <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
             role="alert">
             <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@
                 </p>
             </div>
         </div>
-    @else
+    @else --}}
         <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             @foreach ($lowongan as $item)
                 <div class="max-w-sm w-full mx-auto bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -120,5 +120,5 @@
                 </div>
             @endforeach
         </div>
-    @endif
+    {{-- @endif --}}
 @endsection

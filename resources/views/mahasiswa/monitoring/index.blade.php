@@ -21,10 +21,16 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800 whitespace-nowrap">Log Mingguan</h1>
         @if ($pengajuan->status == 'completed')
+         <div class="flex justify-end gap-2 w-full">
+         <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
+            class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            type="button" onclick="location.href='{{ route('mahasiswa.monitoring.review') }}'">Tambakan review
+    </button>
              <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
             class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button" onclick="noLog()">Tambah Log
     </button>
+     </div>
             @else
             <div class="flex justify-end gap-2 w-full">
                 <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
