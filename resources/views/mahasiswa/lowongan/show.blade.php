@@ -46,6 +46,24 @@
             </div>
 
             <!-- Button -->
+            @if ($pengajuan->status != 'rejected')
+                <div class="text-right flex flex-col items-center">
+               
+                    {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
+                    <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
+                    <button type="submit"
+                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition cursor-not-allowed disabled:">Daftar
+                        Sekarang</button>
+                        @if ($pengajuan->status == 'accepted'|| $pengajuan->status == 'completed')
+                        <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
+                                class="font-medium text-green-600">{{ $pengajuan->status }}</span></p>
+                        @elseif ($pengajuan->status == 'pending')
+                        <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
+                                class="font-medium text-yellow-600">{{ $pengajuan->status }}</span></p>
+                        @endif
+            </div>
+        </div> 
+        @else
             <div class="text-right flex flex-col items-center">
                 <form action="{{ route('mahasiswa.pengajuan.store') }}" method="POST">
                     @csrf
@@ -59,7 +77,7 @@
                     {{ $lowongan->pengajuan_count }} Pelamar</p>
             </div>
         </div>
-
+@endif
         <!-- Tabs -->
         <div class="mb-4">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabExample" data-tabs-toggle="#tabContent"
@@ -200,7 +218,7 @@
                                     stroke-width="2"
                                     d="M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9V7Zm5 0h1v1h-1V7Zm-5 4h1v1H9v-1Zm5 0h1v1h-1v-1Zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1Z" />
                             </svg>
-                            <span>Cyber Security</span>
+                            <span>Website</span>
                         </div>
 
                         <!-- Link Website -->
@@ -213,8 +231,8 @@
                                     d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
                             </svg>
 
-                            <a href="https://KAIINDONESIA.co.id" target="_blank" class="text-blue-500 hover:underline">
-                                https://KAIINDONESIA.co.id
+                            <a href="{{ $lowongan->perusahaan->website }}" target="_blank" class="text-blue-500 hover:underline">
+                                {{ $lowongan->perusahaan->website }}
                             </a>
                         </div>
                     </div>
@@ -232,40 +250,39 @@
                 <hr class="mb-4 mt-4 border-gray-200">
 
                 <h2 class="text-xl font-bold text-gray-900 mb-4">Ulasan Pemagang</h2>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Farhan"
-                        class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Farhan Mawaludin</h3>
-                        <p class="text-sm text-gray-500">Internship KAI 2025 – IT Department</p>
-                        <p class="mt-2 text-gray-600 text-sm">senang dan alhamdulillah bisa berkembang dengan pengetahuan
-                            baru
-                            yang belum pernah saya dapatkan sebelumnya</p>
+                <p class="text-gray-500 text-sm mb-4">Berikan ulasan dan penilaian terhadap pengalaman magang Anda di
+                    perusahaan ini.</p>
+                    @if ($review->isEmpty())
+                    <div class="flex items-center p-4 mb-4 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
+                        role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <p class="font-medium">
+                                Belum ada ulasan untuk lowongan ini.
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Siti"
+                    @else
+                        
+                    @foreach ($review as $item)
+                    <!-- Ulasan -->
+                    <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
+                        <img src="{{ asset('storage/' .$item->mahasiswa->user->foto) }}" alt="Avatar Farhan"
                         class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Siti Markona</h3>
-                        <p class="text-sm text-gray-500">Internship KAI 2025 – IT Department</p>
-                        <p class="mt-2 text-gray-600 text-sm">senang dan alhamdulillah bisa berkembang dengan pengetahuan
-                            baru
-                            yang belum pernah saya dapatkan sebelumnya</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Markova"
-                        class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Markova</h3>
-                        <p class="text-sm text-gray-500">Internship KAI 2025 – IT Department</p>
-                        <p class="mt-2 text-gray-600 text-sm">senang dan alhamdulillah bisa berkembang dengan pengetahuan
-                            baru
-                            yang belum pernah saya dapatkan sebelumnya</p>
-                    </div>
-                </div>
-
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">{{ $item->mahasiswa->user->name }}</h3>
+                            <p class="text-sm text-gray-500">{{ $item->lowongan->nama }}</p>
+                            <p class="mt-2 text-gray-600 text-sm">{{$item->mahasiswa_feedback}}</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    @endif
+                
                 <!-- Tombol -->
                 <div class="flex justify-center mt-6">
                     <a href="#"
