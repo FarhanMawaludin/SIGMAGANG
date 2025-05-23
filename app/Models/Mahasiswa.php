@@ -17,8 +17,10 @@ class Mahasiswa extends Model
         'nama',
         'prodi',
         'ipk',
-        'lokasi_preferensi',
-        'user_id'
+        'preferensi_lokasi',
+        'jenis_magang_id',
+        'user_id',
+        'tipe_magang'
     ];
 
     public function user(): BelongsTo
@@ -39,7 +41,7 @@ class Mahasiswa extends Model
     }
     public function jenisMagang()
     {
-        return $this->belongsTo(JenisMagang::class);
+        return $this->belongsTo(JenisMagang::class, 'jenis_magang_id');
     }
 
     public function pengajuan()

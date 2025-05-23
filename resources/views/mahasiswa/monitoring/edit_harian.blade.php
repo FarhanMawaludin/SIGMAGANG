@@ -1,7 +1,8 @@
 @extends('layouts.mahasiswa-app')
 
 @section('content')
-    <form method="POST" action="{{ route('mahasiswa.monitoring.update_harian', $logHarian->id) }}">
+    <form method="POST"
+        action="{{ route('mahasiswa.monitoring.update_harian', ['mingguan' => $logMingguan->id, 'harian' => $logHarian->id]) }}">
         @csrf
         @method('PUT')
         <input type="hidden" name="log_harian_id" value="{{ $logHarian->id }}">
@@ -26,33 +27,35 @@
                     <div class="sm:col-span-1">
                         <label for="jam_mulai" class="block text-sm font-medium text-gray-900">Jam Mulai</label>
                         <div class="mt-2">
-                            <input type="time" id="jam_mulai" name="jam_mulai"
+                            <input type="time" id="jam_mulai" name="jam_mulai" step="60"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                value="{{ old('jam_mulai', $logHarian->jam_mulai) }}">
+                                value="{{ old('jam_mulai', \Carbon\Carbon::parse($logHarian->jam_mulai)->format('H:i')) }}">
                             @error('jam_mulai')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
+
                     <!-- Jam Selesai -->
                     <div class="sm:col-span-1">
                         <label for="jam_selesai" class="block text-sm font-medium text-gray-900">Jam Selesai</label>
                         <div class="mt-2">
-                            <input type="time" id="jam_selesai" name="jam_selesai"
+                            <input type="time" id="jam_selesai" name="jam_selesai" step="60"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                value="{{ old('jam_selesai', $logHarian->jam_selesai) }}">
+                                value="{{ old('jam_selesai', \Carbon\Carbon::parse($logHarian->jam_selesai)->format('H:i')) }}">
                             @error('jam_selesai')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
+
                     <!-- Aktivitas -->
                     <div class="sm:col-span-full">
                         <label for="aktivitas" class="block text-sm font-medium text-gray-900">Aktivitas</label>
                         <div class="mt-2">
                             <textarea type="text" id="aktivitas" name="aktivitas" rows="5"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                placeholder="Tulis Aktivitas" >{{ old('aktivitas', $logHarian->aktivitas) }}</textarea>
+                                placeholder="Tulis Aktivitas">{{ old('aktivitas', $logHarian->aktivitas) }}</textarea>
                             @error('aktivitas')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror

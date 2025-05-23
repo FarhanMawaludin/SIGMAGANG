@@ -47,12 +47,13 @@
 
             <!-- Button -->
             <div class="text-right flex flex-col items-center">
-                <form action="{{route('mahasiswa.pengajuan.store')}}" method="POST">
+                <form action="{{ route('mahasiswa.pengajuan.store') }}" method="POST">
                     @csrf
                     {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
                     <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
                     <button type="submit"
-                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar Sekarang</button>
+                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar
+                        Sekarang</button>
                 </form>
                 <p class="text-sm text-gray-500 mt-2">{{ $lowongan->jumlah_magang }} Posisi •
                     {{ $lowongan->pengajuan_count }} Pelamar</p>
@@ -113,17 +114,16 @@
                                 d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185" />
                         </svg>
                         <div>
-                            <h3 class="font-semibold text-gray-950  text-lg mb-1">Kemampuan Pendukung</h3>
-                            @if ($lowongan->skill->count() > 0)
+                            <h3 class="font-semibold text-gray-950 text-lg mb-1">Kemampuan Pendukung</h3>
+                            @if ($lowongan->skills->count() > 0)
                                 <ul class="list-disc list-inside font-medium text-[15px] text-gray-700 space-y-1 mt-2">
-                                    @foreach ($lowongan->skill as $skill)
+                                    @foreach ($lowongan->skills as $skill)
                                         <li>{{ $skill->nama }}</li>
                                     @endforeach
                                 </ul>
                             @else
                                 <p class="text-sm text-gray-400 italic">Belum ada kemampuan yang ditentukan.</p>
                             @endif
-
                         </div>
                     </div>
                 </div>

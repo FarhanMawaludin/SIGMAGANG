@@ -19,9 +19,10 @@ class LowonganMahasiswaController extends Controller
         $search = $request->input('search');
         $category = $request->input('category', 'all');
 
-        $query = Lowongan::with(['perusahaan', 'jenismagang', 'prodi'])->withCount('pengajuan')
-        ->where('jumlah_magang', '>', 0)
-        ->where('batas_pendaftaran', '>=', now());
+        $query = Lowongan::with(['perusahaan', 'jenismagang', 'prodi'])
+            ->withCount('pengajuan')
+            ->where('jumlah_magang', '>', 0)
+            ->where('batas_pendaftaran', '>=', now());
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -36,28 +37,44 @@ class LowonganMahasiswaController extends Controller
 
         $lowongan = $query->paginate(10)->appends([
             'search' => $search,
-            'category' => $category
+            'category' => $category,
         ]);
 
         $perusahaan = Perusahaan::all();
         $jenismagang = Jenismagang::all();
+        $prodi = Prodi::all();
 
         $mahasiswa = auth()->user()->mahasiswa;
         $pengajuan = null;
+
         if ($mahasiswa) {
+            // Cek apakah mahasiswa memiliki pengajuan yang belum selesai atau belum ditolak
             $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
-                ->where('status', '!=', 'rejected')
+                ->whereNotIn('status', ['rejected', 'completed'])
                 ->latest()
                 ->first();
         }
-        $prodi = Prodi::all();
-        return view('mahasiswa.lowongan.index', compact('activemenu', 'lowongan', 'jenismagang', 'prodi', 'search', 'category', 'perusahaan', 'pengajuan'));
+
+        return view('mahasiswa.lowongan.index', compact(
+            'activemenu',
+            'lowongan',
+            'jenismagang',
+            'prodi',
+            'search',
+            'category',
+            'perusahaan',
+            'pengajuan'
+        ));
     }
+
 
     public function show($id)
     {
         $activemenu = 'lowongan';
-        $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skill'])->withCount('pengajuan')->findOrFail($id);
+        $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills']) // ← perbaikan di sini
+            ->withCount('pengajuan')
+            ->findOrFail($id);
+
         return view('mahasiswa.lowongan.show', [
             'activemenu' => $activemenu,
             'lowongan' => $lowongan,
