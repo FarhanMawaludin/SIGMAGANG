@@ -17,12 +17,12 @@ class MonitoringMahasiswaController extends Controller
 
         $pengajuan = Pengajuan::with('mahasiswa.user')
             ->where('mahasiswa_id', $user->id)
-            ->where('status', 'accepted')
+            ->whereIn('status', ['accepted', 'completed'])
             ->first();
 
         if (!$pengajuan) {
             $logMingguan = collect();
-            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan'))
+            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan', 'pengajuan'))
                 ->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
         }
 
@@ -30,7 +30,7 @@ class MonitoringMahasiswaController extends Controller
             ->orderByDesc('tanggal_awal')
             ->paginate(10);
 
-        return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan'));
+        return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan', 'pengajuan'));
     }
 
     public function create()
@@ -327,5 +327,19 @@ class MonitoringMahasiswaController extends Controller
         $logHarian = LogHarian::findOrFail($harian);
 
         return view('mahasiswa.monitoring.detail_harian', compact('activemenu', 'logMingguan', 'logHarian'));
+    }
+    public function selesai(){
+        $user = Auth::user();
+        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+            ->where('status', 'accepted')
+            ->first();
+        if (!$pengajuan) {
+            return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
+        }
+
+        $pengajuan->update([
+            'status' => 'completed',
+        ]);
+        return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log mingguan berhasil ditandai selesai.');
     }
 }
