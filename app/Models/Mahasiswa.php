@@ -48,5 +48,6 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(Pengajuan::class);
     }
+    
     // baru
 }
