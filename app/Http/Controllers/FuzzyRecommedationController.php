@@ -15,7 +15,17 @@ class FuzzyRecommedationController extends Controller
     {
         $activemenu = 'lowongan';
 
-        $mahasiswa = Mahasiswa::with('skills')->where('user_id', Auth::id())->firstOrFail();
+        $mahasiswa = Mahasiswa::with('skills', 'prodi')->where('user_id', Auth::id())->first();
+
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.profil.index')
+                ->with('error', 'Silakan lengkapi profil terlebih dahulu sebelum melihat rekomendasi.');
+        }
+
+        if (!$mahasiswa->isCompleteProfile()) {
+            return redirect()->route('mahasiswa.profil.index')
+                ->with('error', 'Profil Anda belum lengkap. Lengkapi profil terlebih dahulu.');
+        }
 
         $bobot = [
             'skills' => 0.25,

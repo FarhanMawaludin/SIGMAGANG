@@ -45,39 +45,54 @@
 
             </div>
 
-            <!-- Button -->
-            @if ($pengajuan->status != 'rejected')
+            @if ($pengajuan && $pengajuan->status != 'rejected')
                 <div class="text-right flex flex-col items-center">
-               
-                    {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
                     <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
                     <button type="submit"
                         class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition cursor-not-allowed disabled:">Daftar
                         Sekarang</button>
-                        @if ($pengajuan->status == 'accepted'|| $pengajuan->status == 'completed')
+
+                    @if ($pengajuan->status == 'accepted' || $pengajuan->status == 'completed')
                         <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
                                 class="font-medium text-green-600">{{ $pengajuan->status }}</span></p>
-                        @elseif ($pengajuan->status == 'pending')
+                    @elseif ($pengajuan->status == 'pending')
                         <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
                                 class="font-medium text-yellow-600">{{ $pengajuan->status }}</span></p>
-                        @endif
-            </div>
-        </div> 
-        @else
-            <div class="text-right flex flex-col items-center">
-                <form action="{{ route('mahasiswa.pengajuan.store') }}" method="POST">
-                    @csrf
-                    {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
-                    <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
-                    <button type="submit"
-                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar
-                        Sekarang</button>
-                </form>
-                <p class="text-sm text-gray-500 mt-2">{{ $lowongan->jumlah_magang }} Posisi •
-                    {{ $lowongan->pengajuan_count }} Pelamar</p>
-            </div>
+                    @endif
+                </div>
+            @else
+                <div class="text-right flex flex-col items-center">
+                    {{-- <form action="{{ route('admin.lowongan.destroy', $item->id) }}" method="POST"
+                class="inline" id="delete-form-{{ $item->id }}">
+                @csrf
+                @method('DELETE')
+                <button type="button"
+                    class="inline-flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm cursor-pointer btn-delete"
+                    data-id="{{ $item->id }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span class="hidden md:inline">Hapus</span>
+                </button>
+            </form> --}}
+                    <form action="{{ route('mahasiswa.pengajuan.store') }}" method="POST"
+                        id="daftar-form-{{ $lowongan->id }}">
+                        @csrf
+                        <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
+                        <button type="button" {{-- gunakan type="button" agar tidak submit langsung --}}
+                            class="btn-daftar bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition"
+                            data-id="{{ $lowongan->id }}">
+                            Daftar Sekarang
+                        </button>
+                    </form>
+
+                    <p class="text-sm text-gray-500 mt-2">{{ $lowongan->jumlah_magang }} Posisi •
+                        {{ $lowongan->pengajuan_count }} Pelamar</p>
+                </div>
         </div>
-@endif
+        @endif
         <!-- Tabs -->
         <div class="mb-4">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="tabExample" data-tabs-toggle="#tabContent"
@@ -231,7 +246,8 @@
                                     d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
                             </svg>
 
-                            <a href="{{ $lowongan->perusahaan->website }}" target="_blank" class="text-blue-500 hover:underline">
+                            <a href="{{ $lowongan->perusahaan->website }}" target="_blank"
+                                class="text-blue-500 hover:underline">
                                 {{ $lowongan->perusahaan->website }}
                             </a>
                         </div>
@@ -252,7 +268,7 @@
                 <h2 class="text-xl font-bold text-gray-900 mb-4">Ulasan Pemagang</h2>
                 <p class="text-gray-500 text-sm mb-4">Berikan ulasan dan penilaian terhadap pengalaman magang Anda di
                     perusahaan ini.</p>
-                    @if ($review->isEmpty())
+                @if ($review->isEmpty())
                     <div class="flex items-center p-4 mb-4 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
                         role="alert">
                         <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -267,22 +283,21 @@
                             </p>
                         </div>
                     </div>
-                    @else
-                        
+                @else
                     @foreach ($review as $item)
-                    <!-- Ulasan -->
-                    <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                        <img src="{{ asset('storage/' .$item->mahasiswa->user->foto) }}" alt="Avatar Farhan"
-                        class="w-10 h-10 rounded-full object-cover" />
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">{{ $item->mahasiswa->user->name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $item->lowongan->nama }}</p>
-                            <p class="mt-2 text-gray-600 text-sm">{{$item->mahasiswa_feedback}}</p>
+                        <!-- Ulasan -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
+                            <img src="{{ asset('storage/' . $item->mahasiswa->user->foto) }}" alt="Avatar Farhan"
+                                class="w-10 h-10 rounded-full object-cover" />
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">{{ $item->mahasiswa->user->name }}</h3>
+                                <p class="text-sm text-gray-500">{{ $item->lowongan->nama }}</p>
+                                <p class="mt-2 text-gray-600 text-sm">{{ $item->mahasiswa_feedback }}</p>
                             </div>
                         </div>
-                        @endforeach
-                    @endif
-                
+                    @endforeach
+                @endif
+
                 <!-- Tombol -->
                 <div class="flex justify-center mt-6">
                     <a href="#"
@@ -293,4 +308,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.btn-daftar').forEach(button => {
+            button.addEventListener('click', function() {
+                const lowonganId = this.getAttribute('data-id');
+                const profilLengkap = @json($profilLengkap);
+
+                if (!profilLengkap) {
+                    Swal.fire({
+                        title: 'Profil Belum Lengkap',
+                        text: 'Silakan lengkapi profil Anda terlebih dahulu sebelum mendaftar.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Isi Sekarang',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ route('mahasiswa.profil.index') }}";
+                        }
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin ingin mendaftar?',
+                    text: 'Pastikan data Anda sudah benar.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Daftar',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('daftar-form-' + lowonganId).submit();
+                    }
+                });
+            });
+        });
+    </script>
+
 @endsection
