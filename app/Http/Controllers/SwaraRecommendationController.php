@@ -14,7 +14,17 @@ class SwaraRecommendationController extends Controller
     {
         $activemenu = 'lowongan';
 
-        $mahasiswa = Mahasiswa::with('skills')->where('user_id', Auth::id())->firstOrFail();
+        $mahasiswa = Mahasiswa::with('skills', 'prodi')->where('user_id', Auth::id())->first();
+
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.profil.index')
+                ->with('error', 'Silakan lengkapi profil terlebih dahulu sebelum melihat rekomendasi.');
+        }
+
+        if (!$mahasiswa->isCompleteProfile()) {
+            return redirect()->route('mahasiswa.profil.index')
+                ->with('error', 'Profil Anda belum lengkap. Lengkapi profil terlebih dahulu.');
+        }
 
         $bobot = [
             'skills' => 0.292,
@@ -25,7 +35,7 @@ class SwaraRecommendationController extends Controller
             'prodi' => 0.056,
         ];
 
-        $lowongans = Lowongan::with('skills')->get();
+        $lowongans = Lowongan::with('skills', 'prodi')->get();
         $hasil = [];
 
         foreach ($lowongans as $lowongan) {
@@ -35,7 +45,7 @@ class SwaraRecommendationController extends Controller
                 'lokasi' => $mahasiswa->preferensi_lokasi === $lowongan->lokasi ? 1 : 0,
                 'jenis_magang' => $mahasiswa->jenis_magang === $lowongan->jenis_magang ? 1 : 0,
                 'tipe_magang' => $mahasiswa->tipe_magang === $lowongan->tipe_magang ? 1 : 0,
-                'prodi' => $mahasiswa->prodi->nama === $lowongan->prodi->nama ? 1 : 0,
+                'prodi' => optional($mahasiswa->prodi)->nama === optional($lowongan->prodi)->nama ? 1 : 0,
             ];
 
             $skor = collect($nilai)->map(fn($val, $k) => $val * $bobot[$k])->sum();
@@ -49,6 +59,7 @@ class SwaraRecommendationController extends Controller
 
         usort($hasil, fn($a, $b) => $b['skor'] <=> $a['skor']);
 
+        // Pagination
         $currentPage = request()->get('page', 1);
         $perPage = 10;
         $offset = ($currentPage - 1) * $perPage;

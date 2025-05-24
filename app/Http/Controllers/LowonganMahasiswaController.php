@@ -46,9 +46,11 @@ class LowonganMahasiswaController extends Controller
 
         $mahasiswa = auth()->user()->mahasiswa;
         $pengajuan = null;
+        $profilLengkap = true;
 
         if ($mahasiswa) {
-            // Cek apakah mahasiswa memiliki pengajuan yang belum selesai atau belum ditolak
+            $profilLengkap = $mahasiswa->isCompleteProfile();
+
             $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
                 ->whereNotIn('status', ['rejected', 'completed'])
                 ->latest()
@@ -63,7 +65,8 @@ class LowonganMahasiswaController extends Controller
             'search',
             'category',
             'perusahaan',
-            'pengajuan'
+            'pengajuan',
+            'profilLengkap'
         ));
     }
 
@@ -71,20 +74,30 @@ class LowonganMahasiswaController extends Controller
     public function show($id)
     {
         $activemenu = 'lowongan';
-        $pengajuan = Pengajuan::where('mahasiswa_id', auth()->user()->mahasiswa->id)
-            ->first();
+        $user = auth()->user();
+        $mahasiswa = $user->mahasiswa;
+
+        // Cek apakah mahasiswa tersedia
+        $pengajuan = $mahasiswa
+            ? Pengajuan::where('mahasiswa_id', $mahasiswa->id)->first()
+            : null;
+
         $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills'])
             ->withCount('pengajuan')
             ->findOrFail($id);
+
         $review = Pengajuan::where('lowongan_id', $id)
             ->where('status', 'completed')
             ->get();
+
+        $profilLengkap = $mahasiswa?->isCompleteProfile() ?? false;
 
         return view('mahasiswa.lowongan.show', [
             'activemenu' => $activemenu,
             'lowongan' => $lowongan,
             'pengajuan' => $pengajuan,
             'review' => $review,
+            'profilLengkap' => $profilLengkap,
         ]);
     }
 }

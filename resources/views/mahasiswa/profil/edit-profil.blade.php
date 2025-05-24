@@ -25,11 +25,11 @@
                         class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"> --}}
                 </div>
 
-                {{-- NIM (readonly) --}}
+                {{-- NIM --}}
                 <div class="sm:col-span-3">
                     <label for="nim" class="block text-sm/6 font-medium text-gray-900">NIM</label>
                     <div class="mt-2">
-                        <input type="text" name="nim" id="nim" value="{{ $user->mahasiswa->nim }}"
+                        <input type="text" name="nim" id="nim" value="{{ $user->mahasiswa?->nim ?? '' }}"
                             autocomplete="given-name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                         @error('nim')
@@ -62,9 +62,9 @@
                     <label for="no_telp" class="block text-sm/6 font-medium text-gray-900">No Telepon</label>
                     <div class="mt-2">
                         <input type="text" name="no_telp" id="no_telp"
-                            value="{{ old('no_telp', $user->mahasiswa->no_telp) }}" autocomplete="given-name"
+                            value="{{ old('no_telp', $user->mahasiswa->no_telp ?? '') }}" autocomplete="given-name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                        @error('email')
+                        @error('no_telp')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -74,28 +74,37 @@
                         class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"> --}}
                 </div>
 
-                {{-- Prodi (readonly) --}}
+                {{-- Prodi --}}
+                {{-- <div class="sm:col-span-3"> --}}
                 <div class="sm:col-span-3">
-                    <label for="nama" class="block text-sm/6 font-medium text-gray-900">Program Studi</label>
+                    <label for="prodi_id" class="block text-sm/6 font-medium text-gray-900">Prodi</label>
+                    <select name="prodi_id" id="prodi_id"
+                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        @foreach ($prodis ?? [] as $prodi)
+                            <option value="{{ $prodi->id }}">{{ $prodi->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                {{-- <label for="nama" class="block text-sm/6 font-medium text-gray-900">Program Studi</label>
                     <div class="mt-2">
-                        <input type="text" name="nama" id="nama"
-                            value="{{ $user->mahasiswa->prodi->nama }}" autocomplete="given-name"
+                        <input type="text" name="nama" id="nama" value="{{ $user->mahasiswa->prodi->nama }}"
+                            autocomplete="given-name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                         @error('nama')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-                    </div>
-                    {{-- <label class="block text-sm font-medium text-gray-900">Program Studi</label>
+                    </div> --}}
+                {{-- <label class="block text-sm font-medium text-gray-900">Program Studi</label>
                     <input type="text" value="{{ $user->mahasiswa->prodi->nama }}" readonly
                         class="mt-2 block w-full bg-gray-100 px-3 py-1.5 rounded-md border border-gray-300 text-gray-700 sm:text-sm"> --}}
-                </div>
+                {{-- </div> --}}
 
                 {{-- Semester --}}
                 <div class="sm:col-span-3">
                     <label for="semester" class="block text-sm/6 font-medium text-gray-900">Semester</label>
                     <div class="mt-2">
                         <input type="text" name="semester" id="semester"
-                            value="{{ old('semester', $user->mahasiswa->semester) }}" autocomplete="given-name"
+                            value="{{ old('semester', $user->mahasiswa->semester ?? '') }}" autocomplete="given-name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                         @error('semester')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

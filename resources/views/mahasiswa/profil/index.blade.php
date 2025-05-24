@@ -5,12 +5,20 @@
 
     <!-- Header Profil dengan Foto -->
     <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6 flex items-center gap-6">
-        <img src="{{ asset('storage/' . $user->mahasiswa->user->foto) }}" alt="Foto Profil"
-            class="w-24 h-24 rounded-full object-cover border border-gray-300">
+        @if ($user->mahasiswa && $user->mahasiswa->user->foto)
+            <img src="{{ asset('storage/' . $user->mahasiswa->user->foto) }}" alt="Foto Profil"
+                class="w-24 h-24 rounded-full object-cover border border-gray-300">
+        @else
+            <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
+                class="w-24 h-24 rounded-full object-cover border border-gray-300">
+        @endif
+
+        {{-- <img src="{{ asset('storage/' . $user->mahasiswa->user->foto) }}" alt="Foto Profil"
+            class="w-24 h-24 rounded-full object-cover border border-gray-300"> --}}
         <div>
             <h3 class="text-[22px] font-semibold text-gray-900">{{ $user->name }}</h3>
-            <p class="text-[18px] text-gray-700">{{ $user->mahasiswa->nim }}</p>
-            <p class="text-[18px] text-gray-400">{{ $user->mahasiswa->prodi->nama }}</p>
+            <p class="text-[18px] text-gray-700">{{ $user->mahasiswa->nim ?? 'NIM Tidak Ditemukan' }}</p>
+            <p class="text-[18px] text-gray-400">{{ $user->mahasiswa->prodi->nama ?? 'Program Studi Tidak Ditemukan' }}</p>
         </div>
     </div>
 
@@ -35,7 +43,7 @@
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">NIM</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->nim }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->nim ?? 'NIM Tidak Ditemukan' }}</p>
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">Email</p>
@@ -43,15 +51,15 @@
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">No Telepon</p>
-                <p class=" text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->no_telp }}</p>
+                <p class=" text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->no_telp ?? 'No Telepon Tidak Ditemukan' }}</p>
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">Prodi</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->prodi->nama }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->prodi->nama ?? 'Program Studi Tidak Ditemukan' }}</p>
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">Semester</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->semester }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->semester ?? 'Semester Tidak Ditemukan' }}</p>
             </div>
         </div>
     </div>
@@ -73,17 +81,17 @@
         <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-sm text-gray-700">
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">IPK</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->ipk }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->ipk ?? 'IPK Tidak Ditemukan' }}</p>
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">Preferensi Lokasi</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->preferensi_lokasi }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->preferensi_lokasi ?? 'Preferensi Lokasi Tidak Ditemukan' }}</p>
             </div>
             <div>
                 <p class="text-[16px] text-gray-500 mb-1">Kemampuan</p>
                 <p class="text-[18px] font-semibold text-gray-900">
-                    @forelse ($mahasiswa->skills as $skill)
-                        {{ !$loop->first ? ', ' : '' }}{{ $skill->nama }}
+                    @forelse ($mahasiswa?->skills ?? [] as $skill)
+                        {{ !$loop->first ? ', ' : '' }}{{ $skill->nama  }}
                     @empty
                         -
                     @endforelse
@@ -91,11 +99,11 @@
             </div>
             <div>
                 <p class="text-[16px] text-gray-500">Jenis Magang</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->jenismagang->jenis_magang }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->jenismagang->jenis_magang ?? 'Jenis Magang Tidak Ditemukan' }}</p>
             </div>
             <div>
                 <p class="text-[16px] text-gray-500">Tipe Magang</p>
-                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->tipe_magang }}</p>
+                <p class="text-[18px] font-semibold text-gray-900">{{ $user->mahasiswa->tipe_magang ?? 'Tipe Magang Tidak Ditemukan' }}</p>
             </div>
         </div>
 
