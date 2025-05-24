@@ -28,4 +28,8 @@ class LogMingguan extends Model
     {
         return $this->hasMany(LogHarian::class, 'log_mingguan_id');
     }
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
+    }
 }

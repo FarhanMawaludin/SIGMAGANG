@@ -50,6 +50,7 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(Pengajuan::class);
     }
+    
     // baru
 
     public function isCompleteProfile(): bool
