@@ -17,8 +17,12 @@ class Mahasiswa extends Model
         'nama',
         'prodi',
         'ipk',
-        'lokasi_preferensi',
-        'user_id'
+        'preferensi_lokasi',
+        'jenis_magang_id',
+        'user_id',
+        'tipe_magang',
+        'semester',
+        'no_telp',
     ];
 
     public function user(): BelongsTo
@@ -39,12 +43,26 @@ class Mahasiswa extends Model
     }
     public function jenisMagang()
     {
-        return $this->belongsTo(JenisMagang::class);
+        return $this->belongsTo(JenisMagang::class, 'jenis_magang_id');
     }
 
     public function pengajuan()
     {
         return $this->hasMany(Pengajuan::class);
     }
+    
     // baru
+
+    public function isCompleteProfile(): bool
+    {
+        return $this->nim &&
+            $this->user && $this->user->name &&
+            $this->prodi &&
+            $this->ipk &&
+            $this->preferensi_lokasi &&
+            $this->jenis_magang_id &&
+            $this->tipe_magang &&
+            $this->no_telp &&
+            $this->semester;
+    }
 }

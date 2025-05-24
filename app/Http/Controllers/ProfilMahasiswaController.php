@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Skill;
+use App\Models\Prodi;
 use App\Models\JenisMagang;
 use App\Models\Mahasiswa;
+
 class ProfilMahasiswaController extends Controller
 {
     /**
@@ -25,7 +27,7 @@ class ProfilMahasiswaController extends Controller
             'activemenu' => 'profil',
         ]);
     }
-    
+
     public function updateProfil(Request $request)
     {
         $user = Auth::user();
@@ -48,6 +50,7 @@ class ProfilMahasiswaController extends Controller
         $mahasiswa->update([
             'no_telp' => $request->no_telp,
             'semester' => $request->semester,
+            'nim' => $request->nim
         ]);
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
@@ -61,29 +64,51 @@ class ProfilMahasiswaController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'no_telp' => 'nullable|string|max:20',
-            'semester' => 'nullable|integer|min:1',
+            'no_telp' => 'required|string|max:20',
+            'semester' => 'required|integer|min:1',
+            'nim' => 'required|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'name.required' => 'Nama tidak boleh kosong.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email salah.',
+            'email.unique' => 'Email sudah digunakan sebelumnya.',
+            'no_telp.required' => 'Nomor telepon wajib diisi.',
+            'semester.required' => 'Semester wajib diisi.',
+            'nim.required' => 'NIM wajib diisi.',
         ]);
 
-        // Update user dan relasi mahasiswa
+        // Update data user
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->save();
-        // Jika ada foto baru, simpan dan update path-nya
-        if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('foto_profil', 'public');
-            $user->mahasiswa->user->foto = $path;
-            $user->mahasiswa->user->save();
-            $user->mahasiswa->save();
-        }
+
+        // Cek relasi mahasiswa
         $mahasiswa = $user->mahasiswa;
+
+        if (!$mahasiswa) {
+            // Jika belum ada, buat data mahasiswa baru
+            $mahasiswa = new \App\Models\Mahasiswa();
+            $mahasiswa->user_id = $user->id;
+        }
+
+        // Update/isi data mahasiswa
         $mahasiswa->no_telp = $validated['no_telp'];
         $mahasiswa->semester = $validated['semester'];
+        $mahasiswa->nim = $validated['nim'];
+        $mahasiswa->prodi_id = $request->prodi_id;
         $mahasiswa->save();
+
+        // Simpan foto jika ada
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('foto_profil', 'public');
+            $user->foto = $path;
+            $user->save(); // Simpan ke kolom foto user
+        }
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Profil berhasil diperbarui');
     }
+
 
     /**
      * Update preferensi magang mahasiswa
@@ -96,7 +121,8 @@ class ProfilMahasiswaController extends Controller
         $request->validate([
             'ipk' => 'required|numeric|between:0,4.00',
             'preferensi_lokasi' => 'required|string|max:100',
-            'jenis_magang' => 'required|string|max:100',
+            'jenis_magang_id' => 'required|exists:jenis_magang,id',
+            'tipe_magang' => 'required|in:onsite,remote',
             'kemampuan' => 'nullable|string|max:255',
             'file_cv' => 'nullable|file|mimes:pdf|max:2048',
             'file_transkrip' => 'nullable|file|mimes:pdf|max:2048',
@@ -107,8 +133,9 @@ class ProfilMahasiswaController extends Controller
         $data = [
             'ipk' => $request->ipk,
             'preferensi_lokasi' => $request->preferensi_lokasi,
-            'jenis_magang' => $request->jenis_magang,
+            'jenis_magang_id' => $request->jenis_magang_id,
             'kemampuan' => $request->kemampuan,
+            'tipe_magang' => $request->tipe_magang
         ];
 
         // Proses upload file
@@ -118,7 +145,7 @@ class ProfilMahasiswaController extends Controller
                 $data[$fileField] = $file;
             }
         }
-            if ($request->has('skills')) {
+        if ($request->has('skills')) {
             $mahasiswa->skills()->sync($request->skills);
         }
         $mahasiswa->update($data);
@@ -132,8 +159,10 @@ class ProfilMahasiswaController extends Controller
     public function edit()
     {
         $user = Auth::user();
+        $prodis = Prodi::all();
         return view('mahasiswa.profil.edit-profil', [
             'user' => $user,
+            'prodis' => $prodis,
             'activemenu' => 'profil',
         ]);
     }
@@ -148,11 +177,11 @@ class ProfilMahasiswaController extends Controller
         $mahasiswa = Mahasiswa::with('skills')->findOrFail($id);
         $allSkills = Skill::all();
         return view('mahasiswa.profil.edit-preferensi', [
-        'user' => $user,
-        'jenismagang' => $jenismagang,
-        'mahasiswa' => $mahasiswa,
-        'skills' => $allSkills,
-        'activemenu' => 'profil',
+            'user' => $user,
+            'jenismagang' => $jenismagang,
+            'mahasiswa' => $mahasiswa,
+            'skills' => $allSkills,
+            'activemenu' => 'profil',
         ]);
     }
 }

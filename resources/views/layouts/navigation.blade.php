@@ -23,15 +23,21 @@
                 <div class="flex items-center ms-3">
                     <div class="flex items-center gap-4">
                         <div class="flex flex-col items-end">
-                            <span class="text-mirage-950 font-medium">{{Auth::user()->name}}</span>
+                            <span class="text-mirage-950 font-medium">{{ Auth::user()->name }}</span>
                             <span class="text-sm text-gray-500">{{ str_replace('_', ' ', Auth::user()->role) }}</span>
                         </div>
                         <button type="button"
                             class="flex items-center text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
-                            <img class="w-10 h-10 rounded-full"
-                                src="{{ asset('storage/' .Auth::user()->foto) }}" alt="user photo">
+                            @if (Auth::user()->foto)
+                                <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . Auth::user()->foto) }}"
+                                    alt="user photo">
+                            @else
+                                <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
+                                    class="w-10 h-10 rounded-full object-cover border border-gray-300">
+                            @endif
+
                         </button>
                     </div>
                     <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm border border-gray-200 dark:bg-gray-700 dark:divide-gray-600"
@@ -44,28 +50,18 @@
                                 {{ auth::user()->email }}
                             </p>
                         </div>
-                        <ul class="py-1" role="none">
+                        {{-- <ul class="py-1" role="none">
                             <li>
-                                <a href="#"
+                                <a href=""
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                     role="menuitem">Dashboard</a>
                             </li>
                             <li>
                                 <a href="#"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    role="menuitem">Settings</a>
+                                    role="menuitem">Profil</a>
                             </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    role="menuitem">Earnings</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    role="menuitem">Sign out</a>
-                            </li>
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
             </div>
