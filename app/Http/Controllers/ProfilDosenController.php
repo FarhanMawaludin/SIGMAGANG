@@ -5,31 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DosenPembimbing;
+use App\Models\Skill;
+use App\Models\JenisMagang;
 
 class ProfilDosenController extends Controller
 {
-    /**
-     * Tampilkan halaman profil dosen
-     */
     public function index()
     {
         $user = Auth::user();
-        $dosen = $user->dosen()->with('prodi')->first();
+        $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
+        $allSkills = Skill::all();
 
         return view('dosen.profil.index', [
             'user' => $user,
-            'dosen' => $dosen,
+            'dosen_pembimbing' => $dosen,
+            'allSkills' => $allSkills,
             'activemenu' => 'profil',
         ]);
     }
 
-    /**
-     * Update data pribadi dosen
-     */
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('dosen.profil.edit-profil', [
+            'user' => $user,
+            'dosen_pembimbing' => $user->dosenPembimbing,
+            'activemenu' => 'profil',
+        ]);
+    }
+
     public function updateProfil(Request $request)
     {
         $user = Auth::user();
-        $dosen = $user->dosen;
+        $dosen = $user->dosenPembimbing;
 
         $request->validate([
             'nama_lengkap' => 'required|string|max:255',
@@ -49,17 +57,14 @@ class ProfilDosenController extends Controller
         return redirect()->route('dosen.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
     }
 
-    /**
-     * Update data umum termasuk foto profil
-     */
     public function update(Request $request)
     {
         $user = Auth::user();
-        $dosen = $user->dosen;
+        $dosen = $user->dosenPembimbing;
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'no_telp' => 'nullable|string|max:20',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -70,6 +75,10 @@ class ProfilDosenController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
+            if ($user->foto) {
+                \Storage::disk('public')->delete($user->foto);
+            }
+
             $path = $request->file('foto')->store('foto_profil', 'public');
             $user->foto = $path;
             $user->save();
@@ -82,15 +91,43 @@ class ProfilDosenController extends Controller
         return redirect()->route('dosen.profil.index')->with('success', 'Profil berhasil diperbarui.');
     }
 
-    /**
-     * Form edit data pribadi
-     */
-    public function edit()
+    // Optional: Kalau ingin fitur preferensi seperti mahasiswa
+    public function editPreferensi($id)
     {
         $user = Auth::user();
-        return view('dosen.profil.edit-profil', [
+        $dosen = DosenPembimbing::with('skills')->findOrFail($id);
+        $jenismagang = JenisMagang::all();
+        $allSkills = Skill::all();
+
+        return view('dosen.profil.edit-preferensi', [
             'user' => $user,
+            'dosen_pembimbing' => $dosen,
+            'jenismagang' => $jenismagang,
+            'skills' => $allSkills,
             'activemenu' => 'profil',
         ]);
+    }
+
+    public function updatePreferensi(Request $request)
+    {
+        $user = Auth::user();
+        $dosen = $user->dosenPembimbing;
+
+        $request->validate([
+            'preferensi_lokasi' => 'required|string|max:100',
+            'jenis_magang_id' => 'required|exists:jenis_magang,id',
+            'skills' => 'nullable|array',
+        ]);
+
+        $dosen->update([
+            'preferensi_lokasi' => $request->preferensi_lokasi,
+            'jenis_magang_id' => $request->jenis_magang_id,
+        ]);
+
+        if ($request->has('skills')) {
+            $dosen->skills()->sync($request->skills);
+        }
+
+        return redirect()->route('dosen.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
     }
 }

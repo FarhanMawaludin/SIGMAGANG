@@ -20,7 +20,7 @@ class DosenPembimbing extends Model
         'prodi_id',
         'user_id'
     ];
-
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
