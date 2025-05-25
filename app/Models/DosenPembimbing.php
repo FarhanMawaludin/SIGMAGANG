@@ -41,5 +41,10 @@ class DosenPembimbing extends Model
         return $this->belongsTo(JenisMagang::class);
     }
 
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class);
+    }
+
     //baru
 }

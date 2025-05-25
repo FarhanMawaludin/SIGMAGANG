@@ -12,6 +12,7 @@ use Validator;
 class PenggunaController extends Controller
 {
     use PasswordValidationRules;
+    
     public function index(Request $request)
     {
         $activemenu = 'pengguna';

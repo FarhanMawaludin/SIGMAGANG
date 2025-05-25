@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use Illuminate\Support\Facades\Auth;
+
 
 class MahasiswaDosenController extends Controller
 {
@@ -43,11 +45,13 @@ class MahasiswaDosenController extends Controller
     public function show($id)
     {
         $activemenu = 'mahasiswa';
+        $user = Auth::user();
         $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])
             ->where('dosen_id', auth()->user()->dosen->id)
             ->where('id', $id)
             ->firstOrFail();
         return view('dosen.mahasiswa.show', [
+            'user' => $user,
             'activemenu' => $activemenu,
             'pengajuan' => $pengajuan,
         ]);
