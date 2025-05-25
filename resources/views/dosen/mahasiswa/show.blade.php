@@ -7,12 +7,12 @@
     <div class="overflow-x-auto relative rounded-lg border border-gray-200 bg-white">
         {{-- Foto Profil --}}
         <div class="flex justify-center py-6">
-            @if ($pengajuan->photo)
-                <img src="{{ asset('images/logo/' . $pengajuanItem->photo) }}" alt="Foto {{ $pengajuanItem->name }}"
-                    class="w-32 h-32 rounded-full object-cover shrink-0">
+            @if ($pengajuan->mahasiswa->user && $pengajuan->mahasiswa->user->foto)
+                <img src="{{ asset('storage/' . $pengajuan->mahasiswa->user->foto) }}" alt="Foto Profil"
+                    class="w-24 h-24 rounded-full object-cover border border-gray-300">
             @else
                 <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
-                    class="w-32 h-32 rounded-full border border-gray-200 object-cover shrink-0">
+                    class="w-24 h-24 rounded-full object-cover border border-gray-300">
             @endif
             {{-- <img src="{{ asset('storage/foto/' . $pengajuan->foto) }}" alt="Foto {{ $pengajuan->name }}"
                 class="w-32 h-32 rounded-full object-cover border border-gray-300"> --}}
@@ -29,7 +29,7 @@
             <tbody>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Nama</td>
-                    <td class="px-6 py-4">{{ $pengajuan->mahasiswa->user->name}}</td>
+                    <td class="px-6 py-4">{{ $pengajuan->mahasiswa->user->name }}</td>
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Email</td>
@@ -37,7 +37,7 @@
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Program Studi</td>
-                    <td class="px-6 py-4">{{ $pengajuan->mahasiswa->prodi->nama}}</td>
+                    <td class="px-6 py-4">{{ $pengajuan->mahasiswa->prodi->nama }}</td>
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Lowongan</td>
@@ -45,15 +45,15 @@
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Perusahaan</td>
-                    <td class="px-6 py-4">{{ $pengajuan->lowongan->perusahaan->nama}}</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->perusahaan->nama }}</td>
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Tipe Magang</td>
-                    <td class="px-6 py-4">{{ $pengajuan->lowongan->tipe_magang}}</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->tipe_magang }}</td>
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Periode</td>
-                    <td class="px-6 py-4">{{ $pengajuan->lowongan->periode->deskripsi}}</td>
+                    <td class="px-6 py-4">{{ $pengajuan->lowongan->periode->deskripsi }}</td>
                 </tr>
                 <tr class="bg-white border-b border-gray-200">
                     <td class="px-6 py-4 font-medium">Role</td>
@@ -74,16 +74,15 @@
 
         {{-- Tombol Kembali --}}
         <div class="text-center py-6">
-            <a href="{{ route('admin.pengguna.index') }}"
+            <a href="{{ route('dosen.mahasiswa.index') }}"
                 class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm">
-
                 <!-- Ikon Panah Kiri -->
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
                 </svg>
 
-                Kembali ke Daftar Pengguna
+                Kembali ke Daftar Bimbingan
             </a>
         </div>
     </div>

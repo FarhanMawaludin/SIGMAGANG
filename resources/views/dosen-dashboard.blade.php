@@ -22,8 +22,7 @@
         </div>
 
         <!-- Table -->
-        
-        <div class="overflow-x-auto relative rounded-lg border border-gray-200">
+        {{-- <div class="overflow-x-auto relative rounded-lg border border-gray-200">
             <table class="min-w-full text-sm text-left text-gray-700">
                 <thead class="text-xs uppercase bg-gray-100 text-gray-700">
                     <tr>
@@ -68,13 +67,13 @@
                     @endforelse
                 </tbody>
             </table>
-        </div>
+        </div> --}}
 
         <!-- Data Log Aktivitas Mahasiswa -->
         <div class="flex justify-between items-center mt-10 mb-3">
             <h2 class="text-lg font-semibold">Data Log Aktivitas Mahasiswa</h2>
             <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg">
-                Lihat Data Log Aktivitas Mahasiswa
+                Lihat Semua Log
             </button>
         </div>
         <div class="overflow-x-auto relative rounded-lg border border-gray-200">
