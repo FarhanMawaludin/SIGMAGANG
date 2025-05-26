@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\DosenPembimbing;
+use App\Models\Dokumen;
 use App\Models\Lowongan;
 use Illuminate\Support\Facades\DB;
 class PengajuanController extends Controller
@@ -52,18 +53,33 @@ class PengajuanController extends Controller
         $activemenu = 'pengajuan';
         $dosens = DosenPembimbing::all();
         $pengajuan = Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'lowongan'])->findOrFail($id);
+        // Get all documents for the mahasiswa related to this pengajuan
+        $dokumen_all = Dokumen::where('documentable_type', 'mahasiswa')
+            ->where('documentable_id', $pengajuan->mahasiswa_id)
+            ->where('file_path', '!=', null)
+            ->get();
+        $dokumen_cv = $dokumen_all->where('tipe', 'CV')->first();
+        $dokumen_transkrip = $dokumen_all->where('tipe', 'Transkrip Nilai')->first();
+        $dokumen_pengantar = $dokumen_all->where('tipe', 'Surat Pengantar')->first();
+        $dokumen_sertifikat = $dokumen_all->where('tipe', 'Sertifikat');
         return view('admin.pengajuan.edit', [
             'pengajuan' => $pengajuan,
             'activemenu' => $activemenu,
             'dosens' => $dosens,
+            'dokumen_cv' => $dokumen_cv,
+            'dokumen_transkrip' => $dokumen_transkrip,
+            'dokumen_pengantar' => $dokumen_pengantar,
+            'dokumen_sertifikat' => $dokumen_sertifikat,
         ]);
     }
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
             'dosen_id' => 'required',
+           
         ],[
             'dosen_id.required' => 'Dosen wajib diisi.',
+
         ]);
         try{
         $pengajuan = Pengajuan::findOrFail($id);
@@ -91,6 +107,7 @@ public function update(Request $request, $id)
         ]);
         $pengajuan->dosen_id = $request->dosen_id;
         $pengajuan->status = 'accepted';
+        $pengajuan->catatan_validasi = $request->catatan_validasi;
     } elseif ($request->input('action') === 'decline') {
         $pengajuan->status = 'rejected';
     }

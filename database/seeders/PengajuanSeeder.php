@@ -20,6 +20,7 @@ class PengajuanSeeder extends Seeder
                 'skor_spk' => 0,
                 'mahasiswa_feedback' => null,
                 'dosen_id' => null,
+                'catatan_validasi' => null,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -30,6 +31,7 @@ class PengajuanSeeder extends Seeder
                 'skor_spk' => 0,
                 'dosen_id' => null,
                 'mahasiswa_feedback' => null,
+                'catatan_validasi' => null,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -40,6 +42,7 @@ class PengajuanSeeder extends Seeder
                 'skor_spk' => 0,
                 'dosen_id' => null,
                 'mahasiswa_feedback' => null,
+                'catatan_validasi' => null,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
