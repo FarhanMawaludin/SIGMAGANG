@@ -36,7 +36,6 @@ class DatabaseSeeder extends Seeder
         
         // Seed documents
         $this->call(DokumenSeeder::class);
-        $this->call(DokumenLowonganSeeder::class);
         
         // Seed applications
         $this->call(PengajuanSeeder::class);
