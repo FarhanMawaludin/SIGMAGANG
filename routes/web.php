@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\WelcomeController;
@@ -130,6 +131,16 @@ Route::middleware('auth', 'role:admin')->group(function () {
         Route::get('/{id}/edit', [ProgramStudiController::class, 'edit'])->name('edit');
         Route::put('/{id}', [ProgramStudiController::class, 'update'])->name('update');
         Route::delete('/{id}', [ProgramStudiController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('dokumen')->group(function () {
+        Route::get('/', [DokumenController::class, 'index'])->name('admin.dokumen.index');
+        Route::get('/create', [DokumenController::class, 'create'])->name('admin.dokumen.create');
+        Route::get('/show', [DokumenController::class, 'show'])->name('admin.dokumen.show');
+        Route::post('/store', [DokumenController::class, 'store'])->name('admin.dokumen.store');
+        Route::get('/edit', [DokumenController::class, 'edit'])->name('admin.dokumen.edit');
+        Route::put('/update', [DokumenController::class, 'update'])->name('admin.dokumen.update');
+        Route::delete('/{id}', [DokumenController::class, 'destroy'])->name('admin.dokumen.destroy');
     });
 
     Route::prefix('pengajuan')->group(function () {
