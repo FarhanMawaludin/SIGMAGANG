@@ -147,18 +147,11 @@ Route::middleware('auth', 'role:admin')->group(function () {
 Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
     Route::get('/dashboard/dosen', [DashboardController::class, 'dosen'])->name('dashboard.dosen');
 
-    // PROFILE(dari breeze)
-    // Route::prefix('profile')->group(function () {
-    //     Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-    //     Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
-    //     Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // });
-
     Route::prefix('profil')->name('dosen.profil.')->group(function () {
         Route::get('/dosen', [ProfilDosenController::class, 'index'])->name('index');
         Route::get('/dosen/edit/{id}', [ProfilDosenController::class, 'edit'])->name('edit');
         Route::put('/dosen/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
-        Route::get('/dosen/edit_preferensi/{id}', [ProfilDosenController::class, 'editPreferensi'])->name('edit_preferensi');
+        Route::get('/dosen/edit_preferensi/{id}', [ProfilDosenController::class, 'edit_preferensi'])->name('edit_preferensi');
         Route::put('/dosen/update_preferensi/{id}', [ProfilDosenController::class, 'updatePreferensi'])->name('update_preferensi');
     });
 
@@ -185,7 +178,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa', [ProfilMahasiswaController::class, 'index'])->name('index');
         Route::get('/mahasiswa/edit/{id}', [ProfilMahasiswaController::class, 'edit'])->name('edit');
         Route::put('/mahasiswa/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
-        Route::get('/mahasiswa/edit_preferensi/{id}', [ProfilMahasiswaController::class, 'editPreferensi'])->name('edit_preferensi');
+        Route::get('/mahasiswa/edit_preferensi/{id}', [ProfilMahasiswaController::class, 'edit_preferensi'])->name('editPreferensi');
         Route::put('/mahasiswa/update_preferensi/{id}', [ProfilMahasiswaController::class, 'updatePreferensi'])->name('update_preferensi');
     });
 

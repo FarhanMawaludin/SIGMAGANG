@@ -68,7 +68,7 @@
     <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
         <div class="flex justify-between items-center mb-5">
             <span class="text-lg font-semibold text-gray-800">Preferensi Magang</span>
-            <a href="{{ route('mahasiswa.profil.edit_preferensi', $user->id) }}"
+            <a href="{{ route('mahasiswa.profil.editPreferensi', $user->id) }}"
                 class="inline-flex items-center gap-2 border border-yellow-400 text-yellow-500 hover:bg-yellow-500 hover:text-white font-semibold px-5 py-2 rounded-full transition text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">

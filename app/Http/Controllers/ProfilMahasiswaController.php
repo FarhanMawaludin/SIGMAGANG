@@ -116,8 +116,8 @@ class ProfilMahasiswaController extends Controller
     public function updatePreferensi(Request $request)
     {
         $user = Auth::user();
-        $mahasiswa = Mahasiswa::findOrFail($user->mahasiswa->id);
-
+        $mahasiswa = $user->mahasiswa;
+        
         $request->validate([
             'ipk' => 'required|numeric|between:0,4.00',
             'preferensi_lokasi' => 'required|string|max:100',
@@ -170,18 +170,35 @@ class ProfilMahasiswaController extends Controller
     /**
      * Form edit preferensi magang
      */
-    public function editPreferensi($id)
+    // public function editPreferensiMahasiswa($id)
+    // {
+    //     $user = Auth::user();
+    //     $jenismagang = JenisMagang::all();
+    //     $mahasiswa = Mahasiswa::with('skills')->findOrFail($id);
+    //     $allSkills = Skill::all();
+    //     return view('mahasiswa.profil.edit_preferensi_mahasiswa', [
+    //         'user' => $user,
+    //         'jenismagang' => $jenismagang,
+    //         'mahasiswa' => $mahasiswa,
+    //         'skills' => $allSkills,
+    //         'activemenu' => 'profil',
+    //     ]);
+    // }
+
+    public function edit_preferensi()
     {
+        $activemenu = 'profil';
         $user = Auth::user();
+        $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
         $jenismagang = JenisMagang::all();
-        $mahasiswa = Mahasiswa::with('skills')->findOrFail($id);
-        $allSkills = Skill::all();
-        return view('mahasiswa.profil.edit-preferensi', [
+        $skills = Skill::all(); 
+
+        return view('mahasiswa.profil.editPreferensi', [
+            'activemenu' => $activemenu,
             'user' => $user,
-            'jenismagang' => $jenismagang,
             'mahasiswa' => $mahasiswa,
-            'skills' => $allSkills,
-            'activemenu' => 'profil',
+            'skills' => $skills,
+            'jenismagang' => $jenismagang
         ]);
     }
 }
