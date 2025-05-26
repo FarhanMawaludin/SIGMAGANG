@@ -8,6 +8,8 @@ use App\Models\Skill;
 use App\Models\Prodi;
 use App\Models\JenisMagang;
 use App\Models\Mahasiswa;
+use App\Models\Dokumen;
+
 
 class ProfilMahasiswaController extends Controller
 {
@@ -16,6 +18,26 @@ class ProfilMahasiswaController extends Controller
      */
     public function index()
     {
+        $dokumen_cv = Auth::user()->mahasiswa->documents()->where('tipe', 'CV')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->first();
+        $dokumen_transkrip = Auth::user()->mahasiswa->documents()->where('tipe', 'Transkrip Nilai')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->first();
+        $dokumen_pengantar = Auth::user()->mahasiswa->documents()->where('tipe', 'Surat Pengantar')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->first();
+        $dokumen_sertifikat = Auth::user()->mahasiswa->documents()->where('tipe', 'Sertifikat')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->get();
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
         $allSkills = Skill::all();
@@ -25,6 +47,10 @@ class ProfilMahasiswaController extends Controller
             'mahasiswa' => $mahasiswa,
             'allSkills' => $allSkills,
             'activemenu' => 'profil',
+            'dokumen_cv' => $dokumen_cv,
+            'dokumen_transkrip' => $dokumen_transkrip,
+            'dokumen_pengantar' => $dokumen_pengantar,
+            'dokumen_sertifikat' => $dokumen_sertifikat,
         ]);
     }
 
