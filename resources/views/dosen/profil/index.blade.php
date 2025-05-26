@@ -84,7 +84,7 @@
             <p class="text-[16px] text-gray-500 mb-1">Jenis Magang</p>
             <p class="text-[18px] font-semibold text-gray-900">{{ $dosen_pembimbing->jenisMagang->jenis_magang ?? '-' }}</p>
         </div>
-        {{-- <div>
+        <div>
             <p class="text-[16px] text-gray-500 mb-1">Kemampuan</p>
             <p class="text-[18px] font-semibold text-gray-900">
                 @forelse ($dosen_pembimbing->skills as $skill)
@@ -93,7 +93,7 @@
                     -
                 @endforelse
             </p>
-        </div> --}}
+        </div>
     </div>
 
     <!-- Files -->

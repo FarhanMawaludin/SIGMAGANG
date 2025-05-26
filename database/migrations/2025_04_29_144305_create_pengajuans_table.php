@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('lowongan_id')->unsigned();
             $table->foreign('lowongan_id')->references('id')->on('lowongan')->onDelete('cascade');
             $table->float('skor_spk')->default(0);
+            $table->text('catatan_validasi')->nullable();
             $table->bigInteger('dosen_id')->unsigned()->nullable();
             $table->foreign('dosen_id')->references('id')->on('dosen_pembimbing')->onDelete('set null');   
             $table->timestamps();

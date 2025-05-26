@@ -8,6 +8,8 @@ use App\Models\Skill;
 use App\Models\Prodi;
 use App\Models\JenisMagang;
 use App\Models\Mahasiswa;
+use App\Models\Dokumen;
+
 
 class ProfilMahasiswaController extends Controller
 {
@@ -16,6 +18,26 @@ class ProfilMahasiswaController extends Controller
      */
     public function index()
     {
+        $dokumen_cv = Auth::user()->mahasiswa->documents()->where('tipe', 'CV')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->first();
+        $dokumen_transkrip = Auth::user()->mahasiswa->documents()->where('tipe', 'Transkrip Nilai')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->first();
+        $dokumen_pengantar = Auth::user()->mahasiswa->documents()->where('tipe', 'Surat Pengantar')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->first();
+        $dokumen_sertifikat = Auth::user()->mahasiswa->documents()->where('tipe', 'Sertifikat')
+        ->where('documentable_type', 'mahasiswa')
+        ->where('documentable_id', Auth::user()->mahasiswa->id)
+        ->where('file_path', '!=', null)
+        ->get();
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
         $allSkills = Skill::all();
@@ -25,6 +47,10 @@ class ProfilMahasiswaController extends Controller
             'mahasiswa' => $mahasiswa,
             'allSkills' => $allSkills,
             'activemenu' => 'profil',
+            'dokumen_cv' => $dokumen_cv,
+            'dokumen_transkrip' => $dokumen_transkrip,
+            'dokumen_pengantar' => $dokumen_pengantar,
+            'dokumen_sertifikat' => $dokumen_sertifikat,
         ]);
     }
 
@@ -116,8 +142,8 @@ class ProfilMahasiswaController extends Controller
     public function updatePreferensi(Request $request)
     {
         $user = Auth::user();
-        $mahasiswa = Mahasiswa::findOrFail($user->mahasiswa->id);
-
+        $mahasiswa = $user->mahasiswa;
+        
         $request->validate([
             'ipk' => 'required|numeric|between:0,4.00',
             'preferensi_lokasi' => 'required|string|max:100',
@@ -170,18 +196,35 @@ class ProfilMahasiswaController extends Controller
     /**
      * Form edit preferensi magang
      */
-    public function editPreferensi($id)
+    // public function editPreferensiMahasiswa($id)
+    // {
+    //     $user = Auth::user();
+    //     $jenismagang = JenisMagang::all();
+    //     $mahasiswa = Mahasiswa::with('skills')->findOrFail($id);
+    //     $allSkills = Skill::all();
+    //     return view('mahasiswa.profil.edit_preferensi_mahasiswa', [
+    //         'user' => $user,
+    //         'jenismagang' => $jenismagang,
+    //         'mahasiswa' => $mahasiswa,
+    //         'skills' => $allSkills,
+    //         'activemenu' => 'profil',
+    //     ]);
+    // }
+
+    public function edit_preferensi()
     {
+        $activemenu = 'profil';
         $user = Auth::user();
+        $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
         $jenismagang = JenisMagang::all();
-        $mahasiswa = Mahasiswa::with('skills')->findOrFail($id);
-        $allSkills = Skill::all();
-        return view('mahasiswa.profil.edit-preferensi', [
+        $skills = Skill::all(); 
+
+        return view('mahasiswa.profil.editPreferensi', [
+            'activemenu' => $activemenu,
             'user' => $user,
-            'jenismagang' => $jenismagang,
             'mahasiswa' => $mahasiswa,
-            'skills' => $allSkills,
-            'activemenu' => 'profil',
+            'skills' => $skills,
+            'jenismagang' => $jenismagang
         ]);
     }
 }

@@ -88,47 +88,71 @@
                         <!-- File CV -->
                         <div>
                             <h4 class="font-semibold text-gray-800 mb-1">File CV</h4>
-                            <div class="flex items-center border rounded p-2 gap-3">
-                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf"
-                                    class="w-6 h-6">
-                                <span class="text-gray-700">file.pdf</span>
-                            </div>
+                            @if ($dokumen_cv)
+                                <a href="{{ asset('storage/' . $dokumen_cv->file_path) }}" target="_blank" class="flex items-center border rounded p-2 gap-3 hover:bg-gray-50">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf" class="w-6 h-6">
+                                    <span class="text-blue-700 underline">Lihat CV</span>
+                                </a>
+                            @else
+                                <span class="text-gray-500">Tidak ada file</span>
+                            @endif
                         </div>
 
                         <!-- Transkrip -->
                         <div>
                             <h4 class="font-semibold text-gray-800 mb-1">File Transkrip Nilai</h4>
-                            <div class="flex items-center border rounded p-2 gap-3">
-                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf"
-                                    class="w-6 h-6">
-                                <span class="text-gray-700">file.pdf</span>
-                            </div>
+                            @if ($dokumen_transkrip)
+                                <a href="{{ asset('storage/' . $dokumen_transkrip->file_path) }}" target="_blank" class="flex items-center border rounded p-2 gap-3 hover:bg-gray-50">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf" class="w-6 h-6">
+                                    <span class="text-blue-700 underline">Lihat Transkrip</span>
+                                </a>
+                            @else
+                                <span class="text-gray-500">Tidak ada file</span>
+                            @endif
                         </div>
 
                         <!-- Sertifikat -->
+                        @foreach ($dokumen_sertifikat as $d )
+                            
                         <div>
                             <h4 class="font-semibold text-gray-800 mb-1">File Sertifikat</h4>
-                            <div class="flex items-center border rounded p-2 gap-3">
-                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf"
-                                    class="w-6 h-6">
-                                <span class="text-gray-700">file.pdf</span>
-                            </div>
+                            @if ($d)
+                                <a href="{{ asset('storage/' . $d->file_path) }}" target="_blank" class="flex items-center border rounded p-2 gap-3 hover:bg-gray-50">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf" class="w-6 h-6">
+                                    <span class="text-blue-700 underline">Lihat Sertifikat</span>
+                                </a>
+                            @else
+                                <span class="text-gray-500">Tidak ada file</span>
+                            @endif
                         </div>
+                        @endforeach
 
                         <!-- Surat Pengantar -->
                         <div>
                             <h4 class="font-semibold text-gray-800 mb-1">File Surat Pengantar</h4>
-                            <div class="flex items-center border rounded p-2 gap-3">
-                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf"
-                                    class="w-6 h-6">
-                                <span class="text-gray-700">file.pdf</span>
-                            </div>
+                            @if ($dokumen_pengantar)
+                                <a href="{{ asset('storage/' . $dokumen_pengantar->file_path) }}" target="_blank" class="flex items-center border rounded p-2 gap-3 hover:bg-gray-50">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="pdf" class="w-6 h-6">
+                                    <span class="text-blue-700 underline">Lihat Surat Pengantar</span>
+                                </a>
+                            @else
+                                <span class="text-gray-500">Tidak ada file</span>
+                            @endif
                         </div>
 
                     </div>
                 </div>
             </div>
 
+        </div>
+        <!-- Catatan_validasi -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200 mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Catatan Validasi</h2>
+            <textarea name="catatan_validasi" rows="4"
+                class="w-full p-2 border border-gray-300 rounded text-gray-700">{{ old('catatan_validasi', $pengajuan->catatan_validasi) }}</textarea>
+            @if ($errors->has('catatan_validasi'))
+                <span class="text-red-500 text-sm">{{ $errors->first('catatan_validasi') }}</span>
+            @endif
         </div>
 
         {{-- Tombol --}}

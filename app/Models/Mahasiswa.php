@@ -38,9 +38,9 @@ class Mahasiswa extends Model
         return $this->belongsToMany(Skill::class);
     }
     public function documents()
-    {
-        return $this->morphMany(Dokumen::class, 'documentable');
-    }
+{
+    return $this->hasMany(Dokumen::class, 'documentable_id');
+}
     public function jenisMagang()
     {
         return $this->belongsTo(JenisMagang::class, 'jenis_magang_id');
