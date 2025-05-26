@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('documentable');
             $table->enum('tipe', ['CV', 'Sertifikat', 'Surat Pengantar','Transkrip Nilai']);
-            $table->string('file_path');
-            $table->enum('status', ['pending', 'valid', 'invalid'])->default('pending');
-            $table->text('catatan_validasi')->nullable();   
+            $table->string('file_path'); 
             $table->timestamps();       
         }); 
     }

@@ -18,8 +18,6 @@ class DokumenSeeder extends Seeder
                 'documentable_type' => 'App\Models\Mahasiswa',
                 'tipe' => 'CV',
                 'file_path' => 'path/to/file.pdf',
-                'status' => 'pending',
-                'catatan_validasi' => '',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -28,8 +26,6 @@ class DokumenSeeder extends Seeder
                 'documentable_type' => 'App\Models\Mahasiswa',
                 'tipe' => 'Transkrip Nilai',
                 'file_path' => 'path/to/file.pdf',
-                'status' => 'pending',
-                'catatan_validasi' => '',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -38,8 +34,6 @@ class DokumenSeeder extends Seeder
                 'documentable_type' => 'App\Models\Mahasiswa',
                 'tipe' => 'Sertifikat',
                 'file_path' => 'path/to/file.pdf',
-                'status' => 'pending',
-                'catatan_validasi' => '',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -48,8 +42,6 @@ class DokumenSeeder extends Seeder
                 'documentable_type' => 'App\Models\Mahasiswa',
                 'tipe' => 'Surat Pengantar',
                 'file_path' => 'path/to/file.pdf',
-                'status' => 'pending',
-                'catatan_validasi' => '',
                 'created_at' => now(),
                 'updated_at' => now()
             ]

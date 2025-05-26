@@ -16,8 +16,6 @@ class Dokumen extends Model
         'documentable_type',
         'tipe',
         'file_path',
-        'status',
-        'catatan_validasi'
     ];
     public function isMahasiswa(): bool
     {
