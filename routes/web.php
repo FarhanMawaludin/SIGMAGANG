@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\WelcomeController;
@@ -132,6 +133,16 @@ Route::middleware('auth', 'role:admin')->group(function () {
         Route::delete('/{id}', [ProgramStudiController::class, 'destroy'])->name('destroy');
     });
 
+    Route::prefix('dokumen')->group(function () {
+        Route::get('/', [DokumenController::class, 'index'])->name('admin.dokumen.index');
+        Route::get('/create', [DokumenController::class, 'create'])->name('admin.dokumen.create');
+        Route::get('/show', [DokumenController::class, 'show'])->name('admin.dokumen.show');
+        Route::post('/store', [DokumenController::class, 'store'])->name('admin.dokumen.store');
+        Route::get('/edit', [DokumenController::class, 'edit'])->name('admin.dokumen.edit');
+        Route::put('/update', [DokumenController::class, 'update'])->name('admin.dokumen.update');
+        Route::delete('/{id}', [DokumenController::class, 'destroy'])->name('admin.dokumen.destroy');
+    });
+
     Route::prefix('pengajuan')->group(function () {
         Route::get('/', [PengajuanController::class, 'index'])->name('admin.pengajuan.index');
         Route::get('/{id}/edit', [PengajuanController::class, 'edit'])->name('admin.pengajuan.edit');
@@ -155,9 +166,9 @@ Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
     // });
 
     Route::prefix('profil')->name('dosen.profil.')->group(function () {
-        Route::get('/dosen', [profilDosenController::class, 'index'])->name('index');
+        Route::get('/dosen', [ProfilDosenController::class, 'index'])->name('index');
         Route::get('/dosen/edit/{id}', [ProfilDosenController::class, 'edit'])->name('edit');
-        Route::put('/dosen/update/{id}', [ProfilDosenController::class, 'update'])->name('update');
+        Route::put('/dosen/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
         Route::get('/dosen/edit_preferensi/{id}', [ProfilDosenController::class, 'editPreferensi'])->name('edit_preferensi');
         Route::put('/dosen/update_preferensi/{id}', [ProfilDosenController::class, 'updatePreferensi'])->name('update_preferensi');
     });

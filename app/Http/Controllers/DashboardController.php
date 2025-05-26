@@ -108,30 +108,30 @@ class DashboardController extends Controller
         return view('dashboard', $data);
     }
 
-  public function dosen()
-{
-    $activemenu = 'dashboard';
-    $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])
-        ->whereHas('mahasiswa', function ($q) {
-            $q->where('dosen_id', Auth::id());
-        }) 
-        ->latest()
-        ->paginate(10);
+    public function dosen()
+    {
+        $activemenu = 'dashboard';
+        $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])
+            ->whereHas('mahasiswa', function ($q) {
+                $q->where('dosen_id', Auth::id());
+            })
+            ->latest()
+            ->paginate(10);
 
-    $logMingguan = \App\Models\LogMingguan::with(['pengajuan.mahasiswa.user'])
-    ->whereHas('pengajuan.mahasiswa', function ($q) {
-        $q->where('dosen_id', Auth::id());
-    })
-    ->latest()
-    ->paginate(10);
+        $logMingguan = \App\Models\LogMingguan::with(['pengajuan.mahasiswa.user'])
+            ->whereHas('pengajuan.mahasiswa', function ($q) {
+                $q->where('dosen_id', Auth::id());
+            })
+            ->latest()
+            ->paginate(10);
 
 
-    return view('dosen-dashboard', [
-        'activemenu' => $activemenu,
-        'pengajuan' => $pengajuan,
-        'logMingguan' => $logMingguan
-    ]);
-}
+        return view('dosen-dashboard', [
+            'activemenu' => $activemenu,
+            'pengajuan' => $pengajuan,
+            'logMingguan' => $logMingguan
+        ]);
+    }
 
 
 
