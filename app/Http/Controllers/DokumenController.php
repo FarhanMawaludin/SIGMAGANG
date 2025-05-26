@@ -3,97 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokumen;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class DokumenController extends Controller
 {
-    public function index(Request $request)
+    public function update(Request $request)
     {
-        $user = $request->user();
-        $dokumens = Dokumen::where('pemilik_id', $user->id)
-            ->where('pemilik_tipe', $user->hasRole('mahasiswa') ? 'mahasiswa' : 'dosen')
-            ->get();
-
-        return view('dokumen.index', compact('dokumens'));
-    }
-
-    public function create()
-    {
-        return view('dokumen.create');
-    }
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|max:5120', // 5MB max
-            'tipe' => 'required|in:CV,Sertifikat,Surat Pengantar,Transkrip Nilai'
+        $user = Auth::user();
+        // Validasi file
+        $request->validate([
+            'cv' => 'nullable|file|mimes:pdf|max:5120',
+            'transkrip' => 'nullable|file|mimes:pdf|max:5120',
+            'pengantar' => 'nullable|file|mimes:pdf|max:5120',
+            'sertifikat.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        // CV
+        if ($request->hasFile('cv')) {
+            $this->replaceSingleDokumen($user, 'CV', $request->file('cv'));
         }
+        // Transkrip
+        if ($request->hasFile('transkrip')) {
+            $this->replaceSingleDokumen($user, 'Transkrip Nilai', $request->file('transkrip'));
+        }
+        // Surat Pengantar
+        if ($request->hasFile('pengantar')) {
+            $this->replaceSingleDokumen($user, 'Surat Pengantar', $request->file('pengantar'));
+        }
+        // Sertifikat (bisa banyak, max 3)
+        $sertifikat_lama = Dokumen::where('documentable_id', $user->id)->where('tipe', 'Sertifikat')->count();
+        $sertifikat_baru = $request->file('sertifikat') ? count($request->file('sertifikat')) : 0;
+        if (($sertifikat_lama + $sertifikat_baru) > 3) {
+            return back()->with('error', 'Maksimal 3 file sertifikat.');
+        }
+        if ($request->hasFile('sertifikat')) {
+            foreach ($request->file('sertifikat') as $file) {
+                $path = $file->store('dokumen', 'public');
+                Dokumen::create([
+                    'documentable_id' => $user->id,
+                    'documentable_type' => $user->role === 'mahasiswa' ? 'mahasiswa' : 'dosen',
+                    'tipe' => 'Sertifikat',
+                    'file_path' => $path,
+                ]);
+            }
+        }
+        return redirect()->back()->with('success', 'Dokumen berhasil diupdate.');
+    }
 
-        $file = $request->file('file');
+    private function replaceSingleDokumen($user, $tipe, $file)
+    {
+        $old = Dokumen::where('documentable_id', $user->id)
+            ->where('documentable_type', $user->role === 'mahasiswa' ? 'mahasiswa' : 'dosen')
+            ->where('tipe', $tipe)
+            ->first();
+        if ($old && $old->file_path && Storage::disk('public')->exists($old->file_path)) {
+            Storage::disk('public')->delete($old->file_path);
+            $old->delete();
+        }
         $path = $file->store('dokumen', 'public');
-
         Dokumen::create([
-            'pemilik_id' => $request->user()->id,
-            'pemilik_tipe' => $request->user()->hasRole('mahasiswa') ? 'mahasiswa' : 'dosen',
-            'tipe' => $request->tipe,
+            'documentable_id' => $user->id,
+            'documentable_type' => $user->role === 'mahasiswa' ? 'mahasiswa' : 'dosen',
+            'tipe' => $tipe,
             'file_path' => $path,
-            'status' => 'pending'
         ]);
-
-        return redirect()->route('dokumen.index')->with('success', 'Dokumen berhasil diunggah');
-    }
-
-    public function show(Dokumen $dokumen)
-    {
-        $this->authorize('view', $dokumen);
-        return view('dokumen.show', compact('dokumen'));
-    }
-
-    public function edit(Dokumen $dokumen)
-    {
-        $this->authorize('update', $dokumen);
-        return view('dokumen.edit', compact('dokumen'));
-    }
-
-    public function update(Request $request, Dokumen $dokumen)
-    {
-        $this->authorize('update', $dokumen);
-
-        $validator = Validator::make($request->all(), [
-            'file' => 'file|max:5120',
-            'tipe' => 'required|in:CV,Sertifikat,Surat Pengantar,Transkrip Nilai'
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($dokumen->file_path);
-            $file = $request->file('file');
-            $path = $file->store('dokumen', 'public');
-            $dokumen->file_path = $path;
-        }
-
-        $dokumen->tipe = $request->tipe;
-        $dokumen->save();
-
-        return redirect()->route('dokumen.index')->with('success', 'Dokumen berhasil diperbarui');
-    }
-
-    public function destroy(Dokumen $dokumen)
-    {
-        $this->authorize('delete', $dokumen);
-        Storage::disk('public')->delete($dokumen->file_path);
-        $dokumen->delete();
-
-        return redirect()->route('dokumen.index')->with('success', 'Dokumen berhasil dihapus');
     }
 }
