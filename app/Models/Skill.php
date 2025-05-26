@@ -18,7 +18,7 @@ class Skill extends Model
     public function mahasiswa() {
         return $this->belongsToMany(Mahasiswa::class, 'mahasiswa_skill');
     }   
-    public function dosen_pembimbing() {
+    public function dosenPembimbing() {
         return $this->belongsToMany(DosenPembimbing::class);
     }   
     public function skills()
