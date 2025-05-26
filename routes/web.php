@@ -225,6 +225,11 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa/{mingguan}/harian/{harian}/detail', [MonitoringMahasiswaController::class, 'detail_harian'])->name('detail_harian');
         Route::put('/mahasiswa/monitoring/{mingguan}/harian/{harian}/update', [MonitoringMahasiswaController::class, 'update_harian'])->name('update_harian');
     });
+    
+    Route::prefix('dokumen')->name('mahasiswa.dokumen.')->group(function () {
+    Route::put('/dokumen/update', [DokumenController::class, 'update'])->name('update');
+      
+    });
 
     Route::get('/rekomendasi/swara', [SwaraRecommendationController::class, 'rekomendasi'])->name('mahasiswa.rekomendasi.index');
     Route::get('/rekomendasi/fuzzy', [FuzzyRecommedationController::class, 'rekomendasi'])->name('mahasiswa.rekomendasi.fuzzy');
