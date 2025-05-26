@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DosenPembimbing;
 use App\Models\Skill;
+use App\Models\User;
 use App\Models\JenisMagang;
 
 class ProfilDosenController extends Controller
@@ -90,23 +91,25 @@ class ProfilDosenController extends Controller
 
         return redirect()->route('dosen.profil.index')->with('success', 'Profil berhasil diperbarui.');
     }
+    
 
-    // Optional: Kalau ingin fitur preferensi seperti mahasiswa
-    public function editPreferensi($id)
+    public function edit_preferensi()
     {
+        $activemenu = 'profil';
         $user = Auth::user();
-        $dosen = DosenPembimbing::with('skills')->findOrFail($id);
+        $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
         $jenismagang = JenisMagang::all();
-        $allSkills = Skill::all();
+        $skills = Skill::all(); 
 
-        return view('dosen.profil.edit-preferensi', [
+        return view('dosen.profil.edit_preferensi', [
+            'activemenu' => $activemenu,
             'user' => $user,
-            'dosen_pembimbing' => $dosen,
-            'jenismagang' => $jenismagang,
-            'skills' => $allSkills,
-            'activemenu' => 'profil',
+            'dosen' => $dosen,
+            'skills' => $skills,
+            'jenismagang' => $jenismagang
         ]);
     }
+
 
     public function updatePreferensi(Request $request)
     {
