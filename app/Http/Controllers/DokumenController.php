@@ -12,23 +12,20 @@ class DokumenController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        $mahasiswa = $user->mahasiswa;
-        $dosen = $user->dosenPembimbing;
 
-        // Cek apakah data mahasiswa tersedia
-        if (!$mahasiswa) {
-            return redirect()->route('mahasiswa.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
-        }
-
-        // Cek apakah data dosen pembimbing tersedia
-        if (!$dosen) {
-            return redirect()->route('dosen.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
-        }
-
-        // Tentukan model type berdasarkan role
+        // Tentukan tipe dan ID model terkait
         $documentableType = $user->role === 'mahasiswa'
             ? 'App\\Models\\Mahasiswa'
             : 'App\\Models\\Dosen';
+
+        $documentableId = $user->role === 'mahasiswa'
+            ? optional($user->mahasiswa)->id
+            : optional($user->dosenPembimbing)->id;
+
+        // Cek apakah data relasi tersedia
+        if (!$documentableId) {
+            return redirect()->route('mahasiswa.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        }
 
         // Validasi file
         $request->validate([
@@ -38,39 +35,42 @@ class DokumenController extends Controller
             'sertifikat.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
-        // CV
+        // Upload CV
         if ($request->hasFile('cv')) {
-            $this->replaceSingleDokumen($user, $documentableType, 'CV', $request->file('cv'));
+            $this->replaceSingleDokumen($documentableId, $documentableType, 'CV', $request->file('cv'));
         }
 
-        // Transkrip
+        // Upload Transkrip
         if ($request->hasFile('transkrip')) {
-            $this->replaceSingleDokumen($user, $documentableType, 'Transkrip Nilai', $request->file('transkrip'));
+            $this->replaceSingleDokumen($documentableId, $documentableType, 'Transkrip Nilai', $request->file('transkrip'));
         }
 
-        // Surat Pengantar
+        // Upload Surat Pengantar
         if ($request->hasFile('pengantar')) {
-            $this->replaceSingleDokumen($user, $documentableType, 'Surat Pengantar', $request->file('pengantar'));
+            $this->replaceSingleDokumen($documentableId, $documentableType, 'Surat Pengantar', $request->file('pengantar'));
         }
 
-        // Sertifikat (max 3)
-        $sertifikatLama = Dokumen::where('documentable_id', $user->id)
+        // Hitung sertifikat lama
+        $sertifikatLama = Dokumen::where('documentable_id', $documentableId)
             ->where('documentable_type', $documentableType)
             ->where('tipe', 'Sertifikat')
             ->count();
 
+        // Hitung sertifikat baru
         $sertifikatBaru = $request->file('sertifikat') ? count($request->file('sertifikat')) : 0;
 
+        // Maksimum 3 sertifikat
         if (($sertifikatLama + $sertifikatBaru) > 3) {
             return back()->with('error', 'Maksimal 3 file sertifikat.');
         }
 
+        // Upload sertifikat baru
         if ($request->hasFile('sertifikat')) {
             foreach ($request->file('sertifikat') as $file) {
                 $path = $file->store('dokumen', 'public');
 
                 Dokumen::create([
-                    'documentable_id' => $user->id,
+                    'documentable_id' => $documentableId,
                     'documentable_type' => $documentableType,
                     'tipe' => 'Sertifikat',
                     'file_path' => $path,
@@ -81,9 +81,17 @@ class DokumenController extends Controller
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Dokumen berhasil diupdate.');
     }
 
-    private function replaceSingleDokumen($user, $documentableType, $tipe, $file)
+    /**
+     * Mengganti dokumen tunggal (CV, Transkrip, Pengantar)
+     */
+    private function replaceSingleDokumen($documentableId, $documentableType, $tipe, $file)
     {
-        $old = Dokumen::where('documentable_id', $user->id)
+        // Cegah jika file kosong/null
+        if (!$file || !$file->isValid()) {
+            return;
+        }
+
+        $old = Dokumen::where('documentable_id', $documentableId)
             ->where('documentable_type', $documentableType)
             ->where('tipe', $tipe)
             ->first();
@@ -96,7 +104,7 @@ class DokumenController extends Controller
         $path = $file->store('dokumen', 'public');
 
         Dokumen::create([
-            'documentable_id' => $user->id,
+            'documentable_id' => $documentableId,
             'documentable_type' => $documentableType,
             'tipe' => $tipe,
             'file_path' => $path,
