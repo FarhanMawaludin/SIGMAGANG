@@ -45,7 +45,7 @@
 
 <body>
     {{-- Navigation --}}
-    @include('layouts.navigation')
+    @include('layouts.mahasiswa-navigation')
 
     {{-- Sidebar --}}
     @include('layouts.mahasiswa-sidebar')
