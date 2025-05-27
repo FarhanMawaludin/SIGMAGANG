@@ -164,6 +164,7 @@ Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
         Route::put('/dosen/update/{id}', [ProfilDosenController::class, 'update'])->name('update');
         Route::get('/dosen/edit_preferensi/{id}', [ProfilDosenController::class, 'edit_preferensi'])->name('edit_preferensi');
         Route::put('/dosen/update_preferensi/{id}', [ProfilDosenController::class, 'updatePreferensi'])->name('update_preferensi');
+        Route::get('/dosen/unggah_dokumen/{id}', [ProfilDosenController::class, 'UnggahDokumen'])->name('unggahDokumen');
     });
 
     Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {

@@ -28,10 +28,9 @@ class DosenPembimbing extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function documents()
-    {
-        return $this->morphMany(Dokumen::class, 'documentable');
-    }
+    public function documents() {
+    return $this->morphMany(Dokumen::class, 'documentable');
+}
 
     public function prodi(): BelongsTo
     {

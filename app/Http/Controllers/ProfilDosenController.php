@@ -12,19 +12,39 @@ use App\Models\Prodi;
 class ProfilDosenController extends Controller
 {
     public function index()
-    {
-        
-        $user = Auth::user();
-        $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
-        $allSkills = Skill::all();
-
+{
+    $user = Auth::user();
+    $dosen = $user->dosenPembimbing;
+    if (!$dosen) {
         return view('dosen.profil.index', [
             'user' => $user,
-            'dosen_pembimbing' => $dosen,
-            'allSkills' => $allSkills,
+            'dosen_pembimbing' => null,
+            'allSkills' => [],
             'activemenu' => 'profil',
-        ]);
+            'dokumen_cv' => null,
+            'dokumen_pengantar' => null,
+            'dokumen_sertifikat' => collect(),
+        ])->with('warning', 'Profil dosen belum dilengkapi.');
     }
+
+    // Ambil dokumen-dokumen dosen
+    $dokumen_cv = $dosen->documents()->where('tipe', 'CV')->whereNotNull('file_path')->first();
+    $dokumen_pengantar = $dosen->documents()->where('tipe', 'Surat Pengantar')->whereNotNull('file_path')->first();
+    $dokumen_sertifikat = $dosen->documents()->where('tipe', 'Sertifikat')->whereNotNull('file_path')->get();
+
+    $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
+    $allSkills = Skill::all();
+
+    return view('dosen.profil.index', [
+        'user' => $user,
+        'dosen_pembimbing' => $dosen,
+        'allSkills' => $allSkills,
+        'activemenu' => 'profil',
+        'dokumen_cv' => $dokumen_cv,
+        'dokumen_pengantar' => $dokumen_pengantar,
+        'dokumen_sertifikat' => $dokumen_sertifikat,
+    ]);
+}
 
     public function edit()
     {
@@ -167,5 +187,16 @@ class ProfilDosenController extends Controller
         $dosen->update($data);
 
         return redirect()->route('dosen.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
+    }
+     public function unggahDokumen()
+    {
+        $activemenu = 'profil';
+        $user = Auth::user();
+        $dosen_pembimbing = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
+        return view('dosen.profil.unggahDokumen', [
+            'activemenu' => $activemenu,
+            'user' => $user,
+            'dosen_pembimbing' => $dosen_pembimbing,
+        ]);
     }
 }
