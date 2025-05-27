@@ -38,9 +38,10 @@ class Mahasiswa extends Model
         return $this->belongsToMany(Skill::class);
     }
     public function documents()
-{
-    return $this->hasMany(Dokumen::class, 'documentable_id');
-}
+    {
+        return $this->morphMany(Dokumen::class, 'documentable');
+    }
+
     public function jenisMagang()
     {
         return $this->belongsTo(JenisMagang::class, 'jenis_magang_id');
@@ -50,7 +51,7 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(Pengajuan::class);
     }
-    
+
     // baru
 
     public function isCompleteProfile(): bool
