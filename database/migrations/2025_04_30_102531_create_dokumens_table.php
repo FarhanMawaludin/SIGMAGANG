@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dokumen', function (Blueprint $table) {
             $table->id();
             $table->morphs('documentable');
-            $table->enum('tipe', ['CV', 'Sertifikat', 'Surat Pengantar','Transkrip Nilai','Surat Keterangan Magang']);
+            $table->enum('tipe', ['CV', 'Sertifikat', 'Surat Pengantar','Transkrip Nilai','Sertifikat Magang']);
             $table->string('file_path'); 
             $table->timestamps();       
         }); 

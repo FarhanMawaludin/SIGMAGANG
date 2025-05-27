@@ -40,6 +40,7 @@ class ProfilMahasiswaController extends Controller
         $dokumen_cv = $mahasiswa->documents()->where('tipe', 'cv')->whereNotNull('file_path')->first();
         $dokumen_transkrip = $mahasiswa->documents()->where('tipe', 'Transkrip Nilai')->whereNotNull('file_path')->first();
         $dokumen_pengantar = $mahasiswa->documents()->where('tipe', 'Surat Pengantar')->whereNotNull('file_path')->first();
+        $dokumen_sertifikat_magang = $mahasiswa->documents()->where('tipe', 'Sertifikat Magang')->whereNotNull('file_path')->first();
         $dokumen_sertifikat = $mahasiswa->documents()->where('tipe', 'Sertifikat')->whereNotNull('file_path')->get();
 
         $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
@@ -61,6 +62,7 @@ class ProfilMahasiswaController extends Controller
             'dokumen_transkrip' => $dokumen_transkrip,
             'dokumen_pengantar' => $dokumen_pengantar,
             'dokumen_sertifikat' => $dokumen_sertifikat,
+            'dokumen_sertifikat_magang' => $dokumen_sertifikat_magang,
         ]);
     }
 

@@ -7,7 +7,7 @@ use App\Models\LogMingguan;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class MonitoringMahasiswaController extends Controller
 {
     public function index()
@@ -347,19 +347,19 @@ class MonitoringMahasiswaController extends Controller
         ]);
     }
 
-public function updateSuratKeterangan(Request $request)
+public function updateSertifikatMagang(Request $request)
 {
     $user = Auth::user();
     $mahasiswa = $user->mahasiswa;
 
     $request->validate([
-        'surat_keterangan' => 'required|file|mimes:pdf|max:5120',
+        'sertifikat_magang' => 'required|file|mimes:pdf|max:5120',
     ]);
 
 
     $dokumen = \App\Models\Dokumen::where('documentable_id', $mahasiswa->id)
-        ->where('documentable_type', 'mahasiswa')
-        ->where('tipe', 'Surat Keterangan Magang')
+        ->where('documentable_type', 'App\Models\Mahasiswa')
+        ->where('tipe', 'Sertifikat Magang')
         ->first();
 
     if ($dokumen && $dokumen->file_path && \Storage::disk('public')->exists($dokumen->file_path)) {
@@ -368,11 +368,11 @@ public function updateSuratKeterangan(Request $request)
     }
 
    
-    $path = $request->file('surat_keterangan')->store('dokumen', 'public');
+    $path = $request->file('sertifikat_magang')->store('dokumen', 'public');
     \App\Models\Dokumen::create([
         'documentable_id' => $mahasiswa->id,
-        'documentable_type' => 'mahasiswa',
-        'tipe' => 'Surat Keterangan Magang',
+        'documentable_type' =>'App\Models\Mahasiswa',
+        'tipe' => 'Sertifikat Magang',
         'file_path' => $path,
     ]);
 
@@ -416,4 +416,21 @@ public function updateSuratKeterangan(Request $request)
 
         return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Review berhasil ditambahkan.');
     }
+    public function generateSuratKeterangan($pengajuan_id)
+{
+    $pengajuan = \App\Models\Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'dosen.user', 'lowongan.perusahaan'])
+        ->findOrFail($pengajuan_id);
+
+    $data = [
+        'nomor_surat' => 'SKM/' . $pengajuan->id . '/' . date('Y'),
+        'mahasiswa' => $pengajuan->mahasiswa,
+        'dosen' => $pengajuan->dosen,
+        'perusahaan' => $pengajuan->lowongan->perusahaan->nama,
+        'tanggal_mulai' => $pengajuan->tanggal_mulai,
+        'tanggal_selesai' => $pengajuan->tanggal_selesai,
+    ];
+
+    $pdf = Pdf::loadView('mahasiswa.monitoring.surat_magang', $data);
+    return $pdf->download('Surat_Keterangan_Magang_'.$pengajuan->mahasiswa->nim.'.pdf');
+}
 }

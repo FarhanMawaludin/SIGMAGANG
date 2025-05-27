@@ -55,7 +55,7 @@
                                 ['label' => 'CV', 'data' => $dokumen_cv],
                                 ['label' => 'Transkrip Nilai', 'data' => $dokumen_transkrip],
                                 ['label' => 'Surat Pengantar', 'data' => $dokumen_pengantar],
-                                ['label' => 'Surat Keterangan Magang', 'data' => $dokumen_surat_keterangan_magang],
+                                ['label' => 'Sertifikat Magang', 'data' => $dokumen_surat_keterangan_magang],
                             ];
                         @endphp
 

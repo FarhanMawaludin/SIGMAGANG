@@ -216,7 +216,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
         Route::post('/mahasiswa/store', [MonitoringMahasiswaController::class, 'store'])->name('store');
         Route::get('/mahasiswa/selesai', [MonitoringMahasiswaController::class, 'selesai'])->name('selesai');
-        Route::put('/mahasiswa/selesai/keterangan', [MonitoringMahasiswaController::class, 'updateSuratKeterangan'])->name('surat_keterangan');
+        Route::put('/mahasiswa/selesai/keterangan', [MonitoringMahasiswaController::class, 'updateSertifikatMagang'])->name('sertifikat_magang');
         Route::get('/mahasiswa/review', [MonitoringMahasiswaController::class, 'review'])->name('review');
         Route::put('/mahasiswa/review_update', [MonitoringMahasiswaController::class, 'review_update'])->name('review.update');
         Route::get('/mahasiswa/{id}/show', [MonitoringMahasiswaController::class, 'show'])->name('show');
@@ -225,6 +225,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa/monitoring/{mingguan}/harian/{harian}/edit', [MonitoringMahasiswaController::class, 'edit_harian'])->name('edit_harian');
         Route::get('/mahasiswa/{mingguan}/harian/{harian}/detail', [MonitoringMahasiswaController::class, 'detail_harian'])->name('detail_harian');
         Route::put('/mahasiswa/monitoring/{mingguan}/harian/{harian}/update', [MonitoringMahasiswaController::class, 'update_harian'])->name('update_harian');
+        Route::get('/mahasiswa/surat-keterangan-magang/{pengajuan_id}', [MonitoringMahasiswaController::class, 'generateSuratKeterangan'])->name('surat_keterangan_magang');
     });
     
     Route::prefix('dokumen')->name('mahasiswa.dokumen.')->group(function () {

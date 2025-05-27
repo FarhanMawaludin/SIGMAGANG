@@ -60,7 +60,7 @@ class PengajuanController extends Controller
         ->get();
         
     $dokumen_cv = $dokumen_all->where('tipe', 'CV')->first();
-    $dokumen_surat_keterangan_magang = $dokumen_all->where('tipe', 'Surat Keterangan Magang')->first();
+    $dokumen_surat_keterangan_magang = $dokumen_all->where('tipe', 'Sertifikat Magang')->first();
     $dokumen_transkrip = $dokumen_all->where('tipe', 'Transkrip Nilai')->first();
     $dokumen_pengantar = $dokumen_all->where('tipe', 'Surat Pengantar')->first();
     $dokumen_sertifikat = $dokumen_all->where('tipe', 'Sertifikat')->values();
