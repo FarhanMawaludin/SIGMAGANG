@@ -241,22 +241,29 @@
                         </div>
                     @endforeach
                 </div> --}}
-                
+
 
                 <!-- Data Dosen -->
                 <div class="space-y-6 pt-2 mb-2">
                     @foreach ($dosen as $item)
+                        @php
+                            $percentage =
+                                $max_mahasiswa > 0
+                                    ? number_format(($item->jumlah_mahasiswa / $max_mahasiswa) * 100, 2)
+                                    : 0;
+                        @endphp
                         <div>
                             <div class="flex justify-between items-center mb-1 text-sm text-gray-900 font-medium">
                                 <span>{{ $item->name }}</span>
-                                <span>{{ $item->total_bimbingan }} mahasiswa</span>
+                                <span>{{ $item->jumlah_mahasiswa }} mahasiswa</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $percentage }}%"></div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
             </div>
 
             <!-- Statistik Kepuasan Rekomendasi -->
