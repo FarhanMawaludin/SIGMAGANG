@@ -7,6 +7,7 @@ use App\Models\Pengajuan;
 use App\Models\Perusahaan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StatistikController extends Controller
 {
@@ -14,7 +15,22 @@ class StatistikController extends Controller
     {
         //dosen
         $dosen_count =  User::where('role', 'dosen_pembimbing')->count();
-        $dosen_plot = User::where('role', 'dosen_pembimbing')->get();
+        $dosen_plot = User::where('role', 'dosen_pembimbing')
+            ->with(['dosenPembimbing.pengajuans' => function ($query) {
+                $query->select('dosen_id', 'mahasiswa_id');
+            }])
+            ->get()
+            ->map(function ($user) {
+                $jumlah = $user->dosenPembimbing
+                    ? $user->dosenPembimbing->pengajuans->pluck('mahasiswa_id')->unique()->count()
+                    : 0;
+                $user->jumlah_mahasiswa = $jumlah;
+                return $user;
+            });
+
+        $max_mahasiswa = $dosen_plot->max('jumlah_mahasiswa');
+
+        // dd($dosen_plot);
 
         //lowongan
         $lowongan_count = Lowongan::count();
@@ -81,6 +97,7 @@ class StatistikController extends Controller
             'mahasiswa_dibimbing_count' => $mahasiswa_dibimbing_count,
             'dosen_pembimbing_count' => $dosen_pembimbing_count,
             'ratio_mahasiswa_per_dosen' => $ratio_mahasiswa_per_dosen,
+            'max_mahasiswa' => $max_mahasiswa
 
         );
         return view('admin.statistik.index', $data);

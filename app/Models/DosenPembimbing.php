@@ -50,5 +50,10 @@ class DosenPembimbing extends Model
         return $this->belongsToMany(Skill::class);
     }
 
+    public function pengajuans()
+    {
+        return $this->hasMany(Pengajuan::class, 'dosen_id');
+    }
+
     //baru
 }
