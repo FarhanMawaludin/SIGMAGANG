@@ -466,7 +466,7 @@
                     series: [{
                         name: "Diterima Per Tahun",
                         data: @json($totals),
-                        color:'#2563eb'
+                        color: '#2563eb'
                     }],
                     xaxis: {
                         categories: @json($years),
@@ -522,6 +522,5 @@
             chart.render();
         });
     </script>
-
 
 @endsection
