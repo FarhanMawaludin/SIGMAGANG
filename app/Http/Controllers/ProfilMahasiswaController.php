@@ -19,8 +19,6 @@ class ProfilMahasiswaController extends Controller
     public function index()
     {
         $user = Auth::user();
-
-        
         $mahasiswa = $user->mahasiswa;
 
         if (!$mahasiswa) {
