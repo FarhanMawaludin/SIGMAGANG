@@ -49,10 +49,11 @@ class DashboardController extends Controller
 
         // statistik
         $accepted_per_year = Pengajuan::selectRaw('YEAR(created_at) as year, COUNT(*) as total')
-            ->where('status', 'accepted')
+            ->whereIn('status', ['accepted', 'completed'])
             ->groupByRaw('YEAR(created_at)')
             ->orderBy('year')
             ->get();
+
         $years = $accepted_per_year->pluck('year')->toArray();
         $totals = $accepted_per_year->pluck('total')->toArray();
 
@@ -69,7 +70,7 @@ class DashboardController extends Controller
         $monthlyData = [];
         if ($selectedYear) {
             $monthlyAcceptedPengajuan = Pengajuan::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-                ->where('status', 'accepted')
+                ->whereIn('status', ['accepted', 'completed'])
                 ->whereYear('created_at', $selectedYear)
                 ->groupByRaw('MONTH(created_at)')
                 ->orderBy('month')
