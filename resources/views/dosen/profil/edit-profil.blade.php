@@ -25,7 +25,7 @@
                 <div class="sm:col-span-3">
                     <label for="nidn" class="block text-sm/6 font-medium text-gray-900">NIDN</label>
                     <div class="mt-2">
-                        <input type="text" id="nidn" value="{{ $user->dosenPembimbing->nidn }}" readonly
+                        <input type="text" id="nidn" name="nidn" value="{{ $user->dosenPembimbing->nidn }}" readonly
                             class="block w-full bg-gray-100 px-3 py-1.5 rounded-md border border-gray-300 text-gray-700 sm:text-sm/6">
                     </div>
                 </div>

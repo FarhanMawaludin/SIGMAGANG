@@ -19,7 +19,7 @@
         <tbody>
             <tr class="bg-white border-b border-gray-200">
                 <td class="px-6 py-4 font-medium">Tanggal</td>
-                <td class="px-6 py-4">{{ \Carbon\Carbon::parse($logHarian->tanggal)->format('d M Y') }}</td>
+                <td class="px-6 py-4">{{ \Carbon\Carbon::parse($logHarian->tanggal)->translatedFormat('l, d F Y')  }}</td>
             </tr>
             <tr class="bg-white border-b border-gray-200">
                 <td class="px-6 py-4 font-medium">Jam Mulai</td>
@@ -33,10 +33,7 @@
                 <td class="px-6 py-4 font-medium">Aktivitas</td>
                 <td class="px-6 py-4">{{ $logHarian->aktivitas }}</td>
             </tr>
-            <tr class="bg-white border-b border-gray-200">
-                <td class="px-6 py-4 font-medium">Keterangan</td>
-                <td class="px-6 py-4">{{ $logHarian->keterangan ?? '-' }}</td>
-            </tr>
+
         </tbody>
     </table>
 </div>
