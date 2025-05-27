@@ -12,6 +12,18 @@ class DokumenController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
+        $mahasiswa = $user->mahasiswa;
+        $dosen = $user->dosenPembimbing;
+
+        // Cek apakah data mahasiswa tersedia
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        }
+
+        // Cek apakah data dosen pembimbing tersedia
+        if (!$dosen) {
+            return redirect()->route('dosen.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        }
 
         // Tentukan model type berdasarkan role
         $documentableType = $user->role === 'mahasiswa'
