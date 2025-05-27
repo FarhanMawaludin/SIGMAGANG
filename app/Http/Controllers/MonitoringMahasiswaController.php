@@ -7,7 +7,7 @@ use App\Models\LogMingguan;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 class MonitoringMahasiswaController extends Controller
 {
     public function index()
@@ -330,18 +330,54 @@ class MonitoringMahasiswaController extends Controller
     }
     public function selesai(){
         $user = Auth::user();
-        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
-            ->where('status', 'accepted')
-            ->first();
-        if (!$pengajuan) {
-            return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
-        }
+        // $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        //     ->where('status', 'accepted')
+        //     ->first();
+        // if (!$pengajuan) {
+        //     return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
+        // }
 
-        $pengajuan->update([
-            'status' => 'completed',
+        // $pengajuan->update([
+        //     'status' => 'completed',
+        // ]);
+        // return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log mingguan berhasil ditandai selesai.');
+
+        return view('mahasiswa.monitoring.selesai', [
+            'activemenu' => 'monitoring',
         ]);
-        return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log mingguan berhasil ditandai selesai.');
     }
+
+public function updateSertifikatMagang(Request $request)
+{
+    $user = Auth::user();
+    $mahasiswa = $user->mahasiswa;
+
+    $request->validate([
+        'sertifikat_magang' => 'required|file|mimes:pdf|max:5120',
+    ]);
+
+
+    $dokumen = \App\Models\Dokumen::where('documentable_id', $mahasiswa->id)
+        ->where('documentable_type', 'App\Models\Mahasiswa')
+        ->where('tipe', 'Sertifikat Magang')
+        ->first();
+
+    if ($dokumen && $dokumen->file_path && \Storage::disk('public')->exists($dokumen->file_path)) {
+        \Storage::disk('public')->delete($dokumen->file_path);
+        $dokumen->delete();
+    }
+
+   
+    $path = $request->file('sertifikat_magang')->store('dokumen', 'public');
+    \App\Models\Dokumen::create([
+        'documentable_id' => $mahasiswa->id,
+        'documentable_type' =>'App\Models\Mahasiswa',
+        'tipe' => 'Sertifikat Magang',
+        'file_path' => $path,
+    ]);
+
+    return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Surat Keterangan Magang berhasil diupload.');
+}
     public function review()
     {
         $activemenu = 'monitoring';
@@ -380,4 +416,21 @@ class MonitoringMahasiswaController extends Controller
 
         return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Review berhasil ditambahkan.');
     }
+    public function generateSuratKeterangan($pengajuan_id)
+{
+    $pengajuan = \App\Models\Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'dosen.user', 'lowongan.perusahaan'])
+        ->findOrFail($pengajuan_id);
+
+    $data = [
+        'nomor_surat' => 'SKM/' . $pengajuan->id . '/' . date('Y'),
+        'mahasiswa' => $pengajuan->mahasiswa,
+        'dosen' => $pengajuan->dosen,
+        'perusahaan' => $pengajuan->lowongan->perusahaan->nama,
+        'tanggal_mulai' => $pengajuan->tanggal_mulai,
+        'tanggal_selesai' => $pengajuan->tanggal_selesai,
+    ];
+
+    $pdf = Pdf::loadView('mahasiswa.monitoring.surat_magang', $data);
+    return $pdf->download('Surat_Keterangan_Magang_'.$pengajuan->mahasiswa->nim.'.pdf');
+}
 }

@@ -18,6 +18,7 @@ class DosenPembimbing extends Model
         'departemen',
         'no_telp',
         'preferensi_lokasi',
+        'jenis_magang_id',
         'prodi_id',
         'user_id'
     ];
@@ -27,10 +28,9 @@ class DosenPembimbing extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function documents()
-    {
-        return $this->morphMany(Dokumen::class, 'documentable');
-    }
+    public function documents() {
+    return $this->morphMany(Dokumen::class, 'documentable');
+}
 
     public function prodi(): BelongsTo
     {

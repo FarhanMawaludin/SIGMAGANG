@@ -161,9 +161,10 @@ Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
     Route::prefix('profil')->name('dosen.profil.')->group(function () {
         Route::get('/dosen', [ProfilDosenController::class, 'index'])->name('index');
         Route::get('/dosen/edit/{id}', [ProfilDosenController::class, 'edit'])->name('edit');
-        Route::put('/dosen/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
+        Route::put('/dosen/update/{id}', [ProfilDosenController::class, 'update'])->name('update');
         Route::get('/dosen/edit_preferensi/{id}', [ProfilDosenController::class, 'edit_preferensi'])->name('edit_preferensi');
         Route::put('/dosen/update_preferensi/{id}', [ProfilDosenController::class, 'updatePreferensi'])->name('update_preferensi');
+        Route::get('/dosen/unggah_dokumen/{id}', [ProfilDosenController::class, 'UnggahDokumen'])->name('unggahDokumen');
     });
 
     Route::prefix('mahasiswa')->name('dosen.mahasiswa.')->group(function () {
@@ -178,6 +179,12 @@ Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
         Route::get('/dosen/{id}/harian/{harian}/edit', [MonitoringDosenController::class, 'edit_harian'])->name('edit_harian');
         Route::get('/dosen/{id}/create', [MonitoringDosenController::class, 'create_feedback'])->name('create_feedback');
         Route::put('/dosen/{id}/update', [MonitoringDosenController::class, 'update_feedback'])->name('update_feedback');
+
+        
+    });
+        Route::prefix('dokumen')->name('dosen.dokumen.')->group(function () {
+        Route::put('/dosen/dokumen/update', [DokumenController::class, 'update'])->name('update');
+      
     });
 });
 
@@ -210,6 +217,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
         Route::post('/mahasiswa/store', [MonitoringMahasiswaController::class, 'store'])->name('store');
         Route::get('/mahasiswa/selesai', [MonitoringMahasiswaController::class, 'selesai'])->name('selesai');
+        Route::put('/mahasiswa/selesai/keterangan', [MonitoringMahasiswaController::class, 'updateSertifikatMagang'])->name('sertifikat_magang');
         Route::get('/mahasiswa/review', [MonitoringMahasiswaController::class, 'review'])->name('review');
         Route::put('/mahasiswa/review_update', [MonitoringMahasiswaController::class, 'review_update'])->name('review.update');
         Route::get('/mahasiswa/{id}/show', [MonitoringMahasiswaController::class, 'show'])->name('show');
@@ -218,6 +226,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa/monitoring/{mingguan}/harian/{harian}/edit', [MonitoringMahasiswaController::class, 'edit_harian'])->name('edit_harian');
         Route::get('/mahasiswa/{mingguan}/harian/{harian}/detail', [MonitoringMahasiswaController::class, 'detail_harian'])->name('detail_harian');
         Route::put('/mahasiswa/monitoring/{mingguan}/harian/{harian}/update', [MonitoringMahasiswaController::class, 'update_harian'])->name('update_harian');
+        Route::get('/mahasiswa/surat-keterangan-magang/{pengajuan_id}', [MonitoringMahasiswaController::class, 'generateSuratKeterangan'])->name('surat_keterangan_magang');
     });
     
     Route::prefix('dokumen')->name('mahasiswa.dokumen.')->group(function () {

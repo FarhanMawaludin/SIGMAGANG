@@ -49,29 +49,34 @@ class PengajuanController extends Controller
         ]);
     }
     public function edit($id)
-    {
-        $activemenu = 'pengajuan';
-        $dosens = DosenPembimbing::all();
-        $pengajuan = Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'lowongan'])->findOrFail($id);
-        // Get all documents for the mahasiswa related to this pengajuan
-        $dokumen_all = Dokumen::where('documentable_type', 'mahasiswa')
-            ->where('documentable_id', $pengajuan->mahasiswa_id)
-            ->where('file_path', '!=', null)
-            ->get();
-        $dokumen_cv = $dokumen_all->where('tipe', 'CV')->first();
-        $dokumen_transkrip = $dokumen_all->where('tipe', 'Transkrip Nilai')->first();
-        $dokumen_pengantar = $dokumen_all->where('tipe', 'Surat Pengantar')->first();
-        $dokumen_sertifikat = $dokumen_all->where('tipe', 'Sertifikat');
-        return view('admin.pengajuan.edit', [
-            'pengajuan' => $pengajuan,
-            'activemenu' => $activemenu,
-            'dosens' => $dosens,
-            'dokumen_cv' => $dokumen_cv,
-            'dokumen_transkrip' => $dokumen_transkrip,
-            'dokumen_pengantar' => $dokumen_pengantar,
-            'dokumen_sertifikat' => $dokumen_sertifikat,
-        ]);
-    }
+{
+    $activemenu = 'pengajuan';
+    $dosens = DosenPembimbing::all();
+    $pengajuan = Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'lowongan'])->findOrFail($id);
+
+    // Ambil semua dokumen mahasiswa terkait pengajuan ini
+    $dokumen_all = Dokumen::where('documentable_type', 'App\Models\Mahasiswa')
+        ->where('documentable_id', $pengajuan->mahasiswa_id)
+        ->get();
+        
+    $dokumen_cv = $dokumen_all->where('tipe', 'CV')->first();
+    $dokumen_surat_keterangan_magang = $dokumen_all->where('tipe', 'Sertifikat Magang')->first();
+    $dokumen_transkrip = $dokumen_all->where('tipe', 'Transkrip Nilai')->first();
+    $dokumen_pengantar = $dokumen_all->where('tipe', 'Surat Pengantar')->first();
+    $dokumen_sertifikat = $dokumen_all->where('tipe', 'Sertifikat')->values();
+
+
+    return view('admin.pengajuan.edit', [
+        'pengajuan' => $pengajuan,
+        'activemenu' => $activemenu,
+        'dosens' => $dosens,
+        'dokumen_cv' => $dokumen_cv,
+        'dokumen_transkrip' => $dokumen_transkrip,
+        'dokumen_pengantar' => $dokumen_pengantar,
+        'dokumen_sertifikat' => $dokumen_sertifikat,
+        'dokumen_surat_keterangan_magang' => $dokumen_surat_keterangan_magang,
+    ]);
+}
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
@@ -96,24 +101,23 @@ public function update(Request $request, $id)
 {
     $pengajuan = Pengajuan::findOrFail($id);
     $request->validate([
-        'action' => 'required|in:accept,decline',
+        'action' => 'required|in:accept,decline,done',
+        'catatan_validasi' => 'nullable|string',
     ]);
-    if ($request->input('action') === 'accept') {
-        $request->validate([
-            'dosen_id' => 'required|exists:dosen_pembimbing,id',
-        ], [
-            'dosen_id.required' => 'Dosen wajib diisi.',
-            'dosen_id.exists' => 'Dosen tidak ditemukan.',
-        ]);
+    if ($request->filled('dosen_id')) {
         $pengajuan->dosen_id = $request->dosen_id;
+    }
+    $pengajuan->catatan_validasi = $request->catatan_validasi;
+    if ($request->action === 'accept') {
         $pengajuan->status = 'accepted';
-        $pengajuan->catatan_validasi = $request->catatan_validasi;
-    } elseif ($request->input('action') === 'decline') {
+    } elseif ($request->action === 'decline') {
         $pengajuan->status = 'rejected';
+    } elseif ($request->action === 'done') {
+        $pengajuan->status = 'completed';
     }
 
     $pengajuan->save();
-    if($pengajuan->save()){
+     if ($request->action === 'accept') {
         Lowongan::where('id', $pengajuan->lowongan_id)->update([
             'jumlah_magang' => DB::raw('jumlah_magang - 1')
         ]);

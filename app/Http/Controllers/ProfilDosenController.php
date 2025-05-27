@@ -6,31 +6,54 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DosenPembimbing;
 use App\Models\Skill;
-use App\Models\User;
 use App\Models\JenisMagang;
+use App\Models\Prodi;
 
 class ProfilDosenController extends Controller
 {
     public function index()
-    {
-        $user = Auth::user();
-        $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
-        $allSkills = Skill::all();
-
+{
+    $user = Auth::user();
+    $dosen = $user->dosenPembimbing;
+    if (!$dosen) {
         return view('dosen.profil.index', [
             'user' => $user,
-            'dosen_pembimbing' => $dosen,
-            'allSkills' => $allSkills,
+            'dosen_pembimbing' => null,
+            'allSkills' => [],
             'activemenu' => 'profil',
-        ]);
+            'dokumen_cv' => null,
+            'dokumen_pengantar' => null,
+            'dokumen_sertifikat' => collect(),
+        ])->with('warning', 'Profil dosen belum dilengkapi.');
     }
+
+    // Ambil dokumen-dokumen dosen
+    $dokumen_cv = $dosen->documents()->where('tipe', 'CV')->whereNotNull('file_path')->first();
+    $dokumen_pengantar = $dosen->documents()->where('tipe', 'Surat Pengantar')->whereNotNull('file_path')->first();
+    $dokumen_sertifikat = $dosen->documents()->where('tipe', 'Sertifikat')->whereNotNull('file_path')->get();
+
+    $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
+    $allSkills = Skill::all();
+
+    return view('dosen.profil.index', [
+        'user' => $user,
+        'dosen_pembimbing' => $dosen,
+        'allSkills' => $allSkills,
+        'activemenu' => 'profil',
+        'dokumen_cv' => $dokumen_cv,
+        'dokumen_pengantar' => $dokumen_pengantar,
+        'dokumen_sertifikat' => $dokumen_sertifikat,
+    ]);
+}
 
     public function edit()
     {
         $user = Auth::user();
+        $prodis = Prodi::all();
         return view('dosen.profil.edit-profil', [
             'user' => $user,
-            'dosen_pembimbing' => $user->dosenPembimbing,
+            'prodis' => $prodis,
+            'dosen_pembimbing' => $user->dosen,
             'activemenu' => 'profil',
         ]);
     }
@@ -44,54 +67,78 @@ class ProfilDosenController extends Controller
             'nama_lengkap' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'no_telp' => 'nullable|string|max:20',
+            'nidn' => 'required|string|max:255',
         ]);
 
+        // Update ke tabel users
         $user->update([
             'name' => $request->nama_lengkap,
             'email' => $request->email,
         ]);
 
+        // Update ke tabel dosen_pembimbing
         $dosen->update([
             'no_telp' => $request->no_telp,
+            'nidn' => $request->nidn,
         ]);
 
         return redirect()->route('dosen.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
     }
 
+
     public function update(Request $request)
     {
         $user = Auth::user();
-        $dosen = $user->dosenPembimbing;
 
+        // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'no_telp' => 'nullable|string|max:20',
+            'email' => 'required|email|max:255',
+            'no_telp' => 'required|string|max:20',
+            'nidn' => 'required|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'prodi_id' => 'required',
+        ], [
+            'name.required' => 'Nama tidak boleh kosong.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email salah.',
+            'email.unique' => 'Email sudah digunakan sebelumnya.',
+            'no_telp.required' => 'Nomor telepon wajib diisi.',
+            'nidn.required' => 'NIDN wajib diisi.',
+            'prodi_id.required' => 'Prodi wajib diisi.',
         ]);
 
-        $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-        ]);
+        // Update data user
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->save();
 
-        if ($request->hasFile('foto')) {
-            if ($user->foto) {
-                \Storage::disk('public')->delete($user->foto);
-            }
+        // Cek relasi mahasiswa
+        $dosen = $user->dosenPembimbing;
 
-            $path = $request->file('foto')->store('foto_profil', 'public');
-            $user->foto = $path;
-            $user->save();
+        if (!$dosen) {
+            // Jika belum ada, buat data mahasiswa baru
+            $dosen = new \App\Models\DosenPembimbing();
+            $dosen->user_id = $user->id;
         }
 
-        $dosen->update([
-            'no_telp' => $validated['no_telp'],
-        ]);
+        // Update/isi data mahasiswa
+        $dosen->no_telp = $validated['no_telp'];
+        $dosen->nidn = $validated['nidn'];
+        $dosen->jabatan = $request->jabatan;
+        $dosen->prodi_id = $request->prodi_id;
+        
+        $dosen->save();
 
-        return redirect()->route('dosen.profil.index')->with('success', 'Profil berhasil diperbarui.');
+        // Simpan foto jika ada
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('foto_profil', 'public');
+            $user->foto = $path;
+            $user->save(); // Simpan ke kolom foto user
+        }
+
+        return redirect()->route('dosen.profil.index')->with('success', 'Profil berhasil diperbarui');
     }
-    
 
     public function edit_preferensi()
     {
@@ -110,7 +157,6 @@ class ProfilDosenController extends Controller
         ]);
     }
 
-
     public function updatePreferensi(Request $request)
     {
         $user = Auth::user();
@@ -122,15 +168,35 @@ class ProfilDosenController extends Controller
             'skills' => 'nullable|array',
         ]);
 
-        $dosen->update([
+        $data = [
             'preferensi_lokasi' => $request->preferensi_lokasi,
             'jenis_magang_id' => $request->jenis_magang_id,
-        ]);
 
-        if ($request->has('skills')) {
+        ];
+         if ($request->has('skills')) {
             $dosen->skills()->sync($request->skills);
         }
 
+        // Proses upload file
+        foreach (['file_cv', 'file_transkrip', 'file_sertifikat', 'file_surat_pengantar'] as $fileField) {
+            if ($request->hasFile($fileField)) {
+                $file = $request->file($fileField)->store('dokumen_magang', 'public');
+                $data[$fileField] = $file;
+            }
+        }
+        $dosen->update($data);
+
         return redirect()->route('dosen.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
+    }
+     public function unggahDokumen()
+    {
+        $activemenu = 'profil';
+        $user = Auth::user();
+        $dosen_pembimbing = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
+        return view('dosen.profil.unggahDokumen', [
+            'activemenu' => $activemenu,
+            'user' => $user,
+            'dosen_pembimbing' => $dosen_pembimbing,
+        ]);
     }
 }
