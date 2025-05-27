@@ -330,18 +330,54 @@ class MonitoringMahasiswaController extends Controller
     }
     public function selesai(){
         $user = Auth::user();
-        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
-            ->where('status', 'accepted')
-            ->first();
-        if (!$pengajuan) {
-            return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
-        }
+        // $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        //     ->where('status', 'accepted')
+        //     ->first();
+        // if (!$pengajuan) {
+        //     return redirect()->back()->with('error', 'Pengajuan Anda belum disetujui.');
+        // }
 
-        $pengajuan->update([
-            'status' => 'completed',
+        // $pengajuan->update([
+        //     'status' => 'completed',
+        // ]);
+        // return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log mingguan berhasil ditandai selesai.');
+
+        return view('mahasiswa.monitoring.selesai', [
+            'activemenu' => 'monitoring',
         ]);
-        return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Log mingguan berhasil ditandai selesai.');
     }
+
+public function updateSuratKeterangan(Request $request)
+{
+    $user = Auth::user();
+    $mahasiswa = $user->mahasiswa;
+
+    $request->validate([
+        'surat_keterangan' => 'required|file|mimes:pdf|max:5120',
+    ]);
+
+
+    $dokumen = \App\Models\Dokumen::where('documentable_id', $mahasiswa->id)
+        ->where('documentable_type', 'mahasiswa')
+        ->where('tipe', 'Surat Keterangan Magang')
+        ->first();
+
+    if ($dokumen && $dokumen->file_path && \Storage::disk('public')->exists($dokumen->file_path)) {
+        \Storage::disk('public')->delete($dokumen->file_path);
+        $dokumen->delete();
+    }
+
+   
+    $path = $request->file('surat_keterangan')->store('dokumen', 'public');
+    \App\Models\Dokumen::create([
+        'documentable_id' => $mahasiswa->id,
+        'documentable_type' => 'mahasiswa',
+        'tipe' => 'Surat Keterangan Magang',
+        'file_path' => $path,
+    ]);
+
+    return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Surat Keterangan Magang berhasil diupload.');
+}
     public function review()
     {
         $activemenu = 'monitoring';

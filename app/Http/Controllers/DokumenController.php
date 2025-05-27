@@ -13,7 +13,7 @@ class DokumenController extends Controller
     {
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
-        $dosen = $user->dosenPembimbing;
+        // $dosen = $user->dosenPembimbing;
 
         // Cek apakah data mahasiswa tersedia
         if (!$mahasiswa) {
@@ -21,9 +21,9 @@ class DokumenController extends Controller
         }
 
         // Cek apakah data dosen pembimbing tersedia
-        if (!$dosen) {
-            return redirect()->route('dosen.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
-        }
+        // if ($dosen) {
+        //     return redirect()->route('dosen.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        // }
 
         // Tentukan model type berdasarkan role
         $documentableType = $user->role === 'mahasiswa'

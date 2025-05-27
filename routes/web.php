@@ -216,6 +216,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::get('/mahasiswa/create', [MonitoringMahasiswaController::class, 'create'])->name('create');
         Route::post('/mahasiswa/store', [MonitoringMahasiswaController::class, 'store'])->name('store');
         Route::get('/mahasiswa/selesai', [MonitoringMahasiswaController::class, 'selesai'])->name('selesai');
+        Route::put('/mahasiswa/selesai/keterangan', [MonitoringMahasiswaController::class, 'updateSuratKeterangan'])->name('surat_keterangan');
         Route::get('/mahasiswa/review', [MonitoringMahasiswaController::class, 'review'])->name('review');
         Route::put('/mahasiswa/review_update', [MonitoringMahasiswaController::class, 'review_update'])->name('review.update');
         Route::get('/mahasiswa/{id}/show', [MonitoringMahasiswaController::class, 'show'])->name('show');

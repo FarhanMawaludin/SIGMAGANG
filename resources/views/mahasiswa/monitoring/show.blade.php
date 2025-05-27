@@ -21,6 +21,7 @@
                         <td class="px-6 py-4">{{ \Carbon\Carbon::parse($log->tanggal)->translatedFormat('l, d F Y') }}</td>
                         <td class="px-6 py-4">{{ $log->aktivitas }}</td>
                         <td class="px-6 py-4">
+                            @if ($logMingguan->pengajuan->status != 'completed')
                             <!-- Edit -->
                             <a href="{{ route('mahasiswa.monitoring.edit_harian', [$logMingguan->id, $log->id]) }}"
                                 class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition cursor-pointer">
@@ -31,6 +32,7 @@
                                 </svg>
                                 <span class="hidden md:inline">Edit</span>
                             </a>
+                            @endif
                             <!-- Detail -->
                             <button
                                 class="inline-flex items-center bg-blue-600 text-white  px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
