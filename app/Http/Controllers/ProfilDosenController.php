@@ -13,6 +13,7 @@ class ProfilDosenController extends Controller
 {
     public function index()
     {
+        
         $user = Auth::user();
         $dosen = $user->dosenPembimbing()->with(['prodi', 'jenismagang', 'skills'])->first();
         $allSkills = Skill::all();
@@ -139,26 +140,22 @@ class ProfilDosenController extends Controller
     public function updatePreferensi(Request $request)
     {
         $user = Auth::user();
-        $dosen = DosenPembimbing::findOrFail($user->id);
+        $dosen = $user->dosenPembimbing;
 
         $request->validate([
             'preferensi_lokasi' => 'required|string|max:100',
             'jenis_magang_id' => 'required|exists:jenis_magang,id',
-            'tipe_magang' => 'required|in:onsite,remote',
-            'kemampuan' => 'nullable|string|max:255',
-            'file_cv' => 'nullable|file|mimes:pdf|max:2048',
-            'file_transkrip' => 'nullable|file|mimes:pdf|max:2048',
-            'file_sertifikat' => 'nullable|file|mimes:pdf|max:2048',
-            'file_surat_pengantar' => 'nullable|file|mimes:pdf|max:2048',
+            'skills' => 'nullable|array',
         ]);
 
         $data = [
-            'ipk' => $request->ipk,
             'preferensi_lokasi' => $request->preferensi_lokasi,
             'jenis_magang_id' => $request->jenis_magang_id,
-            'kemampuan' => $request->kemampuan,
-            'tipe_magang' => $request->tipe_magang
+
         ];
+         if ($request->has('skills')) {
+            $dosen->skills()->sync($request->skills);
+        }
 
         // Proses upload file
         foreach (['file_cv', 'file_transkrip', 'file_sertifikat', 'file_surat_pengantar'] as $fileField) {
@@ -167,11 +164,8 @@ class ProfilDosenController extends Controller
                 $data[$fileField] = $file;
             }
         }
-        if ($request->has('skills')) {
-            $mahasiswa->skills()->sync($request->skills);
-        }
-        $mahasiswa->update($data);
+        $dosen->update($data);
 
-        return redirect()->route('mahasiswa.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
+        return redirect()->route('dosen.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
     }
 }

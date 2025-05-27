@@ -178,6 +178,12 @@ Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
         Route::get('/dosen/{id}/harian/{harian}/edit', [MonitoringDosenController::class, 'edit_harian'])->name('edit_harian');
         Route::get('/dosen/{id}/create', [MonitoringDosenController::class, 'create_feedback'])->name('create_feedback');
         Route::put('/dosen/{id}/update', [MonitoringDosenController::class, 'update_feedback'])->name('update_feedback');
+
+        
+    });
+        Route::prefix('dokumen')->name('dosen.dokumen.')->group(function () {
+        Route::put('/dosen/dokumen/update', [DokumenController::class, 'update'])->name('update');
+      
     });
 });
 
