@@ -197,6 +197,7 @@ Route::middleware('auth', 'role:mahasiswa')->group(function () {
         Route::put('/mahasiswa/update/{id}', [ProfilMahasiswaController::class, 'update'])->name('update');
         Route::get('/mahasiswa/edit_preferensi/{id}', [ProfilMahasiswaController::class, 'edit_preferensi'])->name('editPreferensi');
         Route::put('/mahasiswa/update_preferensi/{id}', [ProfilMahasiswaController::class, 'updatePreferensi'])->name('update_preferensi');
+        Route::get('/mahasiswa/unggah_dokumen/{id}', [ProfilMahasiswaController::class, 'UnggahDokumen'])->name('unggahDokumen');
     });
 
     Route::prefix('lowongan')->name('mahasiswa.lowongan.')->group(function () {

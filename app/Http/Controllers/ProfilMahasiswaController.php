@@ -18,29 +18,39 @@ class ProfilMahasiswaController extends Controller
      */
     public function index()
     {
-        $dokumen_cv = Auth::user()->mahasiswa->documents()->where('tipe', 'CV')
-        ->where('documentable_type', 'mahasiswa')
-        ->where('documentable_id', Auth::user()->mahasiswa->id)
-        ->where('file_path', '!=', null)
-        ->first();
-        $dokumen_transkrip = Auth::user()->mahasiswa->documents()->where('tipe', 'Transkrip Nilai')
-        ->where('documentable_type', 'mahasiswa')
-        ->where('documentable_id', Auth::user()->mahasiswa->id)
-        ->where('file_path', '!=', null)
-        ->first();
-        $dokumen_pengantar = Auth::user()->mahasiswa->documents()->where('tipe', 'Surat Pengantar')
-        ->where('documentable_type', 'mahasiswa')
-        ->where('documentable_id', Auth::user()->mahasiswa->id)
-        ->where('file_path', '!=', null)
-        ->first();
-        $dokumen_sertifikat = Auth::user()->mahasiswa->documents()->where('tipe', 'Sertifikat')
-        ->where('documentable_type', 'mahasiswa')
-        ->where('documentable_id', Auth::user()->mahasiswa->id)
-        ->where('file_path', '!=', null)
-        ->get();
         $user = Auth::user();
+
+        
+        $mahasiswa = $user->mahasiswa;
+
+        if (!$mahasiswa) {
+            return view('mahasiswa.profil.index', [
+                'user' => $user,
+                'mahasiswa' => null,
+                'allSkills' => [], 
+                'activemenu' => 'profil',
+                'dokumen_cv' => null,
+                'dokumen_transkrip' => null,
+                'dokumen_pengantar' => null,
+                'dokumen_sertifikat' => collect(), 
+            ])->with('warning', 'Profil mahasiswa belum dilengkapi.');
+        }
+
+     
+        $dokumen_cv = $mahasiswa->documents()->where('tipe', 'cv')->whereNotNull('file_path')->first();
+        $dokumen_transkrip = $mahasiswa->documents()->where('tipe', 'Transkrip Nilai')->whereNotNull('file_path')->first();
+        $dokumen_pengantar = $mahasiswa->documents()->where('tipe', 'Surat Pengantar')->whereNotNull('file_path')->first();
+        $dokumen_sertifikat = $mahasiswa->documents()->where('tipe', 'Sertifikat')->whereNotNull('file_path')->get();
+
         $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
         $allSkills = Skill::all();
+
+        // dd([
+        //     'cv' => $dokumen_cv,
+        //     'transkrip' => $dokumen_transkrip,
+        //     'pengantar' => $dokumen_pengantar,
+        //     'sertifikat' => $dokumen_sertifikat,
+        // ]);
 
         return view('mahasiswa.profil.index', [
             'user' => $user,
@@ -53,6 +63,8 @@ class ProfilMahasiswaController extends Controller
             'dokumen_sertifikat' => $dokumen_sertifikat,
         ]);
     }
+
+
 
     public function updateProfil(Request $request)
     {
@@ -143,7 +155,12 @@ class ProfilMahasiswaController extends Controller
     {
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
-        
+
+        // Cek apakah data mahasiswa tersedia
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        }
+
         $request->validate([
             'ipk' => 'required|numeric|between:0,4.00',
             'preferensi_lokasi' => 'required|string|max:100',
@@ -171,9 +188,13 @@ class ProfilMahasiswaController extends Controller
                 $data[$fileField] = $file;
             }
         }
+
+        // Sinkronisasi skills jika tersedia
         if ($request->has('skills')) {
             $mahasiswa->skills()->sync($request->skills);
         }
+
+        // Update data mahasiswa
         $mahasiswa->update($data);
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Preferensi magang berhasil diperbarui.');
@@ -217,7 +238,7 @@ class ProfilMahasiswaController extends Controller
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
         $jenismagang = JenisMagang::all();
-        $skills = Skill::all(); 
+        $skills = Skill::all();
 
         return view('mahasiswa.profil.editPreferensi', [
             'activemenu' => $activemenu,
@@ -225,6 +246,18 @@ class ProfilMahasiswaController extends Controller
             'mahasiswa' => $mahasiswa,
             'skills' => $skills,
             'jenismagang' => $jenismagang
+        ]);
+    }
+
+    public function unggahDokumen()
+    {
+        $activemenu = 'profil';
+        $user = Auth::user();
+        $mahasiswa = $user->mahasiswa()->with(['prodi', 'jenismagang', 'skills'])->first();
+        return view('mahasiswa.profil.unggahDokumen', [
+            'activemenu' => $activemenu,
+            'user' => $user,
+            'mahasiswa' => $mahasiswa,
         ]);
     }
 }

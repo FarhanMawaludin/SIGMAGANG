@@ -43,36 +43,32 @@
                         <button id="dropdownDefaultButton" data-dropdown-toggle="tahunDropdown"
                             data-dropdown-placement="bottom" type="button"
                             class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                            Tahun
+                            {{ $selectedYear ?? 'Semua' }}
                             <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="m1 1 4 4 4-4" />
-                            </svg></button>
+                            </svg>
+                        </button>
                         <div id="tahunDropdown"
                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border border-gray-200 w-44 dark:bg-gray-700">
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="dropdownDefaultButton">
                                 <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2021</a>
+                                    <a href="{{ url()->current() }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white {{ $selectedYear === null ? 'font-bold text-blue-600' : '' }}">
+                                        Semua Tahun
+                                    </a>
                                 </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2022</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2023</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2024</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2025</a>
-                                </li>
+                                @foreach ($years as $year)
+                                    <li>
+                                        <a href="{{ url()->current() }}?year={{ $year }}"
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white
+                                        {{ $year == $selectedYear ? 'font-bold text-blue-600' : '' }}">
+                                            {{ $year }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -178,7 +174,7 @@
                         <button id="dropdownDefaultButton" data-dropdown-toggle="tahunDosenDropdown"
                             data-dropdown-placement="bottom" type="button"
                             class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                            Tahun
+                            {{ $selectedYear ?? 'Semua' }}
                             <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -189,25 +185,20 @@
                             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                                 aria-labelledby="dropdownDefaultButton">
                                 <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2021</a>
+                                    <a href="{{ url()->current() }}"
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white {{ $selectedYear === null ? 'font-bold text-blue-600' : '' }}">
+                                        Semua Tahun
+                                    </a>
                                 </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2022</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2023</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2024</a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2025</a>
-                                </li>
+                                @foreach ($years as $year)
+                                    <li>
+                                        <a href="{{ url()->current() }}?year={{ $year }}"
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white
+                                        {{ $year == $selectedYear ? 'font-bold text-blue-600' : '' }}">
+                                            {{ $year }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -218,13 +209,13 @@
                 <div class="flex justify-between items-center gap-8 mt-1 mb-4">
                     <!-- Mahasiswa Magang -->
                     <div class="flex items-center gap-2">
-                        <div class="text-2xl font-bold text-gray-900">{{ $magang_count }}</div>
+                        <div class="text-2xl font-bold text-gray-900">{{ $mahasiswa_dibimbing_count }}</div>
                         <div class="text-sm text-gray-500">Mahasiswa Magang</div>
                     </div>
 
                     <!-- Rata-rata mahasiswa per Dosen -->
                     <div class="flex items-center gap-2 text-left">
-                        <div class="text-2xl font-bold text-gray-900">{{ $magang_count / $dosen_count }}</div>
+                        <div class="text-2xl font-bold text-gray-900">{{ $ratio_mahasiswa_per_dosen }}</div>
                         <div class="text-sm text-gray-500">Mahasiswa per Dosen</div>
                     </div>
                 </div>
@@ -234,19 +225,45 @@
                     <span class="text-sm font-medium text-gray-700">Total Mahasiswa</span>
                 </div>
 
-                <!-- Data Dosen -->
-                <div class="space-y-6 pt-2 mb-2">
+                {{-- <div class="space-y-6 pt-2 mb-2">
                     @foreach ($dosen as $item)
+                        @php
+                            $percentage = $maxBimbingan > 0 ? ($item->total_bimbingan / $maxBimbingan) * 100 : 0;
+                        @endphp
                         <div>
                             <div class="flex justify-between items-center mb-1 text-sm text-gray-900 font-medium">
                                 <span>{{ $item->name }}</span>
+                                <span>{{ $item->total_bimbingan }} mahasiswa</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 100%"></div>
+                                <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: {{ $percentage }}%"></div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div> --}}
+
+
+                <!-- Data Dosen -->
+                <div class="space-y-6 pt-2 mb-2">
+                    @foreach ($dosen as $item)
+                        @php
+                            $percentage =
+                                $max_mahasiswa > 0
+                                    ? number_format(($item->jumlah_mahasiswa / $max_mahasiswa) * 100, 2)
+                                    : 0;
+                        @endphp
+                        <div>
+                            <div class="flex justify-between items-center mb-1 text-sm text-gray-900 font-medium">
+                                <span>{{ $item->name }}</span>
+                                <span>{{ $item->jumlah_mahasiswa }} mahasiswa</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $percentage }}%"></div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+
             </div>
 
             <!-- Statistik Kepuasan Rekomendasi -->
@@ -355,103 +372,150 @@
         }
     </script>
     <script>
-        const options = {
-            // set the labels option to true to show the labels on the X and Y axis
-            xaxis: {
-                show: true,
-                categories: @json($years),
-                labels: {
-                    show: true,
-                    style: {
-                        fontFamily: "Inter, sans-serif",
-                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
-                    }
-                },
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-            },
-            yaxis: {
-                show: true,
-                labels: {
-                    show: true,
-                    style: {
-                        fontFamily: "Inter, sans-serif",
-                        cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400 mb-2'
-                    },
-                    formatter: function(value) {
-                        return value;
-                    }
-                }
-            },
-            series: [{
-                name: "Developer Edition",
-                data: @json($totals),
-                color: "#1A56DB",
-            }],
-            chart: {
-                sparkline: {
-                    enabled: false
-                },
-                height: "100%",
-                width: "100%",
-                type: "area",
-                fontFamily: "Inter, sans-serif",
-                dropShadow: {
-                    enabled: false,
-                },
-                toolbar: {
-                    show: false,
-                },
-            },
-            tooltip: {
-                enabled: true,
-                x: {
-                    show: false,
-                },
-            },
-            fill: {
-                type: "gradient",
-                gradient: {
-                    opacityFrom: 0.55,
-                    opacityTo: 0,
-                    shade: "#1C64F2",
-                    gradientToColors: ["#1C64F2"],
-                },
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                width: 3,
-            },
-            markers: {
-                size: 4,
-                hover: {
-                    size: 6
-                }
-            },
-            legend: {
-                show: false
-            },
-            grid: {
-                show: false,
-            },
-        }
-
         document.addEventListener("DOMContentLoaded", function() {
             const chartContainer = document.getElementById("labels-chart");
-            console.log("Chart container:", chartContainer);
-
-            if (chartContainer && typeof ApexCharts !== 'undefined') {
-                const chart = new ApexCharts(chartContainer, options);
-                chart.render();
-            } else {
+            if (!chartContainer || typeof ApexCharts === 'undefined') {
                 console.warn("Chart container not found or ApexCharts not loaded");
+                return;
             }
+
+            const selectedYear = @json($selectedYear);
+            let options;
+
+            if (selectedYear) {
+                // Tampilkan data bulanan
+                options = {
+                    chart: {
+                        height: '320',
+                        type: 'area',
+                        fontFamily: "Inter, sans-serif",
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    series: [{
+                        name: `Diterima Bulan Tahun ${selectedYear}`,
+                        data: @json($monthlyData),
+                        color: '#2563eb'
+                    }],
+                    xaxis: {
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt',
+                            'Nov', 'Des'
+                        ],
+                        labels: {
+                            style: {
+                                fontFamily: "Inter, sans-serif",
+                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                fontFamily: "Inter, sans-serif",
+                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: 3
+                    },
+                    markers: {
+                        size: 4,
+                        hover: {
+                            size: 6
+                        }
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            opacityFrom: 0.55,
+                            opacityTo: 0,
+                            shade: "#2563eb",
+                            gradientToColors: ["#2563eb"]
+                        }
+                    },
+                    tooltip: {
+                        enabled: true
+                    },
+                    grid: {
+                        show: false
+                    },
+                    legend: {
+                        show: false
+                    }
+                };
+            } else {
+                // Tampilkan data tahunan
+                options = {
+                    chart: {
+                        height: '320',
+                        type: 'area',
+                        fontFamily: "Inter, sans-serif",
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    series: [{
+                        name: "Diterima Per Tahun",
+                        data: @json($totals),
+                        color: '#2563eb'
+                    }],
+                    xaxis: {
+                        categories: @json($years),
+                        labels: {
+                            style: {
+                                fontFamily: "Inter, sans-serif",
+                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                fontFamily: "Inter, sans-serif",
+                                cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: 3
+                    },
+                    markers: {
+                        size: 4,
+                        hover: {
+                            size: 6
+                        }
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            opacityFrom: 0.55,
+                            opacityTo: 0,
+                            shade: "#2563eb",
+                            gradientToColors: ["#2563eb"]
+                        }
+                    },
+                    tooltip: {
+                        enabled: true
+                    },
+                    grid: {
+                        show: false
+                    },
+                    legend: {
+                        show: false
+                    }
+                };
+            }
+
+            const chart = new ApexCharts(chartContainer, options);
+            chart.render();
         });
     </script>
 @endsection
