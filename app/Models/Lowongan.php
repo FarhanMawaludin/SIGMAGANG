@@ -27,6 +27,7 @@ class Lowongan extends Model
         'perusahaan_id',
         'periode_id',
         'prodi_id',
+        'jenis_magang_id'
     ];
 
     public function perusahaan(): BelongsTo

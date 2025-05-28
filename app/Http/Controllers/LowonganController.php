@@ -49,7 +49,8 @@ class LowonganController extends Controller
         $periodes = Periode::all();
         $prodis = Prodi::all();
         $skills = Skill::all();
-        return view('admin.lowongan.create', compact('activemenu', 'perusahaans', 'periodes', 'prodis', 'skills'));
+        $jenismagang = JenisMagang::all();
+        return view('admin.lowongan.create', compact('activemenu', 'perusahaans', 'periodes', 'prodis', 'skills', 'jenismagang'));
     }
 
     public function store(Request $request)
@@ -65,12 +66,14 @@ class LowonganController extends Controller
             'perusahaan_id' => 'required|exists:perusahaan,id',
             'periode_id' => 'nullable|integer',
             'prodi_id' => 'nullable|integer',
+            'jenis_magang_id' => 'required|exists:jenis_magang,id',
         ],[
             'nama.required' => 'Nama wajib diisi.',
             'batas_pendaftaran.required' => 'Batas pendaftaran wajib diisi.',
             'lokasi.required' => 'Lokasi wajib diisi.',
             'jumlah_magang.required' => 'Jumlah magang wajib diisi.',
             'perusahaan_id.required' => 'Perusahaan wajib diisi.',
+            'jenis_magang_id.required' => 'Jenis magang wajib diisi.',
         ]);
         try{
 
@@ -85,6 +88,7 @@ class LowonganController extends Controller
                 'perusahaan_id' => $validated['perusahaan_id'],
                 'periode_id' => $validated['periode_id'],
                 'prodi_id' => $validated['prodi_id'],
+                'jenis_magang_id' => $validated['jenis_magang_id'],
             ]);
             
             if ($request->has('skills')) {
@@ -123,7 +127,8 @@ class LowonganController extends Controller
         $periodes = Periode::all();
         $prodis = Prodi::all();
         $skills = Skill::all();
-        return view('admin.lowongan.edit', compact('activemenu', 'lowongan', 'perusahaans', 'periodes', 'prodis', 'skills'));
+        $jenismagang = JenisMagang::all();
+        return view('admin.lowongan.edit', compact('activemenu', 'lowongan', 'perusahaans', 'periodes', 'prodis', 'skills', 'jenismagang'));
     }
 
     public function update(Request $request, $id)
@@ -141,6 +146,7 @@ class LowonganController extends Controller
             'perusahaan_id' => 'required|exists:perusahaan,id',
             'periode_id' => 'nullable|integer',
             'prodi_id' => 'nullable|integer',
+            'jenis_magang_id' => 'required|exists:jenis_magang,id',
             'tipe_magang' => 'nullable|string',
         ],[
             'nama.required' => 'Nama wajib diisi.',
@@ -164,6 +170,7 @@ class LowonganController extends Controller
             'perusahaan_id' => $validated['perusahaan_id'],
             'periode_id' => $validated['periode_id'],
             'prodi_id' => $validated['prodi_id'],
+            'jenis_magang_id' => $validated['jenis_magang_id'],
             'tipe_magang' => $validated['tipe_magang'],
         ]);
 

@@ -16,12 +16,12 @@ class DokumenController extends Controller
         $dosen = $user->dosenPembimbing;
 
         // Cek apakah data mahasiswa tersedia
-       if ($user->role === 'mahasiswa' && !$mahasiswa) {
-    return redirect()->route('mahasiswa.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
-}
-if ($user->role === 'dosen_pembimbing' && !$dosen) {
-    return redirect()->route('dosen.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
-}
+        if ($user->role === 'mahasiswa' && !$mahasiswa) {
+            return redirect()->route('mahasiswa.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        }
+        if ($user->role === 'dosen_pembimbing' && !$dosen) {
+            return redirect()->route('dosen.profil.index')->with('error', 'Silakan lengkapi data informasi pribadi terlebih dahulu.');
+        }
 
         // Tentukan model type berdasarkan role
         $documentableType = $user->role === 'mahasiswa'
@@ -89,11 +89,11 @@ if ($user->role === 'dosen_pembimbing' && !$dosen) {
         }
 
         if ($user->role === 'mahasiswa') {
-        return redirect()->route('mahasiswa.profil.index')->with('success', 'Dokumen berhasil diupdate.');
+            return redirect()->route('mahasiswa.profil.index')->with('success', 'Dokumen berhasil diupdate.');
         } elseif ($user->role === 'dosen_pembimbing') {
-        return redirect()->route('dosen.profil.index')->with('success', 'Dokumen berhasil diupdate.');
+            return redirect()->route('dosen.profil.index')->with('success', 'Dokumen berhasil diupdate.');
         } else {
-        return back()->with('success', 'Dokumen berhasil diupdate.');
+            return back()->with('success', 'Dokumen berhasil diupdate.');
         }
     }
 
