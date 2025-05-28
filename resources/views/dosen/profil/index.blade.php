@@ -2,14 +2,6 @@
 
 @section('content')
     <h2 class="text-2xl font-semibold text-gray-900 mb-6">Profil Saya</h2>
-
-    {{-- Alert Success --}}
-    @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <!-- Header Profil dengan Foto -->
     <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6 flex items-center gap-6">
         <img src="{{ $user->foto ? asset('storage/' . $user->foto) : asset('images/default-avatar.png') }}"

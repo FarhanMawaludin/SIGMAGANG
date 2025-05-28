@@ -9,7 +9,7 @@
                 <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-3">
                         <label for="nama" class="block text-sm/6 font-medium text-gray-900">Nama Lowongan</label>
-                        <div >
+                        <div class="mt-2">
                             <input type="text" name="nama" id="nama"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 placeholder="Masukkan Nama Lowongan">
@@ -19,10 +19,10 @@
                         </div>
                     </div>
                     <div class="sm:col-span-3">
-                        <label for="nama_perusahaan" class="block text-sm/6 font-medium text-gray-900">Nama
+                        <label for="nama_perusahaan" class="mb-2 block text-sm/6 font-medium text-gray-900">Nama
                             Perusahaan</label>
                         <select name="perusahaan_id" id="perusahaan_id"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                            class=" block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                             @foreach ($perusahaans as $perusahaan)
                                 <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama }}</option>
                             @endforeach
@@ -110,6 +110,17 @@
                             <option value="">Tipe Magang</option>
                             <option value="onsite">Onsite</option>
                             <option value="remote">Remote</option>
+                        </select>
+                    </div>
+
+                    <div class="col-span-3">
+                        <label for="jenis_magang" class="block text-sm/6 font-medium text-gray-900">Jenis Magang</label>
+                        <select name="jenis_magang_id" id="jenis_magang_id"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                            <option value="">Jenis Magang</option>
+                            @foreach ($jenismagang as $j)
+                                <option value="{{ $j->id }}">{{ $j->jenis_magang }}</option>
+                            @endforeach
                         </select>
                     </div>
 

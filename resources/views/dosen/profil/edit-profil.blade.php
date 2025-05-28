@@ -98,7 +98,7 @@
 
             {{-- Tombol --}}
             <div class="mt-6 flex items-center justify-start gap-x-6">
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('dosen.profil.index') }}"
                     class="text-sm font-semibold text-gray-900 hover:border border-gray-900 rounded-md px-3 py-2">Batal</a>
                 <button type="submit"
                     class="bg-indigo-600 hover:bg-indigo-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Simpan

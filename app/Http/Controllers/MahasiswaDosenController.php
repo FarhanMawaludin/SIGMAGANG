@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class MahasiswaDosenController extends Controller
@@ -15,12 +16,26 @@ class MahasiswaDosenController extends Controller
         $category = $request->input('category', 'all');
         $search = $request->input('search');
 
-    $query = Pengajuan::with(['mahasiswa.user', 'lowongan'])
-    ->where('dosen_id', auth()->user()->dosen->id)
+        $dosen = auth()->user()->dosen;
 
-    ->whereHas('lowongan', function ($q) {
-        $q->whereNotNull('id');
-    });
+        // Cek apakah user punya data dosen
+        if (!$dosen) {
+            $emptyPagination = new LengthAwarePaginator([], 0, 10);
+            return view('dosen.mahasiswa.index', [
+                'activemenu' => $activemenu,
+                'pengajuan' => $emptyPagination, // paginator kosong
+                'mahasiswa' => $emptyPagination,
+                'category' => $category,
+                'search' => $search,
+            ]);
+        }
+
+        // Jika dosen ada, jalankan query seperti biasa
+        $query = Pengajuan::with(['mahasiswa.user', 'lowongan'])
+            ->where('dosen_id', $dosen->id)
+            ->whereHas('lowongan', function ($q) {
+                $q->whereNotNull('id');
+            });
 
         if ($category !== 'all') {
             $query->where('status', $category);
@@ -42,6 +57,7 @@ class MahasiswaDosenController extends Controller
             'search' => $search,
         ]);
     }
+
     public function show($id)
     {
         $activemenu = 'mahasiswa';
@@ -55,5 +71,5 @@ class MahasiswaDosenController extends Controller
             'activemenu' => $activemenu,
             'pengajuan' => $pengajuan,
         ]);
-}
+    }
 }

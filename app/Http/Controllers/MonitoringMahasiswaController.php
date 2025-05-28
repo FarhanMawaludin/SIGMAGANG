@@ -202,59 +202,6 @@ class MonitoringMahasiswaController extends Controller
     }
 
 
-    // public function edit_harian($id)
-    // {
-    //     $activemenu = 'monitoring';
-    //     $user = Auth::user();
-
-    //     // Ambil log harian berdasarkan ID
-    //     $logHarian = LogHarian::findOrFail($id);
-
-    //     // Load log mingguan dan pengajuannya (dengan eager loading relasi)
-    //     $logMingguan = LogMingguan::with('pengajuan.mahasiswa')->findOrFail($logHarian->log_mingguan_id);
-
-    //     // Cek apakah user yang sedang login adalah pemilik log ini
-    //     $ownerUserId = optional($logMingguan->pengajuan->mahasiswa)->user_id;
-
-    //     dd([
-    //         'auth_user_id' => $user->id,
-    //         'owner_user_id' => $ownerUserId,
-    //         'log_harian_id' => $logHarian->id,
-    //         'log_mingguan_id' => $logHarian->log_mingguan_id,
-    //         'pengajuan_id' => optional($logMingguan->pengajuan)->id,
-    //         'mahasiswa_id' => optional($logMingguan->pengajuan->mahasiswa)->id,
-    //         'mahasiswa_user_id' => optional($logMingguan->pengajuan->mahasiswa)->user_id,
-    //     ]);
-
-    //     if ($ownerUserId !== $user->id) {
-    //         abort(403, 'Kamu tidak memiliki akses ke log harian ini.');
-    //     }
-    //     return view('mahasiswa.monitoring.edit_harian', compact('activemenu', 'logMingguan', 'logHarian'));
-    // }
-
-    // public function edit_harian($id)
-    // {
-    //     $activemenu = 'monitoring';
-    //     $user = Auth::user();
-    //     // dd($user);
-    //     $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
-    //         ->where('status', 'accepted')
-    //         ->first();
-    //     // dd($pengajuan);
-    //     $logHarian = LogHarian::findOrFail($id);
-    //     // dd($logHarian); 
-    //     $logMingguan = LogMingguan::with('logHarian')->findOrFail($logHarian->log_mingguan_id);
-    //     // dd($logMingguan);
-
-    //     // Tambahkan debug di sini
-    //     // dd([
-    //     //     'user_id' => $user->id,
-    //     //     'log_harian_id' => $logHarian->id,
-    //     //     'log_mingguan_id_dari_logHarian' => $logHarian->log_mingguan_id,
-    //     //     'log_harian_mahasiswa_id' => $logHarian->mahasiswa_id ?? 'tidak ada kolom mahasiswa_id',
-    //     // ]);
-    //     return view('mahasiswa.monitoring.edit_harian', compact('activemenu', 'logMingguan', 'logHarian'));
-    // }
     public function update_harian(Request $request, $mingguan, $harian)
     {
         // Jika ada detik, potong supaya sesuai format H:i
