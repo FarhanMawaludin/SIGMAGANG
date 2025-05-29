@@ -180,20 +180,6 @@
                 </a>
             </li>
 
-           <li>
-                <a href="{{ url('/dokumen') }}"
-                    class="flex items-center p-2 rounded-lg group {{ $activemenu == 'dokumen' ? 'text-white bg-blue-600' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
-                    <svg class="w-5 h-5 {{ $activemenu == 'dokumen' ? 'text-white' : 'text-gray-400 dark:text-white' }}"
-                        fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 3v4a1 1 0 0 1-1 1H5m4 6 2 2 4-4m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" />
-                    </svg>
-                    <span
-                        class="ml-3 {{ $activemenu == 'dokumen' ? 'text-white' : 'text-gray-400' }}">Dokumen</span>
-                </a>
-            </li>
-
-
             <!-- Logout -->
             <li class="mt-4">
                 <form method="POST" action="{{ route('logout') }}">

@@ -13,10 +13,10 @@
 
         <!-- Button Group -->
         <div class="flex justify-center gap-4 mb-18">
-            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5" onclick="location.href='{{ route('mahasiswa.profil.index') }}'">
+            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer" onclick="location.href='{{ route('mahasiswa.profil.index') }}'">
                 Lengkapi Profile
             </button>
-            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">
+            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer" onclick="location.href='{{ route('mahasiswa.lowongan.index') }}'">
                 Lihat Rekomendasi
             </button>
         </div>

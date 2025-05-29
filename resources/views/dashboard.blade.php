@@ -217,83 +217,65 @@
     </div>
 
     <div class="overflow-x-auto relative rounded-lg border border-gray-200">
-        <table class="w-full text-sm text-left text-gray-700 min-w-[768px]">
+        <table class="min-w-full text-sm text-left text-gray-700">
             <thead class="text-xs uppercase bg-gray-100 text-gray-700">
                 <tr>
-                    <th class="px-6 py-3">No</th>
-                    <th class="px-6 py-3">Nama</th>
-                    <th class="px-6 py-3">Prodi</th>
-                    <th class="px-6 py-3">perusahaan</th>
-                    <th class="px-6 py-3">Status</th>
-                    <th class="px-6 py-3">Dosen Pembimbing</th>
-                    <th class="px-6 py-3">Aksi</th>
+                    <th scope="col" class="px-6 py-3">No</th>
+                    <th scope="col" class="px-6 py-3">Nama</th>
+                    <th scope="col" class="px-6 py-3">Prodi</th>
+                    <th scope="col" class="px-6 py-3">Lowongan</th>
+                    <th scope="col" class="px-6 py-3">Status</th>
+                    <th scope="col" class="px-6 py-3">Dosen Pembimbing</th>
+                    <th scope="col" class="px-6 py-3">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @if ($pengajuan->isEmpty())
+                @forelse ($pengajuan as $key => $item)
                     <tr class="bg-white border-b border-gray-200">
-                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                            Tidak ada perusahaan.
+                        <td class="px-6 py-4">{{ $key + 1 }}</td>
+                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">
+                            {{ $item->mahasiswa->user->name ?? '-' }}</td>
+                        <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama }}</td>
+                        <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
+                        <td class="px-6 py-4">
+                            @php
+                                $statusClasses = [
+                                    'pending' => 'bg-orange-100 text-orange-600',
+                                    'accepted' => 'bg-green-100 text-green-600',
+                                    'rejected' => 'bg-red-100 text-red-600',
+                                ];
+                                $statusText = [
+                                    'pending' => 'Menunggu',
+                                    'accepted' => 'Diterima',
+                                    'rejected' => 'Ditolak',
+                                ];
+                                $status = strtolower($item->status);
+                            @endphp
+                            <span
+                                class="{{ $statusClasses[$status] ?? 'bg-gray-100 text-gray-600' }} text-xs font-medium px-3 py-1 rounded-full">
+                                {{ $statusText[$status] ?? ucfirst($item->status) }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">{{ $item->dosen->user->name ?? 'Belum dipilih' }}</td>
+                        <td class="px-6 py-4 space-x-2">
+                            <!-- Detail -->
+                            <button
+                                class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
+                                onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Cek Pengajuan
+                            </button>
                         </td>
                     </tr>
-                @else
-                    @foreach ($pengajuan as $index => $item)
-                        <tr class="bg-white border-b border-gray-200">
-                            <td class="px-6 py-4">{{ $index + 1 }}</td>
-                            <td class="flex items-center gap-3 px-6 py-4">
-                                @if ($item->foto)
-                                    <img src="{{ asset('images/logo/' . $item->foto) }}" alt="Foto {{ $item->name }}"
-                                        class="w-10 h-10 rounded-full object-cover shrink-0">
-                                @else
-                                    <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
-                                        class="w-10 h-10 rounded-full border border-gray-200 object-cover shrink-0">
-                                @endif
-                                <div>
-                                    <div class="font-semibold">{{ $item->mahasiswa->user->name ?? 'Nama Tidak Tersedia' }}
-                                    </div>
-                                    <div class="text-sm text-gray-500">{{ $item->mahasiswa->nim ?? 'NIM Tidak Tersedia' }}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama ?? '-' }}</td>
-                            <td class="px-6 py-4">{{ $item->perusahaan->nama ?? '-' }}</td>
-                            <td class="px-6 py-4">
-                                @php
-                                    $statusClasses = [
-                                        'pending' => 'bg-orange-100 text-orange-600',
-                                        'accepted' => 'bg-green-100 text-green-600',
-                                        'rejected' => 'bg-red-100 text-red-600',
-                                    ];
-                                    $statusText = [
-                                        'pending' => 'Menunggu',
-                                        'accepted' => 'Diterima',
-                                        'rejected' => 'Ditolak',
-                                    ];
-                                    $status = strtolower($item->status);
-                                @endphp
-                                <span
-                                    class="{{ $statusClasses[$status] ?? 'bg-gray-100 text-gray-600' }} text-xs font-medium px-3 py-1 rounded-full">
-                                    {{ $statusText[$status] ?? ucfirst($item->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-gray-500">
-                                {{ $item->dosen->user->name ?? '(Belum dipilih)' }}
-                            </td>
-                            <td class="w-[200px] px-6 py-4">
-                                <button
-                                    class="inline-flex items-center bg-orange-500 text-white font-medium px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
-                                    onclick="window.location.href='{{ route('admin.perusahaan.edit', $item->id) }}'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Cek perusahaan
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
+                @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center">Data tidak tersedia.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -522,5 +504,4 @@
             chart.render();
         });
     </script>
-
 @endsection

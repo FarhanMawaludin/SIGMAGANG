@@ -31,6 +31,7 @@ class ProfilMahasiswaController extends Controller
                 'dokumen_transkrip' => null,
                 'dokumen_pengantar' => null,
                 'dokumen_sertifikat' => collect(), 
+                'dokumen_sertifikat_magang' => null
             ])->with('warning', 'Profil mahasiswa belum dilengkapi.');
         }
 
