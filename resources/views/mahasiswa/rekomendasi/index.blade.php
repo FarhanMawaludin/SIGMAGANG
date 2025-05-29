@@ -104,7 +104,7 @@
                         <td class="px-6 py-4">
                             <a href="{{ route('mahasiswa.lowongan.show', $data['lowongan']->id) }}">
                                 <button type="button"
-                                    class=" text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
+                                    class=" cursor-pointer text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
                                     Lihat Detail
                                 </button>
                             </a>

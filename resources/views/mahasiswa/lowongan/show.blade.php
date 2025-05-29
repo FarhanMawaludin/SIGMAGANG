@@ -80,14 +80,14 @@
             <li class="me-2">
                 <button id="desc-tab" data-tabs-target="#desc" type="button" role="tab" aria-controls="desc"
                     aria-selected="true"
-                    class="inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
+                    class="cursor-pointer inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
                     Deskripsi
                 </button>
             </li>
             <li class="me-2">
                 <button id="company-tab" data-tabs-target="#company" type="button" role="tab"
                     aria-controls="company" aria-selected="false"
-                    class="inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
+                    class="cursor-pointer inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
                     Perusahaan
                 </button>
             </li>
@@ -226,7 +226,7 @@
                     </div>
                 </div>
                 <!-- Tombol -->
-                <a href="#"
+                <a href="{{ $lowongan->perusahaan->website }}" target="_blank"
                     class="inline-flex items-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg mt-2">
                     Lihat Profil Lengkap
                     <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="3"
@@ -262,9 +262,9 @@
                         <img src="{{ asset('storage/' . $item->mahasiswa->user->foto) }}" alt="Avatar"
                             class="w-10 h-10 rounded-full object-cover" />
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900">{{ $item->mahasiswa->user->name }}</h3>
+                            <h3 class="text-md font-semibold text-gray-900">{{ $item->mahasiswa->user->name }}</h3>
                             <p class="text-sm text-gray-500">{{ $item->lowongan->nama }}</p>
-                            <p class="mt-2 text-gray-600 text-sm">{{ $item->mahasiswa_feedback }}</p>
+                            <p class="mt-2 text-gray-900 text-sm">{{ $item->mahasiswa_feedback }}</p>
                         </div>
                     </div>
                 @endforeach

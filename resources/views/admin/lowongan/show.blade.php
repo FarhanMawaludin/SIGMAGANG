@@ -66,7 +66,7 @@
         </table>
         {{-- Tombol Kembali --}}
         <div class="text-center py-6">
-            <a href="{{ route('admin.perusahaan.index') }}"
+            <a href="{{ route('admin.lowongan.index') }}"
                 class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm">
                 <!-- Ikon Panah Kiri -->
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"

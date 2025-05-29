@@ -77,47 +77,13 @@
             </div>
 
 
-            <!-- Tren Bidang Peminatan -->
+            <!-- Tren Skill Mahasiswa -->
             <div class="bg-white rounded-xl p-6 border border-gray-200">
                 <div class="flex justify-between items-center mb-4">
                     <div>
                         <p class="text-base font-normal text-gray-500 dark:text-gray-400">Tren</p>
-                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Bidang Peminatan
+                        <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">Skill Mahasiswa
                         </h5>
-                    </div>
-                    <button id="dropdownDefaultButton" data-dropdown-toggle="tahunPeminatanDropdown"
-                        data-dropdown-placement="bottom" type="button"
-                        class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                        Tahun
-                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg></button>
-                    <div id="tahunPeminatanDropdown"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border border-gray-200 w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2021</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2022</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2023</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2024</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">2025</a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
 
@@ -149,16 +115,9 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $dosen_count }}</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">Total Dosen</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Total Dosen Pembimbing</p>
                     </div>
                 </div>
-                {{-- <div class="mt-4 flex items-center text-green-600 dark:text-green-400">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                    </svg>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">12 mahasiswa bertambah</p>
-                </div> --}}
             </div>
 
             <!-- Ratio Dosen Pembimbing -->
@@ -168,39 +127,6 @@
                         <p class="text-base font-normal text-gray-500 dark:text-gray-400">Ratio</p>
                         <h5 class="leading-none text-xl font-bold text-gray-900 dark:text-white pb-2">Dosen Pembimbing
                         </h5>
-                    </div>
-                    <div>
-                        <!-- Dropdown Tahun -->
-                        <button id="dropdownDefaultButton" data-dropdown-toggle="tahunDosenDropdown"
-                            data-dropdown-placement="bottom" type="button"
-                            class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                            {{ $selectedYear ?? 'Semua' }}
-                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg></button>
-                        <div id="tahunDosenDropdown"
-                            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg border border-gray-200 w-44 dark:bg-gray-700">
-                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                aria-labelledby="dropdownDefaultButton">
-                                <li>
-                                    <a href="{{ url()->current() }}"
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white {{ $selectedYear === null ? 'font-bold text-blue-600' : '' }}">
-                                        Semua Tahun
-                                    </a>
-                                </li>
-                                @foreach ($years as $year)
-                                    <li>
-                                        <a href="{{ url()->current() }}?year={{ $year }}"
-                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white
-                                        {{ $year == $selectedYear ? 'font-bold text-blue-600' : '' }}">
-                                            {{ $year }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
                     </div>
                 </div>
 
@@ -224,24 +150,6 @@
                     <span class="w-2 h-2 rounded-full bg-blue-600"></span>
                     <span class="text-sm font-medium text-gray-700">Total Mahasiswa</span>
                 </div>
-
-                {{-- <div class="space-y-6 pt-2 mb-2">
-                    @foreach ($dosen as $item)
-                        @php
-                            $percentage = $maxBimbingan > 0 ? ($item->total_bimbingan / $maxBimbingan) * 100 : 0;
-                        @endphp
-                        <div>
-                            <div class="flex justify-between items-center mb-1 text-sm text-gray-900 font-medium">
-                                <span>{{ $item->name }}</span>
-                                <span>{{ $item->total_bimbingan }} mahasiswa</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: {{ $percentage }}%"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div> --}}
-
 
                 <!-- Data Dosen -->
                 <div class="space-y-6 pt-2 mb-2">
@@ -267,7 +175,7 @@
             </div>
 
             <!-- Statistik Kepuasan Rekomendasi -->
-            <div class="bg-white rounded-xl p-6 border border-gray-200">
+            {{-- <div class="bg-white rounded-xl p-6 border border-gray-200">
                 <div class="mb-4">
                     <p class="text-base font-normal text-gray-500 dark:text-gray-400">Statistik</p>
                     <h5 class="leading-none text-xl font-bold text-gray-900 dark:text-white pb-2">Kepuasan Rekomendasi
@@ -301,16 +209,16 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
     <script>
         const chartData = {
-            series: [40, 25, 20, 15],
-            labels: ["Web Dev", "Data Analyst", "UI/UX", "Lainnya"],
-            colors: ["#1E40AF", "#2563EB", "#60A5FA", "#BFDBFE"],
+            series: @json($skillCounts),
+            labels: @json($skillLabels),
+            colors: ["#1E40AF", "#2563EB", "#60A5FA", "#BFDBFE", "#93C5FD", "#DBEAFE"], // Tambahkan warna sesuai jumlah data
         };
-
+    
         const getChartOptions = () => {
             return {
                 series: chartData.series,
@@ -344,33 +252,33 @@
                 },
             };
         };
-
+    
         // Render custom legend dynamically
         const renderCustomLegend = () => {
             const legendContainer = document.getElementById("custom-legend");
-            legendContainer.innerHTML = ""; // Clear if already rendered
-
+            legendContainer.innerHTML = "";
+    
             chartData.labels.forEach((label, index) => {
-                const color = chartData.colors[index];
+                const color = chartData.colors[index % chartData.colors.length];
                 const value = chartData.series[index];
-
+    
                 const item = document.createElement("li");
                 item.className = "flex items-center gap-2";
                 item.innerHTML = `
-              <span class="w-3 h-3 rounded-full " style="background-color: ${color};"></span>
-              ${label} - ${value}%
-            `;
+                    <span class="w-3 h-3 rounded-full" style="background-color: ${color};"></span>
+                    ${label}
+                `;
                 legendContainer.appendChild(item);
             });
         };
-
-        // Render chart and legend
+    
         if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
             const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
             chart.render();
             renderCustomLegend();
         }
     </script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const chartContainer = document.getElementById("labels-chart");

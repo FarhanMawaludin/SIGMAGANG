@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800">Rekomendasi Lowongan</h1>
         <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider"
-            class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            class="cursor-pointer text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button">Rekomendasi
             <svg class="w-4 h-4 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                 viewBox="0 0 20 20">
@@ -17,14 +17,14 @@
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">
                 <li>
                     <a href="{{ route('mahasiswa.rekomendasi.index') }}"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rekomendasi-link"
+                        class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rekomendasi-link"
                         data-href="{{ route('mahasiswa.rekomendasi.index') }}">
                         Rekomendasi Swara
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('mahasiswa.rekomendasi.fuzzy') }}"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rekomendasi-link"
+                        class="cursor-pointer block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rekomendasi-link"
                         data-href="{{ route('mahasiswa.rekomendasi.fuzzy') }}">
                         Rekomendasi Fuzzy
                     </a>
@@ -114,7 +114,7 @@
                     </div>
                     <a href="{{ route('mahasiswa.lowongan.show', $item->id) }}">
                         <button type="button"
-                            class="w-full text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out">
+                            class="w-full text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-[8px] text-sm px-5 py-2.5 text-center transition-all duration-300 ease-in-out cursor-pointer">
                             Lihat Detail
                         </button>
                     </a>
