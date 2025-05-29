@@ -58,12 +58,13 @@
                     <div id="notifModal"
                         class="hidden fixed top-[68px] right-6 z-50 w-80 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg p-4">
                         <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">Notifikasi</h3>
-                        <ul class="max-h-48 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700">
-                            <li class="py-2 text-gray-700 dark:text-gray-300">Pesan notifikasi dummy 1</li>
-                            <li class="py-2 text-gray-700 dark:text-gray-300">Pesan notifikasi dummy 2</li>
-                            <li class="py-2 text-gray-700 dark:text-gray-300">Pesan notifikasi dummy 3</li>
-                            <li class="py-2 text-gray-700 dark:text-gray-300">Pesan notifikasi dummy 4</li>
-                        </ul>
+                       <ul class="max-h-48 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700">
+    @forelse($notifications ?? [] as $notif)
+        <li class="py-2 text-gray-700 dark:text-gray-300">{!! $notif !!}</li>
+    @empty
+        <li class="py-2 text-gray-700 dark:text-gray-300">Tidak ada notifikasi.</li>
+    @endforelse
+</ul>
                         <button id="notifCloseBtn"
                             class="mt-3 w-full bg-blue-600 text-white rounded-md py-1 hover:bg-blue-800">Tutup</button>
                     </div>

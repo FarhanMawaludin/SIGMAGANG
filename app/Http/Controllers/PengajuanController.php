@@ -8,6 +8,8 @@ use App\Models\DosenPembimbing;
 use App\Models\Dokumen;
 use App\Models\Lowongan;
 use Illuminate\Support\Facades\DB;
+use App\Mail\PengajuanStatusMail;
+use Illuminate\Support\Facades\Mail;
 class PengajuanController extends Controller
 {
     public function index(Request $request)
@@ -110,10 +112,16 @@ public function update(Request $request, $id)
     $pengajuan->catatan_validasi = $request->catatan_validasi;
     if ($request->action === 'accept') {
         $pengajuan->status = 'accepted';
+          Mail::to($pengajuan->mahasiswa->user->email)
+        ->send(new PengajuanStatusMail($pengajuan, 'accepted'));
     } elseif ($request->action === 'decline') {
         $pengajuan->status = 'rejected';
+        Mail::to($pengajuan->mahasiswa->user->email)
+            ->send(new PengajuanStatusMail($pengajuan, 'rejected'));
     } elseif ($request->action === 'done') {
         $pengajuan->status = 'completed';
+        Mail::to($pengajuan->mahasiswa->user->email)
+            ->send(new PengajuanStatusMail($pengajuan, 'completed'));
     }
 
     $pengajuan->save();
