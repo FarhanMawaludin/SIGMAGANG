@@ -58,6 +58,7 @@ class PengajuanMahasiswaController extends Controller
 
         return redirect()->route('mahasiswa.pengajuan.index')->with('success', 'Pengajuan berhasil dibuat');
     }
+    
     public function show($id)
     {
         $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])

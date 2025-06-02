@@ -82,7 +82,7 @@
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $key + 1 }}</td>
                         <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->mahasiswa->user->name ?? '-' }}</td>
-                        <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama }}</td>
+                        <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama ?? '-'}}</td>
                         <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
                         <td class="px-6 py-4">
                             @php

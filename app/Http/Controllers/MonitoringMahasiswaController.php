@@ -6,8 +6,11 @@ use App\Models\LogHarian;
 use App\Models\LogMingguan;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
+
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class MonitoringMahasiswaController extends Controller
 {
     public function index()
@@ -15,8 +18,15 @@ class MonitoringMahasiswaController extends Controller
         $activemenu = 'monitoring';
         $user = Auth::user();
 
+        $mahasiswa = $user->mahasiswa;
+
+        if (!$mahasiswa) {
+            return view('mahasiswa.monitoring.index', compact('activemenu'))
+                ->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
         $pengajuan = Pengajuan::with('mahasiswa.user')
-            ->where('mahasiswa_id', $user->id)
+            ->where('mahasiswa_id', $mahasiswa->id)
             ->whereIn('status', ['accepted', 'completed'])
             ->first();
 
@@ -33,25 +43,29 @@ class MonitoringMahasiswaController extends Controller
         return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan', 'pengajuan'));
     }
 
+
     public function create()
     {
         $activemenu = 'monitoring';
-        $user = auth()->user();
+        $user = Auth::user();
+
         $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
             ->where('status', 'accepted')
             ->first();
 
         $lastMinggu = 0;
+        $minTanggalAwal = null;
+        $maxTanggalAkhir = null;
+
         if ($pengajuan) {
             $lastMinggu = LogMingguan::where('pengajuan_id', $pengajuan->id)->max('minggu') ?? 0;
+
             $lastLog = LogMingguan::where('pengajuan_id', $pengajuan->id)
                 ->orderByDesc('minggu')
                 ->first();
-            if ($lastMinggu == 0) {
-                $minTanggalAwal = null;
-                $maxTanggalAkhir = null;
-            } else {
-                $minTanggalAwal = $lastLog ? \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDay()->format('Y-m-d') : null;
+
+            if ($lastMinggu != 0 && $lastLog) {
+                $minTanggalAwal = \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDay()->format('Y-m-d');
                 $maxTanggalAkhir = \Carbon\Carbon::parse($lastLog->tanggal_akhir)->addDays(6)->format('Y-m-d');
             }
         }
@@ -65,6 +79,7 @@ class MonitoringMahasiswaController extends Controller
     }
 
 
+
     public function store(Request $request)
     {
         $request->validate([
@@ -75,8 +90,9 @@ class MonitoringMahasiswaController extends Controller
 
         $user = Auth::user();
 
-        // Ambil pengajuan aktif milik mahasiswa
-        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        $mahasiswa = $user->mahasiswa;
+
+        $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
             ->where('status', 'accepted')
             ->first();
 
@@ -125,18 +141,32 @@ class MonitoringMahasiswaController extends Controller
 
         return view('mahasiswa.monitoring.create_harian', compact('activemenu', 'logMingguan', 'minTanggalAwal', 'maxTanggalAkhir'));
     }
+
+
     public function store_harian(Request $request, $id)
     {
+
         $request->validate([
             'tanggal'      => 'required|date',
-            'aktivitas'     => 'required|string',
+            'aktivitas'    => 'required|string',
             'jam_mulai'    => 'required|date_format:H:i',
-            'jam_selesai'  => 'required|date_format:H:i|after:jam_mulai',
+            'jam_selesai'  => 'required|date_format:H:i',
         ]);
+
+        $jamMulai = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal . ' ' . $request->jam_mulai);
+        $jamSelesai = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal . ' ' . $request->jam_selesai);
+
+        if ($jamSelesai->lessThanOrEqualTo($jamMulai)) {
+            return back()->withInput()->withErrors([
+                'jam_selesai' => 'Jam selesai harus lebih dari jam mulai.'
+            ]);
+        }
 
         $user = Auth::user();
 
-        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        $mahasiswa = $user->mahasiswa;
+
+        $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
             ->where('status', 'accepted')
             ->first();
 
@@ -152,6 +182,7 @@ class MonitoringMahasiswaController extends Controller
             return redirect()->back()->with('error', 'Log mingguan tidak ditemukan.');
         }
 
+        // Validasi tanggal dalam rentang log mingguan
         if (
             $request->tanggal < $logMingguan->tanggal_awal ||
             $request->tanggal > $logMingguan->tanggal_akhir
@@ -159,6 +190,7 @@ class MonitoringMahasiswaController extends Controller
             return redirect()->back()->with('error', 'Tanggal log harian harus berada dalam rentang minggu yang dipilih.');
         }
 
+        // Cek duplikasi log harian di tanggal yang sama
         $exists = LogHarian::where('log_mingguan_id', $logMingguan->id)
             ->where('tanggal', $request->tanggal)
             ->exists();
@@ -167,10 +199,11 @@ class MonitoringMahasiswaController extends Controller
             return redirect()->back()->with('error', 'Log harian untuk tanggal ini sudah ada.');
         }
 
+        // Simpan data log harian
         LogHarian::create([
             'log_mingguan_id' => $logMingguan->id,
             'tanggal'         => $request->tanggal,
-            'aktivitas'        => $request->aktivitas,
+            'aktivitas'       => $request->aktivitas,
             'jam_mulai'       => $request->jam_mulai,
             'jam_selesai'     => $request->jam_selesai,
         ]);
@@ -178,6 +211,7 @@ class MonitoringMahasiswaController extends Controller
         return redirect()->route('mahasiswa.monitoring.show', $logMingguan->id)
             ->with('success', 'Log harian berhasil ditambahkan.');
     }
+
     public function edit_harian($mingguanId, $harianId)
     {
         $user = Auth::user();
@@ -275,7 +309,8 @@ class MonitoringMahasiswaController extends Controller
 
         return view('mahasiswa.monitoring.detail_harian', compact('activemenu', 'logMingguan', 'logHarian'));
     }
-    public function selesai(){
+    public function selesai()
+    {
         $user = Auth::user();
         // $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
         //     ->where('status', 'accepted')
@@ -294,44 +329,46 @@ class MonitoringMahasiswaController extends Controller
         ]);
     }
 
-public function updateSertifikatMagang(Request $request)
-{
-    $user = Auth::user();
-    $mahasiswa = $user->mahasiswa;
+    public function updateSertifikatMagang(Request $request)
+    {
+        $user = Auth::user();
+        $mahasiswa = $user->mahasiswa;
 
-    $request->validate([
-        'sertifikat_magang' => 'required|file|mimes:pdf|max:5120',
-    ]);
+        $request->validate([
+            'sertifikat_magang' => 'required|file|mimes:pdf|max:5120',
+        ]);
 
 
-    $dokumen = \App\Models\Dokumen::where('documentable_id', $mahasiswa->id)
-        ->where('documentable_type', 'App\Models\Mahasiswa')
-        ->where('tipe', 'Sertifikat Magang')
-        ->first();
+        $dokumen = \App\Models\Dokumen::where('documentable_id', $mahasiswa->id)
+            ->where('documentable_type', 'App\Models\Mahasiswa')
+            ->where('tipe', 'Sertifikat Magang')
+            ->first();
 
-    if ($dokumen && $dokumen->file_path && \Storage::disk('public')->exists($dokumen->file_path)) {
-        \Storage::disk('public')->delete($dokumen->file_path);
-        $dokumen->delete();
+        if ($dokumen && $dokumen->file_path && \Storage::disk('public')->exists($dokumen->file_path)) {
+            \Storage::disk('public')->delete($dokumen->file_path);
+            $dokumen->delete();
+        }
+
+
+        $path = $request->file('sertifikat_magang')->store('dokumen', 'public');
+        \App\Models\Dokumen::create([
+            'documentable_id' => $mahasiswa->id,
+            'documentable_type' => 'App\Models\Mahasiswa',
+            'tipe' => 'Sertifikat Magang',
+            'file_path' => $path,
+        ]);
+
+        return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Surat Keterangan Magang berhasil diupload.');
     }
-
-   
-    $path = $request->file('sertifikat_magang')->store('dokumen', 'public');
-    \App\Models\Dokumen::create([
-        'documentable_id' => $mahasiswa->id,
-        'documentable_type' =>'App\Models\Mahasiswa',
-        'tipe' => 'Sertifikat Magang',
-        'file_path' => $path,
-    ]);
-
-    return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Surat Keterangan Magang berhasil diupload.');
-}
     public function review()
     {
         $activemenu = 'monitoring';
         $user = Auth::user();
 
+        $mahasiswa = $user->mahasiswa;
+
         $pengajuan = Pengajuan::with('mahasiswa.user')
-            ->where('mahasiswa_id', $user->id)
+            ->where('mahasiswa_id', $mahasiswa->id)
             ->where('status', 'completed')
             ->first();
 
@@ -349,7 +386,9 @@ public function updateSertifikatMagang(Request $request)
 
         $user = Auth::user();
 
-        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        $mahasiswa = $user->mahasiswa;
+
+        $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
             ->where('status', 'completed')
             ->first();
 
@@ -364,20 +403,20 @@ public function updateSertifikatMagang(Request $request)
         return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Review berhasil ditambahkan.');
     }
     public function generateSuratKeterangan($pengajuan_id)
-{
-    $pengajuan = \App\Models\Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'dosen.user', 'lowongan.perusahaan'])
-        ->findOrFail($pengajuan_id);
+    {
+        $pengajuan = \App\Models\Pengajuan::with(['mahasiswa.user', 'mahasiswa.prodi', 'dosen.user', 'lowongan.perusahaan'])
+            ->findOrFail($pengajuan_id);
 
-    $data = [
-        'nomor_surat' => 'SKM/' . $pengajuan->id . '/' . date('Y'),
-        'mahasiswa' => $pengajuan->mahasiswa,
-        'dosen' => $pengajuan->dosen,
-        'perusahaan' => $pengajuan->lowongan->perusahaan->nama,
-        'tanggal_mulai' => $pengajuan->tanggal_mulai,
-        'tanggal_selesai' => $pengajuan->tanggal_selesai,
-    ];
+        $data = [
+            'nomor_surat' => 'SKM/' . $pengajuan->id . '/' . date('Y'),
+            'mahasiswa' => $pengajuan->mahasiswa,
+            'dosen' => $pengajuan->dosen,
+            'perusahaan' => $pengajuan->lowongan->perusahaan->nama,
+            'tanggal_mulai' => $pengajuan->tanggal_mulai,
+            'tanggal_selesai' => $pengajuan->tanggal_selesai,
+        ];
 
-    $pdf = Pdf::loadView('mahasiswa.monitoring.surat_magang', $data);
-    return $pdf->download('Surat_Keterangan_Magang_'.$pengajuan->mahasiswa->nim.'.pdf');
-}
+        $pdf = Pdf::loadView('mahasiswa.monitoring.surat_magang', $data);
+        return $pdf->download('Surat_Keterangan_Magang_' . $pengajuan->mahasiswa->nim . '.pdf');
+    }
 }

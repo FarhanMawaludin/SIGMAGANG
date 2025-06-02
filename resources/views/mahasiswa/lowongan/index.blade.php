@@ -33,45 +33,12 @@
         </div>
     </div>
 
-    {{-- @if ($pengajuan)
-        <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
-            role="alert">
-            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor" viewBox="0 0 20 20">
-                <path
-                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-                <p class="font-medium">
-                    Anda telah mengajukan magang di <b>{{ $pengajuan->lowongan->perusahaan->nama }}</b>
-                    pada <b>{{ \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d F Y') }}</b>
-                    (Status: <b>{{ ucfirst($pengajuan->status) }}</b>)
-                </p>
-            </div>
-        </div>
-    @elseif ($lowongan->isEmpty())
-        <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
-            role="alert">
-            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor" viewBox="0 0 20 20">
-                <path
-                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-                <p class="font-medium">
-                    Belum ada lowongan magang yang tersedia.
-                </p>
-            </div>
-        </div>
-    @else --}}
     <div class="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         @foreach ($lowongan as $item)
             <div class="max-w-sm w-full mx-auto bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div class="p-6">
                     <img src="{{ asset('storage/' . $item->perusahaan->foto) }}" alt="Logo {{ $item->perusahaan->nama }}"
-                        class="h-28">
+                        class="h-30 w-30 object-contain" />
                     <h2 class="text-[14px] font-medium text-gray-400 mb-2">{{ $item->perusahaan->nama }}</h2>
                     <h3 class="text-[18px] font-semibold text-mirage-950 leading-snug mb-2">
                         {{ $item->nama }}

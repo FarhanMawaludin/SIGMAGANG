@@ -16,7 +16,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <!-- Button PDF -->
-                        <button
+                        {{-- <button
                             class="flex items-center gap-1 text-sm font-medium px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
                             <!-- PDF Icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -38,7 +38,7 @@
                                     d="M4 4h16v16H4V4zm4 5l4 6m0-6l-4 6" />
                             </svg>
                             Excel
-                        </button>
+                        </button> --}}
                         <!-- Dropdown Tahun -->
                         <button id="dropdownDefaultButton" data-dropdown-toggle="tahunDropdown"
                             data-dropdown-placement="bottom" type="button"
@@ -175,7 +175,7 @@
             </div>
 
             <!-- Statistik Kepuasan Rekomendasi -->
-            {{-- <div class="bg-white rounded-xl p-6 border border-gray-200">
+            <div class="bg-white rounded-xl p-6 border border-gray-200">
                 <div class="mb-4">
                     <p class="text-base font-normal text-gray-500 dark:text-gray-400">Statistik</p>
                     <h5 class="leading-none text-xl font-bold text-gray-900 dark:text-white pb-2">Kepuasan Rekomendasi
@@ -209,7 +209,7 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
         </div>
     </div>
     <script>

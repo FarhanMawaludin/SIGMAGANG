@@ -41,9 +41,9 @@ class SwaraRecommendationController extends Controller
         foreach ($lowongans as $lowongan) {
             $nilai = [
                 'skills' => $this->nilaiSkill($mahasiswa, $lowongan),
-                'ipk' => $this->nilaiIpk($mahasiswa->ipk, $lowongan->min_ipk),
+                'ipk' => $this->nilaiIpk($mahasiswa->ipk, $lowongan->ipk),
                 'lokasi' => $mahasiswa->preferensi_lokasi === $lowongan->lokasi ? 1 : 0,
-                'jenis_magang' => $mahasiswa->jenis_magang === $lowongan->jenis_magang ? 1 : 0,
+                'jenis_magang' => $mahasiswa->jenis_magang_id === $lowongan->jenis_magang_id ? 1 : 0,
                 'tipe_magang' => $mahasiswa->tipe_magang === $lowongan->tipe_magang ? 1 : 0,
                 'prodi' => optional($mahasiswa->prodi)->nama === optional($lowongan->prodi)->nama ? 1 : 0,
             ];
@@ -96,6 +96,10 @@ class SwaraRecommendationController extends Controller
 
     private function nilaiIpk($ipkMahasiswa, $minIpkLowongan)
     {
+        if (is_null($minIpkLowongan)) {
+            return 0; 
+        }
+
         return $ipkMahasiswa >= $minIpkLowongan ? 1 : 0;
     }
 }

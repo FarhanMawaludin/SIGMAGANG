@@ -62,6 +62,7 @@ class LowonganController extends Controller
             'batas_pendaftaran' => 'required|date',
             'lokasi' => 'required|string',
             'tipe_magang' => 'required',
+            'ipk' => 'required|numeric|between:0,4.00',
             'jumlah_magang' => 'required|integer',
             'perusahaan_id' => 'required|exists:perusahaan,id',
             'periode_id' => 'nullable|integer',
@@ -74,6 +75,7 @@ class LowonganController extends Controller
             'jumlah_magang.required' => 'Jumlah magang wajib diisi.',
             'perusahaan_id.required' => 'Perusahaan wajib diisi.',
             'jenis_magang_id.required' => 'Jenis magang wajib diisi.',
+            'ipk.required' => 'IPK Minimal wajib diisi'
         ]);
         try{
 
@@ -85,6 +87,7 @@ class LowonganController extends Controller
                 'lokasi' => $validated['lokasi'],
                 'tipe_magang' => $validated['tipe_magang'],
                 'jumlah_magang' => $validated['jumlah_magang'],
+                'ipk' => $validated['ipk'],
                 'perusahaan_id' => $validated['perusahaan_id'],
                 'periode_id' => $validated['periode_id'],
                 'prodi_id' => $validated['prodi_id'],
@@ -142,6 +145,7 @@ class LowonganController extends Controller
             'batas_pendaftaran' => 'required|date',
             'lokasi' => 'required|string',
             'tipe_magang' => 'required',
+            'ipk' => 'required|numeric|between:0,4.00',
             'jumlah_magang' => 'required|integer',
             'perusahaan_id' => 'required|exists:perusahaan,id',
             'periode_id' => 'nullable|integer',
@@ -156,6 +160,8 @@ class LowonganController extends Controller
             'jumlah_magang.required' => 'Jumlah magang wajib diisi.',
             'perusahaan_id.required' => 'Perusahaan wajib diisi.',
             'tipe_magang.required' => 'Tipe magang wajib diisi.',
+            'ipk.required' => 'IPK Minimal Wajib diisi',
+            'ipk.between' => 'IPK antara 0.00 sampai 4.00'
         ]);
 
         try{
@@ -172,6 +178,7 @@ class LowonganController extends Controller
             'prodi_id' => $validated['prodi_id'],
             'jenis_magang_id' => $validated['jenis_magang_id'],
             'tipe_magang' => $validated['tipe_magang'],
+            'ipk' => $validated['ipk']
         ]);
 
         // Sync skills if they exist in the request

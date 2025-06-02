@@ -14,7 +14,6 @@ class FuzzyRecommedationController extends Controller
     public function rekomendasi()
     {
         $activemenu = 'lowongan';
-
         $mahasiswa = Mahasiswa::with('skills', 'prodi')->where('user_id', Auth::id())->first();
 
         if (!$mahasiswa) {
@@ -36,15 +35,15 @@ class FuzzyRecommedationController extends Controller
             'prodi' => 0.1,
         ];
 
-        $lowongans = Lowongan::with('skills')->get();
+        $lowongans = Lowongan::with('skills', 'prodi')->get();
         $hasil = [];
 
         foreach ($lowongans as $lowongan) {
             $nilai = [
                 'skills' => $this->nilaiSkill($mahasiswa, $lowongan),
-                'ipk' => $this->nilaiIpk($mahasiswa->ipk, $lowongan->min_ipk),
+                'ipk' => $this->nilaiIpk($mahasiswa->ipk, $lowongan->ipk),
                 'lokasi' => $mahasiswa->preferensi_lokasi === $lowongan->lokasi ? 1 : 0,
-                'jenis_magang' => $mahasiswa->jenis_magang === $lowongan->jenis_magang ? 1 : 0,
+                'jenis_magang' => $mahasiswa->jenis_magang_id === $lowongan->jenis_magang_id ? 1 : 0,
                 'tipe_magang' => $mahasiswa->tipe_magang === $lowongan->tipe_magang ? 1 : 0,
                 'prodi' => $mahasiswa->prodi->nama === $lowongan->prodi->nama ? 1 : 0,
             ];
@@ -81,8 +80,12 @@ class FuzzyRecommedationController extends Controller
         ]);
     }
 
-    private function nilaiIpk($ipkMahasiswa)
+    private function nilaiIpk($ipkMahasiswa, $ipkLowongan)
     {
+        if ($ipkLowongan === null) return 0;
+
+        if ($ipkMahasiswa < $ipkLowongan) return 0;
+
         if (2.0 <= $ipkMahasiswa && $ipkMahasiswa <= 2.75) {
             return 0.25;
         } elseif (2.75 <= $ipkMahasiswa && $ipkMahasiswa <= 3.25) {
@@ -93,7 +96,9 @@ class FuzzyRecommedationController extends Controller
             return 0;
         }
     }
-     private function nilaiSkill($mahasiswa, $lowongan)
+
+    
+    private function nilaiSkill($mahasiswa, $lowongan)
     {
         $mahasiswaSkillIds = $mahasiswa->skills->pluck('id')->toArray();
         $lowonganSkillIds = $lowongan->skills->pluck('id')->toArray();
@@ -108,7 +113,7 @@ class FuzzyRecommedationController extends Controller
         } elseif (count($cocok) == 2) {
             return 0.5;
         } elseif (count($cocok) >= 3) {
-                return 1;
+            return 1;
         } else {
             return 0;
         }

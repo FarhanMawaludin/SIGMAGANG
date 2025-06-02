@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use App\Models\Skill;
 use App\Models\Prodi;
 use App\Models\JenisMagang;
@@ -25,17 +26,17 @@ class ProfilMahasiswaController extends Controller
             return view('mahasiswa.profil.index', [
                 'user' => $user,
                 'mahasiswa' => null,
-                'allSkills' => [], 
+                'allSkills' => [],
                 'activemenu' => 'profil',
                 'dokumen_cv' => null,
                 'dokumen_transkrip' => null,
                 'dokumen_pengantar' => null,
-                'dokumen_sertifikat' => collect(), 
+                'dokumen_sertifikat' => collect(),
                 'dokumen_sertifikat_magang' => null
             ])->with('warning', 'Profil mahasiswa belum dilengkapi.');
         }
 
-     
+
         $dokumen_cv = $mahasiswa->documents()->where('tipe', 'cv')->whereNotNull('file_path')->first();
         $dokumen_transkrip = $mahasiswa->documents()->where('tipe', 'Transkrip Nilai')->whereNotNull('file_path')->first();
         $dokumen_pengantar = $mahasiswa->documents()->where('tipe', 'Surat Pengantar')->whereNotNull('file_path')->first();
@@ -95,6 +96,7 @@ class ProfilMahasiswaController extends Controller
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Informasi pribadi berhasil diperbarui.');
     }
 
+
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -102,10 +104,19 @@ class ProfilMahasiswaController extends Controller
         // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'no_telp' => 'required|string|max:20',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'no_telp' => ['required', 'string', 'max:20', 'regex:/^\d+$/'],
             'semester' => 'required|integer|min:1',
-            'nim' => 'required|string|max:255',
+            'nim' => [
+                'required',
+                'digits:10',
+                Rule::unique('mahasiswa')->ignore($user->mahasiswa?->id),
+            ],
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'name.required' => 'Nama tidak boleh kosong.',
@@ -113,8 +124,15 @@ class ProfilMahasiswaController extends Controller
             'email.email' => 'Format email salah.',
             'email.unique' => 'Email sudah digunakan sebelumnya.',
             'no_telp.required' => 'Nomor telepon wajib diisi.',
+            'no_telp.max' => 'Nomor telepon maksimal 20 digit.',
+            'no_telp.regex' => 'Nomor telepon harus berupa angka saja.',
             'semester.required' => 'Semester wajib diisi.',
             'nim.required' => 'NIM wajib diisi.',
+            'nim.digits' => 'NIM harus terdiri dari tepat 10 angka.',
+            'nim.unique' => 'NIM sudah digunakan.',
+            'foto.image' => 'File harus berupa gambar.',
+            'foto.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+            'foto.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
         // Update data user
@@ -147,6 +165,7 @@ class ProfilMahasiswaController extends Controller
 
         return redirect()->route('mahasiswa.profil.index')->with('success', 'Profil berhasil diperbarui');
     }
+
 
 
     /**
