@@ -181,31 +181,37 @@
                     <h5 class="leading-none text-xl font-bold text-gray-900 dark:text-white pb-2">Kepuasan Rekomendasi
                     </h5>
                 </div>
-                <div class="h-6 w-full rounded-lg bg-gray-200 mb-6 flex overflow-hidden">
-                    <div class="bg-rose-400" style="width: 0.7%"></div>
-                    <div class="bg-yellow-300" style="width: 2%"></div>
-                    <div class="bg-green-400" style="width: 97.3%"></div>
-                </div>
+                @php
+                    $total_kepuasan = $tidak_puas + $puas + $sangat_puas;
+                    $persen_tidak_puas = $total_kepuasan > 0 ? ($tidak_puas / $total_kepuasan) * 100 : 0;
+                    $persen_puas = $total_kepuasan > 0 ? ($puas / $total_kepuasan) * 100 : 0;
+                    $persen_sangat_puas = $total_kepuasan > 0 ? ($sangat_puas / $total_kepuasan) * 100 : 0;
+                @endphp
+              <div class="h-6 w-full rounded-lg bg-gray-200 mb-6 flex overflow-hidden">
+    <span class="bg-rose-400" style="width: {{ $persen_tidak_puas }}%"></span>
+    <span class="bg-yellow-300" style="width: {{ $persen_puas }}%"></span>
+    <span class="bg-green-400" style="width: {{ $persen_sangat_puas }}%"></span>
+</div>
                 <div class="flex justify-between text-sm text-gray-500">
                     <div class="flex flex-col items-center text-center">
-                        <span class="text-xs">Negative</span>
+                        <span class="text-xs">Tidak Puas</span>
                         <div class="flex items-center">
                             <span class="text-rose-400 text-lg mr-2">😞</span>
-                            <span class="text-gray-900 font-semibold text-base">16</span>
+                            <span class="text-gray-900 font-semibold text-base">{{$tidak_puas}}</span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center">
-                        <span class="text-xs">Neutral</span>
+                        <span class="text-xs">Puas</span>
                         <div class="flex items-center">
                             <span class="text-yellow-400 text-lg mr-2">😐</span>
-                            <span class="text-gray-900 font-semibold text-base">45</span>
+                            <span class="text-gray-900 font-semibold text-base">{{$puas}}</span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center">
-                        <span class="text-xs">Positive</span>
+                        <span class="text-xs">Sangat Puas</span>
                         <div class="flex items-center">
                             <span class="text-green-400 text-lg mr-2">😊</span>
-                            <span class="text-gray-900 font-semibold text-base">2,113</span>
+                            <span class="text-gray-900 font-semibold text-base">{{$sangat_puas}}</span>
                         </div>
                     </div>
                 </div>
