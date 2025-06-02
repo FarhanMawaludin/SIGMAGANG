@@ -16,6 +16,7 @@ class Pengajuan extends Model
         'mahasiswa_id',
         'lowongan_id',
         'status',
+        'kepuasan',
         'skor_spk',
         'catatan_validasi',
         'mahasiswa_feedback',
