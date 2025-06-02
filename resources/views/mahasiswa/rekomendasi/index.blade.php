@@ -84,7 +84,7 @@
         </table>
     </div>
 
-    <h2 class="font-semibold text-gray-800 mb-2 mt-4">Lowongan</h2>
+    <h2 class="font-semibold text-gray-800 mb-2 mt-4">Rekomendasi Lowongan Anda</h2>
     <div class="overflow-x-auto relative rounded-lg border border-gray-200">
         <table class="min-w-full text-sm text-center text-gray-700">
             <thead class="text-xs uppercase bg-gray-100 text-gray-700">

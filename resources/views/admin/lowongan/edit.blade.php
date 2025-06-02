@@ -137,6 +137,19 @@
                         </select>
                     </div>
 
+                    <div class="col-span-3">
+                        <label for="ipk" class="block text-sm/6 font-medium text-gray-900">IPK</label>
+                        <div class="">
+                            <input type="text" name="ipk" id="ipk"
+                                value="{{old('ipk', $lowongan->ipk)}}"
+                                autocomplete="given-name"
+                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                            @error('ipk')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="col-span-full">
                         <label for="skills" class="block text-sm/6 font-medium text-gray-900">Skills</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-2">

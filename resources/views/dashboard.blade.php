@@ -355,8 +355,6 @@
         }
     </script>
 
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const chartContainer = document.getElementById("labels-chart");

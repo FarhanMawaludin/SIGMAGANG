@@ -25,8 +25,11 @@
                 <div class="sm:col-span-3">
                     <label for="nidn" class="block text-sm/6 font-medium text-gray-900">NIDN</label>
                     <div class="mt-2">
-                        <input type="text" id="nidn" name="nidn" value="{{ $user->dosenPembimbing->nidn }}" readonly
-                            class="block w-full bg-gray-100 px-3 py-1.5 rounded-md border border-gray-300 text-gray-700 sm:text-sm/6">
+                        <input type="text" id="nidn" name="nidn" value="{{ $user->dosenPembimbing->nidn ?? '' }}"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        @error('nidn')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -55,8 +58,25 @@
                     </div>
                 </div>
 
-                {{-- Jabatan --}}
                 <div class="sm:col-span-3">
+                    <label for="jabatan" class="block text-sm font-medium text-gray-900">Jabatan</label>
+                    <select name="jabatan" id="jabatan"
+                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <option value="">-- Pilih Jabatan --</option>
+                        <option value="lektor" {{ old('jabatan', $dosen->jabatan ?? '') === 'lektor' ? 'selected' : '' }}>
+                            Lektor</option>
+                        <option value="asisten_ahli"
+                            {{ old('jabatan', $dosen->jabatan ?? '') === 'asisten_ahli' ? 'selected' : '' }}>Asisten Ahli
+                        </option>
+                    </select>
+
+                    @error('jabatan')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Jabatan --}}
+                {{-- <div class="sm:col-span-3">
                     <label for="jabatan" class="block text-sm/6 font-medium text-gray-900">Jabatan</label>
                     <div class="mt-2">
                         <input type="text" name="jabatan" id="jabatan"
@@ -66,17 +86,15 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
 
                 {{-- Prodi --}}
                 <div class="sm:col-span-3">
                     <label for="prodi_id" class="block text-sm/6 font-medium text-gray-900">Prodi</label>
                     <select name="prodi_id" id="prodi_id"
-                        class="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        class="mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                         @foreach ($prodis ?? [] as $prodi)
-                            <option value="{{ $prodi->id }}" {{ old('prodi_id', $user->dosenPembimbing->prodi_id) == $prodi->id ? 'selected' : '' }}>
-                                {{ $prodi->nama }}
-                            </option>
+                            <option value="{{ $prodi->id }}">{{ $prodi->nama }}</option>
                         @endforeach
                     </select>
                     @error('prodi_id')

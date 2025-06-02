@@ -62,6 +62,10 @@
                     <td class="px-6 py-4 font-medium">Program Studi</td>
                     <td class="px-6 py-4">{{ $lowongan->prodi->nama }}</td>
                 </tr>
+                <tr class="bg-white border-b border-gray-200">
+                    <td class="px-6 py-4 font-medium">IPK Minimal</td>
+                    <td class="px-6 py-4">{{ $lowongan->ipk ?? '-' }}</td>
+                </tr>
             </tbody>
         </table>
         {{-- Tombol Kembali --}}

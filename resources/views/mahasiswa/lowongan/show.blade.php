@@ -111,7 +111,7 @@
                         <h3 class="font-semibold  text-lg mb-1">Pendidikan</h3>
                         <p class="text-gray-500 mb-1">Jurusan: <span
                                 class="font-medium text-gray-950">{{ $lowongan->prodi->nama }}</span></p>
-                        <p class="text-gray-500">IPK Minimal: <span class="font-medium text-gray-950">3.0</span></p>
+                        <p class="text-gray-500">IPK Minimal: <span class="font-medium text-gray-950">{{$lowongan->ipk ?? 'Tidak ada IPK minimal'}}</span></p>
                     </div>
                 </div>
             </div>

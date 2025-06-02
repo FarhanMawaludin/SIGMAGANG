@@ -186,7 +186,7 @@
     </section>
 
     <!-- Lowongan Terpopuler -->
-    <section class="px-6 py-16">
+    {{-- <section class="px-6 py-16">
         <div class="text-center mb-12">
             <h2 class="text-[28px] font-bold">Lowongan Magang <span class="text-orange-500">Terpopuler</span></h2>
             <p class="text-gray-600 text-sm mt-2">Beberapa lowongan yang paling diminati oleh mahasiswa saat ini.</p>
@@ -413,7 +413,7 @@
                 </svg>
             </button>
         </div>
-    </section>
+    </section> --}}
 
     <!-- 5 Langkah Magang -->
     <section class="bg-blue-500 py-12 px-6" id="panduan">
