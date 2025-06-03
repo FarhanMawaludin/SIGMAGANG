@@ -113,7 +113,18 @@ class StatistikController extends Controller
 
         $skillLabels = $topSkills->pluck('nama')->toArray();
         $skillCounts = $topSkills->pluck('mahasiswa_count')->toArray();
-
+        $puas = Pengajuan::where('status','completed')
+        ->whereNotNull('kepuasan')
+        ->where('kepuasan', 'Puas')
+        ->count();
+        $sangat_puas = Pengajuan::where('status','completed')
+        ->whereNotNull('kepuasan')
+        ->where('kepuasan', 'Sangat Puas')
+        ->count();
+        $tidak_puas = Pengajuan::where('status','completed')
+        ->whereNotNull('kepuasan')
+        ->where('kepuasan', 'Tidak Puas')
+        ->count();
         $activemenu = 'statistik';
 
         return view('admin.statistik.index', [
@@ -133,6 +144,9 @@ class StatistikController extends Controller
             'ratio_mahasiswa_per_dosen' => $ratio_mahasiswa_per_dosen,
             'max_mahasiswa' => $max_mahasiswa,
             'skillLabels' => $skillLabels,
+            'puas' => $puas,
+            'sangat_puas' => $sangat_puas,
+            'tidak_puas' => $tidak_puas,
             'skillCounts' => $skillCounts,
             'otherSkillsDetail' => $otherSkillsDetail, // dikirim ke view
         ]);

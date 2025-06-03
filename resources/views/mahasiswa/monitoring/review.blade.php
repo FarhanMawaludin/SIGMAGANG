@@ -20,6 +20,33 @@
                             @enderror
                         </div>
                     </div>
+                    <!-- Kepuasan -->
+                    <div class="sm:col-span-full">
+                        <label class="block text-sm font-medium text-gray-900 mb-2">Kepuasan Magang</label>
+                        <div class="flex flex-col gap-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="kepuasan" value="Sangat Puas"
+                                    {{ old('kepuasan', $pengajuan->kepuasan ?? '') == 'Sangat Puas"' ? 'checked' : '' }}
+                                    class="form-radio text-indigo-600">
+                                <span class="ml-2">Sangat Puas</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="kepuasan" value="Puas"
+                                    {{ old('kepuasan', $pengajuan->kepuasan ?? '') == 'Puas' ? 'checked' : '' }}
+                                    class="form-radio text-indigo-600">
+                                <span class="ml-2">Puas</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="kepuasan" value="Tidak Puas"
+                                    {{ old('kepuasan', $pengajuan->kepuasan ?? '') == 'Tidak Puas"' ? 'checked' : '' }}
+                                    class="form-radio text-indigo-600">
+                                <span class="ml-2">Tidak Puas</span>
+                            </label>
+                        </div>
+                        @error('kepuasan')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <!-- Tombol Aksi -->
                     <div class="col-span-full mt-6 flex flex-col sm:flex-row items-center justify-end gap-3">
     <button type="button"

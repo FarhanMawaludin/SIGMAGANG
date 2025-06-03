@@ -371,7 +371,6 @@ class MonitoringMahasiswaController extends Controller
             ->where('mahasiswa_id', $mahasiswa->id)
             ->where('status', 'completed')
             ->first();
-
         if (!$pengajuan) {
             return redirect()->back()->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
         }
@@ -398,6 +397,7 @@ class MonitoringMahasiswaController extends Controller
 
         $pengajuan->update([
             'mahasiswa_feedback' => $request->mahasiswa_feedback,
+            'kepuasan' => $request->kepuasan,
         ]);
 
         return redirect()->route('mahasiswa.monitoring.index')->with('success', 'Review berhasil ditambahkan.');
