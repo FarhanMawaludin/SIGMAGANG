@@ -22,11 +22,11 @@
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-800">Prodi</h4>
-                            <p class="text-gray-600">{{ $pengajuan->mahasiswa->prodi->nama }}</p>
+                            <p class="text-gray-600">{{ $pengajuan->mahasiswa->prodi->nama ?? '-' }}</p>
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-800">Semester</h4>
-                            <p class="text-gray-600">{{ $pengajuan->mahasiswa->semester }}</p>
+                            <p class="text-gray-600">{{ $pengajuan->mahasiswa->semester ?? '-' }}</p>
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-800">Email</h4>
@@ -34,7 +34,7 @@
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-800">No Telepon</h4>
-                            <p class="text-gray-600">{{ $pengajuan->mahasiswa->no_telp }}</p>
+                            <p class="text-gray-600">{{ $pengajuan->mahasiswa->no_telp ?? '-' }}</p>
                         </div>
                     </div>
                 </div>

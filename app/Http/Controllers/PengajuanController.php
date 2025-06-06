@@ -40,6 +40,10 @@ class PengajuanController extends Controller
         if ($category !== 'all') {
             $query->where('status', $category);
         }
+
+        $query->orderByRaw("FIELD(status, 'pending', 'accepted', 'rejected', 'completed')")
+            ->orderBy('created_at', 'desc');
+
         $pengajuan = $query->paginate(10);
         $pengajuan->appends(['search' => $search, 'category' => $category]);
 
@@ -51,6 +55,7 @@ class PengajuanController extends Controller
             'search' => $search,
         ]);
     }
+
     public function edit($id)
     {
         $activemenu = 'pengajuan';

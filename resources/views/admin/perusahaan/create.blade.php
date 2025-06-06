@@ -4,7 +4,7 @@
     <form method="POST" action="{{ route('admin.perusahaan.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="space-y-12">
-            <h2 class="text-[28px] font-semibold text-gray-900 mb-4">Tambah Pengguna</h2>
+            <h2 class="text-[28px] font-semibold text-gray-900 mb-4">Tambah Perusahaan</h2>
             <div class="border-b border-gray-900/10 pb-12 p-6 bg-white border border-gray-200 rounded-lg">
                 <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     {{-- Nama --}}
