@@ -12,10 +12,9 @@
         </div>
     @endif
 
-    <form action="{{ route('dosen.monitoring.update_feedback',$logHarian->id) }}" method="POST" class="space-y-6">
+    <form action="{{ route('dosen.monitoring.update_feedback',$logMingguan->id) }}" method="POST" class="space-y-6">
         @csrf
         @method('PUT')
-        <input type="hidden" name="log_mingguan_id" value="{{ $logHarian->id }}">
         <div>
             <label for="dosen_feedback" class="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
             <textarea id="dosen_feedback" name="dosen_feedback" rows="5"

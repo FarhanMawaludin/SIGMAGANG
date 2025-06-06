@@ -72,47 +72,44 @@ class MonitoringDosenController extends Controller
         return view('dosen.monitoring.show_harian', compact('activemenu', 'logMingguan'));
     }
 
-    public function create_feedback($logHarianId)
+    public function create_feedback($logMingguanId)
     {
         $activemenu = 'monitoring';
         $user = Auth::user();
         $dosen = $user->dosenPembimbing;
 
-        $logHarian = LogHarian::with(['logMingguan', 'logMingguan.pengajuan.mahasiswa.user'])
-            ->where('id', $logHarianId)
-            ->whereHas('logMingguan', function ($q) use ($dosen) {
-                $q->whereHas('pengajuan', function ($q2) use ($dosen) {
-                    $q2->where('dosen_id', $dosen->id);
-                });
-            })
-            ->firstOrFail();
+       $logMingguan = LogMingguan::with(['pengajuan.mahasiswa.user', 'logHarian'])
+        ->where('id', $logMingguanId)
+        ->whereHas('pengajuan', function ($q) use ($dosen) {
+            $q->where('dosen_id', $dosen->id);
+        })
+        ->firstOrFail();
 
-        return view('dosen.monitoring.create_feedback', compact('activemenu', 'logHarian'));
+        return view('dosen.monitoring.create_feedback', compact('activemenu', 'logMingguan'));
     }
 
-    public function update_feedback(Request $request, $logHarianId)
-    {
-        $request->validate([
-            'dosen_feedback' => 'required|string|max:255',
-        ]);
-        $user = Auth::user();
-        $dosen = $user->dosenPembimbing;
-        $logHarian = LogHarian::with(['logMingguan', 'logMingguan.pengajuan.mahasiswa.user'])
-            ->where('id', $logHarianId)
-            ->whereHas('logMingguan', function ($q) use ($dosen) {
-                $q->whereHas('pengajuan', function ($q2) use ($dosen) {
-                    $q2->where('dosen_id', $dosen->id);
-                });
-            })
-            ->firstOrFail();
 
-        // Update pada logMingguan, bukan logHarian
-        $logMingguan = $logHarian->logMingguan;
-        $logMingguan->dosen_feedback = $request->input('dosen_feedback');
-        $logMingguan->save();
+public function update_feedback(Request $request, $logMingguanId)
+{
+    $request->validate([
+        'dosen_feedback' => 'required|string|max:255',
+    ]);
+    $user = Auth::user();
+    $dosen = $user->dosenPembimbing;
 
-        return redirect()
-            ->route('dosen.monitoring.show_harian', $logMingguan->id)
-            ->with('success', 'Feedback berhasil disimpan.');
-    }
+   $logMingguan = LogMingguan::with(['pengajuan.mahasiswa.user'])
+        ->where('id', $logMingguanId)
+        ->whereHas('pengajuan', function ($q) use ($dosen) {
+            $q->where('dosen_id', $dosen->id);
+        })
+        ->firstOrFail();
+
+    $logMingguan->dosen_feedback = $request->input('dosen_feedback');
+    $logMingguan->save();
+
+    return redirect()
+        ->route('dosen.monitoring.show_harian', $logMingguan->id)
+        ->with('success', 'Feedback berhasil disimpan.');
 }
+}
+
