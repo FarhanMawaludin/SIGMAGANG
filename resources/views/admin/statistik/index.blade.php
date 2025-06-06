@@ -141,7 +141,7 @@
 
                     <!-- Rata-rata mahasiswa per Dosen -->
                     <div class="flex items-center gap-2 text-left">
-                        <div class="text-2xl font-bold text-gray-900">{{ $ratio_mahasiswa_per_dosen }}</div>
+                        <div class="text-2xl font-bold text-gray-900">{{ round($ratio_mahasiswa_per_dosen) }}</div>
                         <div class="text-sm text-gray-500">Mahasiswa per Dosen</div>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
             labels: @json($skillLabels),
             colors: ["#1E40AF", "#2563EB", "#60A5FA", "#BFDBFE", "#93C5FD", "#DBEAFE"], // Tambahkan warna sesuai jumlah data
         };
-    
+
         const getChartOptions = () => {
             return {
                 series: chartData.series,

@@ -27,9 +27,9 @@ class StatistikController extends Controller
                 $user->jumlah_mahasiswa = $jumlah;
                 return $user;
             })
-            ->sortByDesc('jumlah_mahasiswa') // urutkan dari yang terbanyak
-            ->take(5) // ambil 5 teratas
-            ->values(); // reset index agar rapi
+            ->sortByDesc('jumlah_mahasiswa') 
+            ->take(5)
+            ->values(); 
 
         $max_mahasiswa = $dosen_plot->max('jumlah_mahasiswa');
 
@@ -45,7 +45,7 @@ class StatistikController extends Controller
             ->distinct('dosen_id')
             ->count('dosen_id');
         $ratio_mahasiswa_per_dosen = $dosen_pembimbing_count > 0
-            ? round($mahasiswa_dibimbing_count / $dosen_pembimbing_count, 2)
+            ? $mahasiswa_dibimbing_count / $dosen_pembimbing_count
             : 0;
 
         // Statistik tahunan
