@@ -177,8 +177,8 @@ Route::middleware('auth', 'role:dosen_pembimbing')->group(function () {
         Route::get('/dosen/{id}', [MonitoringDosenController::class, 'show'])->name('show');
         Route::get('/dosen/{id}/harian', [MonitoringDosenController::class, 'show_harian'])->name('show_harian');
         Route::get('/dosen/{id}/harian/{harian}/edit', [MonitoringDosenController::class, 'edit_harian'])->name('edit_harian');
-        Route::get('/dosen/{id}/create', [MonitoringDosenController::class, 'create_feedback'])->name('create_feedback');
-        Route::put('/dosen/{id}/update', [MonitoringDosenController::class, 'update_feedback'])->name('update_feedback');
+        Route::get('/dosen/monitoring/feedback/{logMingguan}', [MonitoringDosenController::class, 'create_feedback'])->name('create_feedback');
+        Route::put('/dosen/monitoring/feedback/{logMingguan}', [MonitoringDosenController::class, 'update_feedback'])->name('update_feedback');
 
         
     });
