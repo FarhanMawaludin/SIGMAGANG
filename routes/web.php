@@ -151,6 +151,7 @@ Route::middleware('auth', 'role:admin')->group(function () {
 
     Route::prefix('statistik')->group(function () {
         Route::get('/', [StatistikController::class, 'index'])->name('statistik.index');
+        Route::get('/export_excel', [StatistikController::class, 'export_excel']);
     });
 });
 

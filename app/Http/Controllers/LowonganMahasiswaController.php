@@ -33,7 +33,7 @@ class LowonganMahasiswaController extends Controller
 
         if ($category === 'terbaru') {
             $query->orderBy('created_at', 'desc');
-        } 
+        }
 
         $lowongan = $query->paginate(10)->appends([
             'search' => $search,
@@ -88,6 +88,8 @@ class LowonganMahasiswaController extends Controller
 
         $review = Pengajuan::where('lowongan_id', $id)
             ->where('status', 'completed')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
             ->get();
 
         $profilLengkap = $mahasiswa?->isCompleteProfile() ?? false;

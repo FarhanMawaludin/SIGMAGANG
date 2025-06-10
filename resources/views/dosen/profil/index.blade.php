@@ -4,8 +4,12 @@
     <h2 class="text-2xl font-semibold text-gray-900 mb-6">Profil Saya</h2>
     <!-- Header Profil dengan Foto -->
     <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6 flex items-center gap-6">
-        <img src="{{ $user->foto ? asset('storage/' . $user->foto) : asset('images/default-avatar.png') }}" alt="Foto Profil"
-            class="w-24 h-24 rounded-full object-cover border border-gray-300">
+        @if (Auth::user()->foto)
+            <img class="w-24 h-24 rounded-full" src="{{ asset('storage/' . Auth::user()->foto) }}" alt="user photo">
+        @else
+            <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
+                class="w-24 h-24 rounded-full object-cover border border-gray-300">
+        @endif
         <div>
             <h3 class="text-[22px] font-semibold text-gray-900">{{ $user->name }}</h3>
             <p class="text-[18px] text-gray-700">{{ $dosen_pembimbing->nidn ?? '-' }}</p>
