@@ -15,22 +15,10 @@
                         </h5>
                     </div>
                     <div class="flex items-center gap-2">
-                        <!-- Button PDF -->
-                        <button
-                            class="flex items-center gap-1 text-sm font-medium px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md">
-                            <!-- PDF Icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v6h6" />
-                            </svg>
-                            PDF
-                        </button>
-
                         <!-- Button Excel -->
                         <button
-                            class="flex items-center gap-1 text-sm font-medium px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">
+                            class="flex items-center gap-1 text-sm font-medium px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md"
+                            onclick="window.location.href='{{ url('statistik/export_excel') }}?year={{ $selectedYear }}'">
                             <!-- Excel Icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -187,31 +175,31 @@
                     $persen_puas = $total_kepuasan > 0 ? ($puas / $total_kepuasan) * 100 : 0;
                     $persen_sangat_puas = $total_kepuasan > 0 ? ($sangat_puas / $total_kepuasan) * 100 : 0;
                 @endphp
-              <div class="h-6 w-full rounded-lg bg-gray-200 mb-6 flex overflow-hidden">
-    <span class="bg-rose-400" style="width: {{ $persen_tidak_puas }}%"></span>
-    <span class="bg-yellow-300" style="width: {{ $persen_puas }}%"></span>
-    <span class="bg-green-400" style="width: {{ $persen_sangat_puas }}%"></span>
-</div>
+                <div class="h-6 w-full rounded-lg bg-gray-200 mb-6 flex overflow-hidden">
+                    <span class="bg-rose-400" style="width: {{ $persen_tidak_puas }}%"></span>
+                    <span class="bg-yellow-300" style="width: {{ $persen_puas }}%"></span>
+                    <span class="bg-green-400" style="width: {{ $persen_sangat_puas }}%"></span>
+                </div>
                 <div class="flex justify-between text-sm text-gray-500">
                     <div class="flex flex-col items-center text-center">
                         <span class="text-xs">Tidak Puas</span>
                         <div class="flex items-center">
                             <span class="text-rose-400 text-lg mr-2">😞</span>
-                            <span class="text-gray-900 font-semibold text-base">{{$tidak_puas}}</span>
+                            <span class="text-gray-900 font-semibold text-base">{{ $tidak_puas }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center">
                         <span class="text-xs">Puas</span>
                         <div class="flex items-center">
                             <span class="text-yellow-400 text-lg mr-2">😐</span>
-                            <span class="text-gray-900 font-semibold text-base">{{$puas}}</span>
+                            <span class="text-gray-900 font-semibold text-base">{{ $puas }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center">
                         <span class="text-xs">Sangat Puas</span>
                         <div class="flex items-center">
                             <span class="text-green-400 text-lg mr-2">😊</span>
-                            <span class="text-gray-900 font-semibold text-base">{{$sangat_puas}}</span>
+                            <span class="text-gray-900 font-semibold text-base">{{ $sangat_puas }}</span>
                         </div>
                     </div>
                 </div>
@@ -222,7 +210,8 @@
         const chartData = {
             series: @json($skillCounts),
             labels: @json($skillLabels),
-            colors: ["#1E40AF", "#2563EB", "#60A5FA", "#BFDBFE", "#93C5FD", "#DBEAFE"], // Tambahkan warna sesuai jumlah data
+            colors: ["#1E40AF", "#2563EB", "#60A5FA", "#BFDBFE", "#93C5FD",
+            "#DBEAFE"], // Tambahkan warna sesuai jumlah data
         };
 
         const getChartOptions = () => {
@@ -258,16 +247,16 @@
                 },
             };
         };
-    
+
         // Render custom legend dynamically
         const renderCustomLegend = () => {
             const legendContainer = document.getElementById("custom-legend");
             legendContainer.innerHTML = "";
-    
+
             chartData.labels.forEach((label, index) => {
                 const color = chartData.colors[index % chartData.colors.length];
                 const value = chartData.series[index];
-    
+
                 const item = document.createElement("li");
                 item.className = "flex items-center gap-2";
                 item.innerHTML = `
@@ -277,14 +266,14 @@
                 legendContainer.appendChild(item);
             });
         };
-    
+
         if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
             const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
             chart.render();
             renderCustomLegend();
         }
     </script>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const chartContainer = document.getElementById("labels-chart");
