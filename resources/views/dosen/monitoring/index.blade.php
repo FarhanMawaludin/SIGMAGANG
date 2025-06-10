@@ -21,7 +21,7 @@
                     <th class="px-6 py-3">Perusahaan</th>
                     <th class="px-6 py-3">Semester</th>
                     <th class="px-6 py-3">Jenis Magang</th>
-                    <th class="px-6 py-3">Detail</th>                   
+                    <th class="px-6 py-3">Detail</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +29,8 @@
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $pengajuanList->firstItem() + $loop->index }}</td>
                         <td class="px-6 py-4">
-                            {{ $log->mahasiswa->user->name ?? 'Nama Tidak Ditemukan' }}
+                            <div class="font-medium text-[16px] text-gray-900">{{ $log->mahasiswa->user->name ?? '-' }}</div>
+                            <div class="text-[14px] text-gray-500">{{ $log->mahasiswa->nim ?? '-' }}</div>
                         </td>
                         <td class="px-6 py-4">
                             {{ $log->lowongan->nama }}
@@ -45,9 +46,15 @@
                         </td>
                         <td class="px-6 py-4">
                             
+
                             <a href="{{ route('dosen.monitoring.show', $log->id) }}"
-                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
-                                Detail
+                                class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 text-sm w-[120px] ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Lihat Log
                             </a>
                         </td>
                     </tr>

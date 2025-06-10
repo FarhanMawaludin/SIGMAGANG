@@ -47,6 +47,19 @@ class PengajuanController extends Controller
         $pengajuan = $query->paginate(10);
         $pengajuan->appends(['search' => $search, 'category' => $category]);
 
+        foreach ($pengajuan as $item) {
+            $mahasiswa = $item->mahasiswa;
+
+            // Cek apakah mahasiswa sudah mengupload dokumen "Sertifikat Magang"
+            $dokumenSertifikat = Dokumen::where('documentable_type', 'App\Models\Mahasiswa')
+                ->where('documentable_id', $mahasiswa->id)
+                ->where('tipe', 'Sertifikat Magang')
+                ->exists(); 
+
+            // Tambahkan properti ke item pengajuan
+            $item->has_sertifikat = $dokumenSertifikat;
+        }
+
         return view('admin.pengajuan.index', [
             'activemenu' => $activemenu,
             'pengajuanAll' => $pengajuanAll,
@@ -55,6 +68,7 @@ class PengajuanController extends Controller
             'search' => $search,
         ]);
     }
+
 
     public function edit($id)
     {

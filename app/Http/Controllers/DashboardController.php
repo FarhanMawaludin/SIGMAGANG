@@ -112,11 +112,22 @@ class DashboardController extends Controller
     public function dosen()
     {
         $activemenu = 'dashboard';
-        $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])
-            ->whereHas('mahasiswa', function ($q) {
-                $q->where('dosen_id', Auth::id());
-            })
-            ->latest()
+        $user = Auth::user();
+        $user = Auth::user();
+        $dosen = $user->dosenPembimbing;
+
+        // Validasi dosen pembimbing
+        if (!$dosen) {
+            $emptyPagination = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+
+            return view('dosen.monitoring.index', compact('activemenu'))
+                ->with('pengajuanList', $emptyPagination);
+        }
+
+        $pengajuanList = Pengajuan::with(['mahasiswa.user', 'lowongan.perusahaan', 'lowongan.jenisMagang'])
+            ->where('dosen_id', $dosen->id)
+            ->where('status', 'accepted')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $logMingguan = \App\Models\LogMingguan::with(['pengajuan.mahasiswa.user'])
@@ -129,7 +140,7 @@ class DashboardController extends Controller
 
         return view('dosen-dashboard', [
             'activemenu' => $activemenu,
-            'pengajuan' => $pengajuan,
+            'pengajuan' => $pengajuanList,
             'logMingguan' => $logMingguan
         ]);
     }

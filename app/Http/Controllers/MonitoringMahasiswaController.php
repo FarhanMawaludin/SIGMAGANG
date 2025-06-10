@@ -259,7 +259,9 @@ class MonitoringMahasiswaController extends Controller
 
         $user = Auth::user();
 
-        $pengajuan = Pengajuan::where('mahasiswa_id', $user->id)
+        $mahasiswa = $user->mahasiswa;
+
+        $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
             ->where('status', 'accepted')
             ->first();
 
