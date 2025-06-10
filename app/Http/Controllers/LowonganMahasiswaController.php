@@ -31,9 +31,9 @@ class LowonganMahasiswaController extends Controller
             });
         }
 
-        if ($category !== 'all') {
-            $query->where('perusahaan_id', $category);
-        }
+        if ($category === 'terbaru') {
+            $query->orderBy('created_at', 'desc');
+        } 
 
         $lowongan = $query->paginate(10)->appends([
             'search' => $search,

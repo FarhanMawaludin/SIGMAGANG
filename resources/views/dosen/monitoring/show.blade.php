@@ -29,12 +29,12 @@
         <table class="min-w-full text-sm text-left text-gray-700">
             <thead class="text-xs uppercase bg-gray-100 text-gray-700">
                 <tr>
-                  <th class="px-6 py-3">No</th>
+                    <th class="px-6 py-3">No</th>
                     <th class="px-6 py-3">Nama Mahasiswa</th>
                     <th class="px-6 py-3">Minggu</th>
                     <th class="px-6 py-3">Tanggal</th>
                     <th class="px-6 py-3">Feedback</th>
-                    <th class="px-6 py-3">Detail Harian</th>            
+                    <th class="px-6 py-3">Detail Harian</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,12 +48,18 @@
                             {{ $log->minggu }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ \Carbon\Carbon::parse($log->tanggal_awal)->translatedFormat('l, d F Y') }} - {{ \Carbon\Carbon::parse($log->tanggal_akhir)->translatedFormat('l, d F Y') }}
+                            {{ \Carbon\Carbon::parse($log->tanggal_awal)->translatedFormat('l, d F Y') }} -
+                            {{ \Carbon\Carbon::parse($log->tanggal_akhir)->translatedFormat('l, d F Y') }}
                         </td>
-                        <td class="px-6 py-4">{{$log->dosen_feedback ?? 'Belum ada feedback'}}</td>
+                        <td class="px-6 py-4">{{ $log->dosen_feedback ?? 'Belum ada feedback' }}</td>
                         <td class="px-6 py-4">
                             <a href="{{ route('dosen.monitoring.show_harian', $log->id) }}"
-                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
+                                class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 text-sm w-[100px] ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                                 Detail
                             </a>
                         </td>

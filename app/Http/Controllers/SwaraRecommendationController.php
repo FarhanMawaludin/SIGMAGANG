@@ -10,6 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class SwaraRecommendationController extends Controller
 {
+
     public function rekomendasi()
     {
         $activemenu = 'lowongan';
@@ -57,7 +58,11 @@ class SwaraRecommendationController extends Controller
             ];
         }
 
+        // Urutkan hasil berdasarkan skor descending
         usort($hasil, fn($a, $b) => $b['skor'] <=> $a['skor']);
+
+        // Ambil top 3 untuk tampilan peringkat khusus
+        $top3 = array_slice($hasil, 0, 3);
 
         // Pagination
         $currentPage = request()->get('page', 1);
@@ -78,8 +83,10 @@ class SwaraRecommendationController extends Controller
             'mahasiswa' => $mahasiswa,
             'hasil' => $hasilPaginated,
             'bobot' => $bobot,
+            'top3' => $top3,
         ]);
     }
+
 
     private function nilaiSkill($mahasiswa, $lowongan)
     {
@@ -97,7 +104,7 @@ class SwaraRecommendationController extends Controller
     private function nilaiIpk($ipkMahasiswa, $minIpkLowongan)
     {
         if (is_null($minIpkLowongan)) {
-            return 0; 
+            return 0;
         }
 
         return $ipkMahasiswa >= $minIpkLowongan ? 1 : 0;

@@ -30,6 +30,7 @@ class MonitoringDosenController extends Controller
         $pengajuanList = Pengajuan::with(['mahasiswa.user', 'lowongan.perusahaan', 'lowongan.jenisMagang'])
             ->where('dosen_id', $dosen->id)
             ->where('status', 'accepted')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('dosen.monitoring.index', compact('activemenu', 'pengajuanList'));

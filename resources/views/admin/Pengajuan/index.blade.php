@@ -81,8 +81,9 @@
                 @forelse ($pengajuan as $key => $item)
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $key + 1 }}</td>
-                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->mahasiswa->user->name ?? '-' }}</td>
-                        <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama ?? '-'}}</td>
+                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">
+                            {{ $item->mahasiswa->user->name ?? '-' }}</td>
+                        <td class="px-6 py-4">{{ $item->mahasiswa->prodi->nama ?? '-' }}</td>
                         <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
                         <td class="px-6 py-4">
                             @php
@@ -105,17 +106,31 @@
                         </td>
                         <td class="px-6 py-4">{{ $item->dosen->user->name ?? 'Belum dipilih' }}</td>
                         <td class="px-6 py-4 space-x-2">
-                            <!-- Detail -->
-                            <button
-                                class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
-                                onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Cek Pengajuan
-                            </button>
+                            @if ($item->has_sertifikat)
+                                <!-- Tombol Selesai -->
+                                <button
+                                    class="inline-flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition cursor-default"
+                                    onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Selesai
+                                </button>
+                            @else
+                                <!-- Tombol Cek Pengajuan -->
+                                <button
+                                    class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer"
+                                    onclick="window.location.href='{{ route('admin.pengajuan.edit', $item->id) }}'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Cek Pengajuan
+                                </button>
+                            @endif
                         </td>
                     </tr>
                 @empty

@@ -27,12 +27,12 @@ class FuzzyRecommedationController extends Controller
         }
 
         $bobot = [
-            'skills' => 0.25,
-            'ipk' => 0.2,
-            'lokasi' => 0.2,
-            'jenis_magang' => 0.15,
-            'tipe_magang' => 0.1,
-            'prodi' => 0.1,
+            'skills' => 0.27,
+            'ipk' => 0.21,
+            'lokasi' => 0.18,
+            'jenis_magang' => 0.14,
+            'tipe_magang' => 0.11,
+            'prodi' => 0.09,
         ];
 
         $lowongans = Lowongan::with('skills', 'prodi')->get();
@@ -59,6 +59,8 @@ class FuzzyRecommedationController extends Controller
 
         usort($hasil, fn($a, $b) => $b['skor'] <=> $a['skor']);
 
+        $top3 = array_slice($hasil, 0, 3);
+
         $currentPage = request()->get('page', 1);
         $perPage = 10;
         $offset = ($currentPage - 1) * $perPage;
@@ -77,27 +79,43 @@ class FuzzyRecommedationController extends Controller
             'mahasiswa' => $mahasiswa,
             'hasil' => $hasilPaginated,
             'bobot' => $bobot,
+            'top3' => $top3
         ]);
     }
 
     private function nilaiIpk($ipkMahasiswa, $ipkLowongan)
     {
-        if ($ipkLowongan === null) return 0;
-
-        if ($ipkMahasiswa < $ipkLowongan) return 0;
-
-        if (2.0 <= $ipkMahasiswa && $ipkMahasiswa <= 2.75) {
-            return 0.25;
-        } elseif (2.75 <= $ipkMahasiswa && $ipkMahasiswa <= 3.25) {
-            return 0.5;
-        } else if (3.25 <= $ipkMahasiswa && $ipkMahasiswa <= 4.0) {
-            return 1;
-        } else {
+        if ($ipkLowongan === null || $ipkMahasiswa < $ipkLowongan) {
             return 0;
         }
+
+        // Fuzzifikasi
+        $rendah = 0;
+        $sedang = 0;
+        $tinggi = 0;
+
+        if ($ipkMahasiswa <= 2.0) {
+            $rendah = 1;
+        } elseif ($ipkMahasiswa > 2.0 && $ipkMahasiswa < 2.75) {
+            $rendah = (2.75 - $ipkMahasiswa) / (2.75 - 2.0);
+            $sedang = ($ipkMahasiswa - 2.0) / (2.75 - 2.0);
+        } elseif ($ipkMahasiswa == 2.75) {
+            $sedang = 1;
+        } elseif ($ipkMahasiswa > 2.75 && $ipkMahasiswa < 3.25) {
+            $sedang = (3.25 - $ipkMahasiswa) / (3.25 - 2.75);
+            $tinggi = ($ipkMahasiswa - 2.75) / (3.25 - 2.75);
+        } elseif ($ipkMahasiswa >= 3.25 && $ipkMahasiswa <= 4.0) {
+            $tinggi = 1;
+        }
+
+        // Defuzzifikasi dengan bobot
+        $skor = ($rendah * 0.25) + ($sedang * 0.5) + ($tinggi * 1.0);
+
+        return round($skor, 3); // dibulatkan ke 3 desimal
     }
 
-    
+
+
     private function nilaiSkill($mahasiswa, $lowongan)
     {
         $mahasiswaSkillIds = $mahasiswa->skills->pluck('id')->toArray();

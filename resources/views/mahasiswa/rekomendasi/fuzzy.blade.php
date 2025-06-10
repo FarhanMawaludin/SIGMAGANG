@@ -5,6 +5,72 @@
         <h1 class="text-2xl font-bold text-gray-800">Hasil Rekomendasi Swara</h1>
     </div>
 
+    <div class="bg-white rounded-lg border border-gray-200 p-12 min-w-full mb-6">
+        <div class="flex flex-col sm:flex-row items-center sm:items-end justify-center gap-10 sm:gap-20 text-center mt-6">
+            @foreach ($top3 as $i => $data)
+                @php
+                    // Ukuran avatar dan margin atas
+                    $uk_avatar = $i === 0 ? 'w-32 h-32' : 'w-24 h-24';
+                    $mt_card = $i === 0 ? 'mt-0' : 'mt-12';
+    
+                    // Warna border avatar (emas, silver, perunggu)
+                    $borderColors = ['border-yellow-400', 'border-gray-400', 'border-yellow-800'];
+                    $border = $borderColors[$i] ?? 'border-gray-300';
+    
+                    // Gambar mahkota crown sesuai posisi
+                    $crowns = ['gold-crown.png', 'silver-crown.png', 'bronze-crown.png'];
+                    $crown = $crowns[$i] ?? null;
+    
+                    // Lebar mahkota crown
+                    $crown_w = $i === 0 ? 'w-12' : 'w-10';
+    
+                    // Urutan tampilan di layar besar: juara 1 di tengah
+                    $orderClasses = ['sm:order-1', 'sm:order-0', 'sm:order-2'];
+                    $orderClass = $orderClasses[$i] ?? '';
+    
+                    // Style untuk juara 1 agar lebih tinggi di desktop
+                    $style = $i === 0 ? 'transform: translateY(-30px);' : '';
+                @endphp
+    
+                <div class="flex flex-col items-center gap-2 {{ $mt_card }} {{ $orderClass }}"
+                    style="{{ $style }}">
+                    <div class="relative">
+                        {{-- Crown di atas avatar --}}
+                        @if ($crown)
+                            <div class="absolute -top-8 left-1/2 -translate-x-1/2 z-10">
+                                <img src="{{ asset('images/' . $crown) }}" alt="Crown {{ $i + 1 }}"
+                                    class="{{ $crown_w }}" />
+                            </div>
+                        @endif
+    
+                        {{-- Avatar dibungkus dalam lingkaran fleksibel agar rapi dan tidak rusak --}}
+                        <div
+                            class="{{ $uk_avatar }} rounded-full border-4 {{ $border }} overflow-hidden flex justify-center items-center bg-white">
+                            <img src="{{ asset('storage/' . $data['lowongan']->perusahaan->foto) }}" alt="Avatar"
+                                class="w-full h-full object-contain" />
+                        </div>
+                    </div>
+    
+                    <div class="font-bold text-lg">{{ $data['lowongan']->nama }}</div>
+                    <div class="text-gray-500">{{ $data['lowongan']->perusahaan->nama ?? '-' }}</div>
+    
+                    <div class="bg-gray-200 rounded-full flex items-center px-4 py-2 mt-2">
+                        <img src="https://img.icons8.com/color/48/000000/trophy.png" alt="Trophy" class="w-6 h-6 mr-2" />
+                        <span class="font-bold text-blue-800 text-lg">{{ number_format($data['skor'], 3) }}</span>
+                        <span class="ml-2 text-gray-600">Poin</span>
+                    </div>
+    
+                    <a href="{{ route('mahasiswa.lowongan.show', $data['lowongan']->id) }}">
+                        <button type="button"
+                            class="cursor-pointer text-white bg-blue-600 hover:bg-blue-800 font-semibold rounded-full text-sm px-5 py-2 text-center transition-all duration-300 ease-in-out">
+                            Lihat
+                        </button>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
 
     <h2 class="font-semibold text-gray-800 mb-2">Normalisasi</h2>
     <div class="overflow-x-auto relative rounded-lg border border-gray-200">
@@ -123,6 +189,4 @@
             {{ $hasil->links() }}
         </div>
     </div>
-
-    
 @endsection

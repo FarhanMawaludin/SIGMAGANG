@@ -1,7 +1,7 @@
 @extends('layouts.dosen-app')
 
 @section('content')
- <div class=" mt-24 text-center">
+    <div class=" mt-24 text-center">
         <!-- Header -->
         <h1 class="text-2xl sm:text-3xl font-semibold mb-2">
             Selamat Datang,
@@ -13,106 +13,82 @@
 
         <!-- Button Group -->
         <div class="flex justify-center gap-4 mb-18">
-            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">
+            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5" onclick="location.href='{{ route('dosen.profil.index') }}'">
                 Lengkapi Profile
             </button>
-            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">
-                Lihat Rekomendasi
-            </button>
         </div>
-
-        <!-- Table -->
-        {{-- <div class="overflow-x-auto relative rounded-lg border border-gray-200">
-            <table class="min-w-full text-sm text-left text-gray-700">
-                <thead class="text-xs uppercase bg-gray-100 text-gray-700">
-                    <tr>
-                        <th class="px-6 py-3">No</th>
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Lowongan</th>
-                        <th class="px-6 py-3">Status</th>
-                        <th class="px-6 py-3 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($pengajuan as $key => $item)
-                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                            <td class="px-6 py-4">{{ $pengajuan->firstItem() + $key }}</td>
-                            <td class="px-6 py-4">
-                                <div class="font-medium md:text-base break-words truncate md:whitespace-normal">
-                                    {{ $item->mahasiswa->user->name ?? '-' }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">{{ $item->lowongan->nama ?? '-' }}</td>
-                            <td class="px-6 py-4">
-                                <span class="inline-block px-2 py-1 text-xs font-semibold rounded 
-                                    {{ $item->status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                    ($item->status === 'accepted' ? 'bg-green-100 text-green-800' :
-                                    ($item->status === 'rejected' ? 'bg-red-100 text-red-800' :
-                                    ($item->status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                                    'bg-gray-100 text-gray-800'))) }}">
-                                    {{ ucfirst($item->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="{{ route('mahasiswa.pengajuan.show', $item->id) }}"
-                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
-                                    Lihat
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada data pengajuan.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div> --}}
 
         <!-- Data Log Aktivitas Mahasiswa -->
         <div class="flex justify-between items-center mt-10 mb-3">
             <h2 class="text-lg font-semibold">Data Log Aktivitas Mahasiswa</h2>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg">
+            <button class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5" onclick="location.href='{{ route('dosen.monitoring.index') }}'">
                 Lihat Semua Log
             </button>
         </div>
-        <div class="overflow-x-auto relative rounded-lg border border-gray-200">
-            <table class="min-w-full text-sm text-left text-gray-700">
-                <thead class="text-xs uppercase bg-gray-100 text-gray-700">
-                    <tr>
-                        <th class="px-6 py-3">No</th>
-                        <th class="px-6 py-3">Nama</th>
-                        <th class="px-6 py-3">Tanggal/Minggu</th>
-                        <th class="px-6 py-3">Ringkasan Aktivitas</th>
-                        <th class="px-6 py-3 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($logMingguan as $index => $log)
-                        <tr class="bg-white border-b border-gray-200 hover:bg-gray-50">
-                            <td class="px-6 py-4">{{ $logAktivitas->firstItem() + $index }}</td>
-                            <td class="px-6 py-4">{{ $log->mahasiswa->user->name ?? '-' }}</td>
-                            <td class="px-6 py-4">{{ $log->minggu ?? '-' }}</td>
-                            <td class="px-6 py-4">{{ $log->ringkasan, 50, '...' }}</td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="{{ route('mahasiswa.log.show', $log->id) }}"
-                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
-                                    Lihat Log
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada data log aktivitas.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-
-            <!-- Pagination (optional) -->
-            <div class="p-4">
-                {{-- {{ $logAktivitas->links('pagination::tailwind') }} --}}
-            </div>
-        </div>
     </div>
-    @endsection
+
+    <div class="overflow-x-auto relative rounded-lg border border-gray-200">
+        <table class="min-w-full text-sm text-left text-gray-700">
+            <thead class="text-xs uppercase bg-gray-100 text-gray-700">
+                <tr>
+                    <th class="px-6 py-3">No</th>
+                    <th class="px-6 py-3">Nama Mahasiswa</th>
+                    <th class="px-6 py-3">Profesi Magang</th>
+                    <th class="px-6 py-3">Perusahaan</th>
+                    <th class="px-6 py-3">Semester</th>
+                    <th class="px-6 py-3">Jenis Magang</th>
+                    <th class="px-6 py-3">Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($pengajuan as $log)
+                    <tr class="bg-white border-b border-gray-200">
+                        <td class="px-6 py-4">{{ $pengajuan->firstItem() + $loop->index }}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-[16px] text-gray-900">{{ $log->mahasiswa->user->name ?? '-' }}</div>
+                            <div class="text-[14px] text-gray-500">{{ $log->mahasiswa->nim ?? '-' }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $log->lowongan->nama }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $log->lowongan->perusahaan->nama }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $log->mahasiswa->semester }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $log->lowongan->jenisMagang->jenis_magang }}
+                        </td>
+                        <td class="px-6 py-4">
+
+
+                            <a href="{{ route('dosen.monitoring.show', $log->id) }}"
+                                class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-700 text-sm w-[120px] ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Lihat Log
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                            Belum ada log harian dari mahasiswa bimbingan Anda.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        {{-- @if ($pengajuanList->hasPages())
+                <div class="p-4">
+                    {{ $pengajuanList->links('pagination::tailwind') }}
+                </div>
+            @endif --}}
+    </div>
+    </div>
+@endsection
