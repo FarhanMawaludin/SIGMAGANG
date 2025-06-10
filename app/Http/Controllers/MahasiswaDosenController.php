@@ -38,8 +38,12 @@ class MahasiswaDosenController extends Controller
             ->where('dosen_id', $dosen->id)
             ->whereHas('lowongan');
 
-        if ($category !== 'all') {
-            $query->where('status', $category);
+        if ($category !== 'all' && $category !== 'Terbaru' && $category !== 'Terlama') {
+            $query->where('status', 'accepted');
+        } elseif ($category === 'Terbaru') {
+            $query->where('status', 'accepted')->orderBy('created_at', 'desc');
+        } elseif ($category === 'Terlama') {
+            $query->where('status', 'accepted')->orderBy('created_at', 'asc');
         }
 
         if ($search) {
