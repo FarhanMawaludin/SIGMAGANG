@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" href="{{ asset('logo/Logo-Sigmagang.png') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="bg-white">
@@ -94,6 +95,17 @@
         </div>
 
     </div>
+    <div>{{ session('error') }}</div>
+    @if(session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Login Gagal',
+        text: '{{ session('error') }}',
+        confirmButtonColor: '#3085d6'
+    });
+</script>
+@endif
 </body>
 
 </html>

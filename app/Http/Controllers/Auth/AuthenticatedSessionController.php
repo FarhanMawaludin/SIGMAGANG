@@ -38,6 +38,7 @@ class AuthenticatedSessionController extends Controller
                 'user' => $user,
             ]);
         }
+
         session()->flash('auth_token', $token);
         if ($user->role == 'admin') {
             return redirect()->intended(route('dashboard'))->with('token', $token)->with('success', 'Login Berhasil');
