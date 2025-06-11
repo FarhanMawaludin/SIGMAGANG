@@ -21,7 +21,8 @@ class MonitoringMahasiswaController extends Controller
         $mahasiswa = $user->mahasiswa;
 
         if (!$mahasiswa) {
-            return view('mahasiswa.monitoring.index', compact('activemenu'))
+            $pengajuan = null;
+            return view('mahasiswa.monitoring.index', compact('activemenu','pengajuan'))
                 ->with('error', 'Data mahasiswa tidak ditemukan.');
         }
 
@@ -32,7 +33,7 @@ class MonitoringMahasiswaController extends Controller
 
         if (!$pengajuan) {
             $logMingguan = collect();
-            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan', 'pengajuan'))
+            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan'))
                 ->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
         }
 
