@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use App\Models\Lowongan;
 
 
 class PengajuanMahasiswaController extends Controller
@@ -45,10 +46,15 @@ class PengajuanMahasiswaController extends Controller
             'lowongan_id' => 'required|exists:lowongan,id',
         ]);
 
+        $lowongan = Lowongan::findOrFail($request->lowongan_id);
         $mahasiswa = auth()->user()->mahasiswa;
 
         if (!$mahasiswa) {
             return back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
+        if ($mahasiswa->ipk < $lowongan->ipk) {
+            return redirect()->route('mahasiswa.lowongan.index')->with('error', 'IPK tidak sesuai');
         }
 
         Pengajuan::create([
@@ -58,7 +64,8 @@ class PengajuanMahasiswaController extends Controller
 
         return redirect()->route('mahasiswa.pengajuan.index')->with('success', 'Pengajuan berhasil dibuat');
     }
-    
+
+
     public function show($id)
     {
         $pengajuan = Pengajuan::with(['mahasiswa.user', 'lowongan'])
