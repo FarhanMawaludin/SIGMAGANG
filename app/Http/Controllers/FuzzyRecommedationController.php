@@ -38,6 +38,7 @@ class FuzzyRecommedationController extends Controller
         $lowongans = Lowongan::with('skills', 'prodi')->get();
         $hasil = [];
 
+
         foreach ($lowongans as $lowongan) {
             $nilai = [
                 'skills' => $this->nilaiSkill($mahasiswa, $lowongan),
@@ -89,7 +90,6 @@ class FuzzyRecommedationController extends Controller
             return 0;
         }
 
-        // Fuzzifikasi
         $rendah = 0;
         $sedang = 0;
         $tinggi = 0;
@@ -108,11 +108,20 @@ class FuzzyRecommedationController extends Controller
             $tinggi = 1;
         }
 
-        // Defuzzifikasi dengan bobot
-        $skor = ($rendah * 0.25) + ($sedang * 0.5) + ($tinggi * 1.0);
+        // Nilai rata-rata (a+b+c)/3 dari masing-masing segitiga
+        $nilaiRendah = (0 + 2.0 + 2.75) / 3;     // 1.583
+        $nilaiSedang = (2.0 + 2.75 + 3.25) / 3;  // 2.667
+        $nilaiTinggi = (2.75 + 3.25 + 4.0) / 3;  // 3.333
 
-        return round($skor, 3); // dibulatkan ke 3 desimal
+        // Defuzzifikasi: total fuzzy value dibagi total derajat
+        $numerator = ($rendah * $nilaiRendah) + ($sedang * $nilaiSedang) + ($tinggi * $nilaiTinggi);
+        $denominator = $rendah + $sedang + $tinggi;
+
+        $skor = $denominator > 0 ? $numerator / $denominator : 0;
+
+        return round($skor, 3);
     }
+
 
 
 
@@ -125,15 +134,33 @@ class FuzzyRecommedationController extends Controller
             return 0;
         }
 
-        $cocok = array_intersect($mahasiswaSkillIds, $lowonganSkillIds);
-        if (count($cocok) == 1) {
-            return 0.25;
-        } elseif (count($cocok) == 2) {
-            return 0.5;
-        } elseif (count($cocok) >= 3) {
-            return 1;
-        } else {
-            return 0;
+        $jumlahCocok = count(array_intersect($mahasiswaSkillIds, $lowonganSkillIds));
+
+        // Inisialisasi derajat keanggotaan
+        $rendah = 0;
+        $sedang = 0;
+        $tinggi = 0;
+
+        // Fuzzifikasi segitiga berbasis nilai integer
+        if ($jumlahCocok == 0 || $jumlahCocok == 1) {
+            $rendah = 1;
+        } elseif ($jumlahCocok == 2) {
+            $sedang = 1;
+        } elseif ($jumlahCocok >= 3) {
+            $tinggi = 1;
         }
+
+        // Nilai centroid (a + b + c) / 3 untuk tiap segitiga
+        $nilaiRendah = 1.0;   // (0 + 1 + 2) / 3
+        $nilaiSedang = 2.0;   // (1 + 2 + 3) / 3
+        $nilaiTinggi = 3.33;  // (2 + 3 + 5) / 3
+
+        // Defuzzifikasi
+        $numerator = ($rendah * $nilaiRendah) + ($sedang * $nilaiSedang) + ($tinggi * $nilaiTinggi);
+        $denominator = $rendah + $sedang + $tinggi;
+
+        $skor = $denominator > 0 ? $numerator / $denominator : 0;
+
+        return round($skor, 3);
     }
 }
