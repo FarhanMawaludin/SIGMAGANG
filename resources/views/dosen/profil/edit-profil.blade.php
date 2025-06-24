@@ -108,9 +108,9 @@
                     <input type="file" id="foto" name="foto" accept="image/*"
                         class="mt-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
                     <p class="mt-1 text-sm text-gray-500">JPG, PNG, atau GIF. Max 800x400px.</p>
-                    @error('foto')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                     @if ($errors->has('foto'))
+                    <p class="text-sm text-red-500 mt-1">{{ $errors->first('foto') }}</p>
+                     @endif
                 </div>
             </div>
 
