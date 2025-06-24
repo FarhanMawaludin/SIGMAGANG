@@ -17,29 +17,30 @@ class MonitoringMahasiswaController extends Controller
     {
         $activemenu = 'monitoring';
         $user = Auth::user();
-
+    
         $mahasiswa = $user->mahasiswa;
-
+    
         if (!$mahasiswa) {
-            return view('mahasiswa.monitoring.index', compact('activemenu'))
+            $pengajuan= null;
+            return view('mahasiswa.monitoring.index', compact('activemenu', 'pengajuan'))
                 ->with('error', 'Data mahasiswa tidak ditemukan.');
         }
-
+    
         $pengajuan = Pengajuan::with('mahasiswa.user')
             ->where('mahasiswa_id', $mahasiswa->id)
             ->whereIn('status', ['accepted', 'completed'])
             ->first();
-
+    
         if (!$pengajuan) {
             $logMingguan = collect();
-            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan', 'pengajuan'))
+            return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan','pengajuan'))
                 ->with('error', 'Anda belum memiliki pengajuan yang disetujui.');
         }
-
+    
         $logMingguan = LogMingguan::where('pengajuan_id', $pengajuan->id)
             ->orderByDesc('tanggal_awal')
             ->paginate(10);
-
+    
         return view('mahasiswa.monitoring.index', compact('activemenu', 'logMingguan', 'pengajuan'));
     }
 

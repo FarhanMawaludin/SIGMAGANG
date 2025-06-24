@@ -261,8 +261,8 @@
                     @foreach ($review as $item)
                         <!-- Ulasan -->
                         <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                            @if (Auth::user()->foto)
-                                <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . Auth::user()->foto) }}"
+                            @if ($item->mahasiswa->user->foto)
+                                <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $item->mahasiswa->user->foto) }}"
                                     alt="user photo">
                             @else
                                 <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
@@ -276,14 +276,6 @@
                         </div>
                     @endforeach
                 @endif
-
-                <!-- Tombol -->
-                <div class="flex justify-center mt-6">
-                    <a href="#"
-                        class="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-                        Lihat Semua
-                    </a>
-                </div>
             </div>
         </div>
     </div>

@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 
 
 class StatistikController extends Controller
@@ -153,7 +154,7 @@ class StatistikController extends Controller
             'sangat_puas' => $sangat_puas,
             'tidak_puas' => $tidak_puas,
             'skillCounts' => $skillCounts,
-            'otherSkillsDetail' => $otherSkillsDetail, // dikirim ke view
+            'otherSkillsDetail' => $otherSkillsDetail, 
         ]);
     }
 
@@ -168,7 +169,7 @@ class StatistikController extends Controller
             $query->whereYear('created_at', $year);
         }
 
-        $pengajuan = $query->orderBy('created_at')->get();
+        $pengajuan = $query->with(['mahasiswa.user', 'lowongan', 'dosen'])->orderBy('created_at')->get();
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->removeSheetByIndex(0); // Hapus sheet default
@@ -189,7 +190,7 @@ class StatistikController extends Controller
         ];
 
         if ($year) {
-            // ✅ CASE: Filter berdasarkan tahun → sheet per bulan
+            // Filter berdasarkan tahun → sheet per bulan
             $grouped = $pengajuan->groupBy(function ($item) {
                 return $item->created_at->format('m'); // Group by bulan
             });
@@ -200,7 +201,7 @@ class StatistikController extends Controller
                 $this->isiSheet($sheet, $items, true); // parameter true = tampilkan kolom Tahun
             }
         } else {
-            // ✅ CASE: Tidak ada filter tahun → sheet per tahun, isi per bulan
+            // Tidak ada filter tahun → sheet per tahun, isi per bulan
             $groupedByYear = $pengajuan->groupBy(function ($item) {
                 return $item->created_at->format('Y');
             });
@@ -209,23 +210,18 @@ class StatistikController extends Controller
                 $sheet = $spreadsheet->createSheet();
                 $sheet->setTitle("Tahun $tahun");
 
-                // Buat header
+                // Header
                 $sheet->setCellValue('A1', 'No');
                 $sheet->setCellValue('B1', 'Bulan');
-                $sheet->setCellValue('C1', 'Status');
-                $sheet->setCellValue('D1', 'Feedback Mahasiswa');
-                $sheet->setCellValue('E1', 'Mahasiswa ID');
-                $sheet->setCellValue('F1', 'Lowongan ID');
-                $sheet->setCellValue('G1', 'Skor SPK');
-                $sheet->setCellValue('H1', 'Catatan Validasi');
-                $sheet->setCellValue('I1', 'Dosen ID');
-                $sheet->setCellValue('J1', 'Created At');
-                $sheet->setCellValue('K1', 'Updated At');
-                $sheet->setCellValue('L1', 'Kepuasan');
+                $sheet->setCellValue('C1', 'NIM');
+                $sheet->setCellValue('D1', 'Mahasiswa');
+                $sheet->setCellValue('E1', 'Lowongan');
+                $sheet->setCellValue('F1', 'Perusahaan');
+                $sheet->setCellValue('G1', 'Bidang Perusahaan');
+                $sheet->setCellValue('H1', 'Jenis Magang');
+                $sheet->setCellValue('I1', 'Dosen Pembimbing');
+                $sheet->getStyle('A1:G1')->getFont()->setBold(true);
 
-                $sheet->getStyle('A1:L1')->getFont()->setBold(true);
-
-                // Kelompokkan data berdasarkan bulan
                 $groupedByMonth = $itemsByYear->groupBy(function ($item) {
                     return $item->created_at->format('m');
                 });
@@ -237,21 +233,32 @@ class StatistikController extends Controller
                     foreach ($items as $item) {
                         $sheet->setCellValue("A$row", $no++);
                         $sheet->setCellValue("B$row", $bulanMap[intval($bulan)] ?? $bulan);
-                        $sheet->setCellValue("C$row", $item->status);
-                        $sheet->setCellValue("D$row", $item->mahasiswa_feedback);
-                        $sheet->setCellValue("E$row", $item->mahasiswa_id);
-                        $sheet->setCellValue("F$row", $item->lowongan_id);
-                        $sheet->setCellValue("G$row", $item->skor_spk);
-                        $sheet->setCellValue("H$row", $item->catatan_validasi);
-                        $sheet->setCellValue("I$row", $item->dosen_id);
-                        $sheet->setCellValue("J$row", $item->created_at);
-                        $sheet->setCellValue("K$row", $item->updated_at);
-                        $sheet->setCellValue("L$row", $item->kepuasan);
+                        $sheet->setCellValue("C$row", $item->mahasiswa->nim ?? '-');
+                        $sheet->setCellValue("D$row", $item->mahasiswa->user->name ?? '-');
+                        $sheet->setCellValue("E$row", $item->lowongan->nama ?? '-');
+                        $sheet->setCellValue("F$row", $item->lowongan->perusahaan->nama ?? '-');
+                        $sheet->setCellValue("G$row", $item->lowongan->perusahaan->bidangPerusahaan->nama_bidang ?? '-');
+                        $sheet->setCellValue("H$row", $item->lowongan->jenisMagang->jenis_magang ?? '-');
+                        $sheet->setCellValue("I$row", $item->dosen->user->name ?? '-');
                         $row++;
                     }
                 }
 
-                foreach (range('A', 'L') as $col) {
+                // Jadikan area A1:G$row menjadi tabel
+                $lastDataRow = $row - 1;
+                $tableRange = "A1:I$lastDataRow";
+                $table = new Table($tableRange);
+
+                // Style opsional
+                $tableStyle = new TableStyle();
+                $tableStyle->setShowRowStripes(true);
+                $table->setStyle($tableStyle);
+
+                // Tambahkan tabel ke sheet
+                $sheet->addTable($table);
+
+                // Set auto-size kolom
+                foreach (range('A', 'I') as $col) {
                     $sheet->getColumnDimension($col)->setAutoSize(true);
                 }
             }
@@ -274,55 +281,51 @@ class StatistikController extends Controller
 
         // Header
         $col = 1;
-        $sheet->setCellValue(Coordinate::stringFromColumnIndex($col) . '1', 'No');
-        $col++;
+        $sheet->setCellValue(Coordinate::stringFromColumnIndex($col++) . '1', 'No');
 
         if ($showYear) {
-            $sheet->setCellValue(Coordinate::stringFromColumnIndex($col) . '1', 'Tahun');
-            $col++;
+            $sheet->setCellValue(Coordinate::stringFromColumnIndex($col++) . '1', 'Tahun');
         }
 
         $headers = [
-            'Status',
-            'Feedback Mahasiswa',
-            'Mahasiswa ID',
-            'Lowongan ID',
-            'Skor SPK',
-            'Catatan Validasi',
-            'Dosen ID',
-            'Created At',
-            'Updated At',
-            'Kepuasan'
+            'NIM',
+            'Mahasiswa',
+            'Prodi',
+            'Lowongan',
+            'Perusahaan',
+            'Bidang Perusahaan',
+            'Jenis Magang',
+            'Dosen Pembimbing',
         ];
 
         foreach ($headers as $header) {
-            $sheet->setCellValue(Coordinate::stringFromColumnIndex($col) . '1', $header);
-            $col++;
+            $sheet->setCellValue(Coordinate::stringFromColumnIndex($col++) . '1', $header);
         }
 
-        $lastCol = Coordinate::stringFromColumnIndex(count($headers) + 1 + $colOffset);
+        $totalColumns = count($headers) + 1 + $colOffset;
+        $lastCol = Coordinate::stringFromColumnIndex($totalColumns);
         $sheet->getStyle("A1:{$lastCol}1")->getFont()->setBold(true);
 
+        // Data
         $row = 2;
         $no = 1;
         foreach ($items as $item) {
             $col = 1;
             $sheet->setCellValue(Coordinate::stringFromColumnIndex($col++) . $row, $no++);
+
             if ($showYear) {
                 $sheet->setCellValue(Coordinate::stringFromColumnIndex($col++) . $row, $item->created_at->format('Y'));
             }
 
             $data = [
-                $item->status,
-                $item->mahasiswa_feedback,
-                $item->mahasiswa_id,
-                $item->lowongan_id,
-                $item->skor_spk,
-                $item->catatan_validasi,
-                $item->dosen_id,
-                $item->created_at,
-                $item->updated_at,
-                $item->kepuasan
+                $item->mahasiswa->nim ?? '-',
+                $item->mahasiswa->user->name ?? '-',
+                $item->mahasiswa->prodi->nama ?? '-',
+                $item->lowongan->nama ?? '-',
+                $item->lowongan->perusahaan->nama ?? '-',
+                $item->lowongan->perusahaan->bidangPerusahaan->nama_bidang ?? '-',
+                $item->lowongan->jenismagang->jenis_magang ?? '-',
+                $item->dosen->user->name ?? '-',
             ];
 
             foreach ($data as $val) {
@@ -332,9 +335,22 @@ class StatistikController extends Controller
             $row++;
         }
 
-        for ($i = 1; $i <= (count($headers) + 1 + $colOffset); $i++) {
+        // Autosize kolom
+        for ($i = 1; $i <= $totalColumns; $i++) {
             $colLetter = Coordinate::stringFromColumnIndex($i);
             $sheet->getColumnDimension($colLetter)->setAutoSize(true);
         }
+
+        $lastDataRow = $row - 1;
+        $tableRange = 'A1:' . Coordinate::stringFromColumnIndex($totalColumns) . $lastDataRow;
+
+        $table = new Table($tableRange);
+        $tableStyle = new TableStyle();
+        $tableStyle->setShowRowStripes(true);
+        $table->setStyle($tableStyle);
+
+        $sheet->addTable($table);
     }
+
+
 }

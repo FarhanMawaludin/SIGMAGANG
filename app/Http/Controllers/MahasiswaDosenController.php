@@ -36,6 +36,7 @@ class MahasiswaDosenController extends Controller
         // Jika dosen ada, jalankan query seperti biasa
         $query = Pengajuan::with(['mahasiswa.user', 'lowongan'])
             ->where('dosen_id', $dosen->id)
+            ->orderBy('updated_at', 'desc')
             ->whereHas('lowongan');
 
         if ($category !== 'all' && $category !== 'Terbaru' && $category !== 'Terlama') {

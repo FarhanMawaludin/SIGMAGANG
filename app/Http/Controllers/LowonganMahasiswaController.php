@@ -35,10 +35,7 @@ class LowonganMahasiswaController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $lowongan = $query->paginate(10)->appends([
-            'search' => $search,
-            'category' => $category,
-        ]);
+        $lowongan = $query->get();
 
         $perusahaan = Perusahaan::all();
         $jenismagang = Jenismagang::all();
@@ -86,7 +83,8 @@ class LowonganMahasiswaController extends Controller
             ->withCount('pengajuan')
             ->findOrFail($id);
 
-        $review = Pengajuan::where('lowongan_id', $id)
+        $review = Pengajuan::
+            with('mahasiswa.user')->where('lowongan_id', $id)
             ->where('status', 'completed')
             ->orderBy('created_at', 'desc')
             ->take(10)
