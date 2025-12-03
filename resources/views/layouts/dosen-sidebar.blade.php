@@ -17,7 +17,7 @@
                 </a>
             </li>
 
-            <!-- Manajemen Data -->
+            <!-- Manajemen Akun -->
             <li class="text-xs px-2 text-gray-800 uppercase">Manajemen Akun</li>
 
             <li class="mb-4">
@@ -32,19 +32,39 @@
                 </a>
             </li>
 
+            <!-- Manajemen Magang -->
+            <li class="text-xs px-2 text-gray-800 uppercase">Manajemen Magang</li>
+
             <li class="mb-4">
                 <a href="{{ url('/mahasiswa/dosen') }}"
                     class="flex items-center p-2 rounded-lg group {{ $activemenu == 'mahasiswa' ? 'text-white bg-blue-600' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
                     <svg class="w-5 h-5 {{ $activemenu == 'mahasiswa' ? 'text-white' : 'text-gray-400 dark:text-white' }}"
-                        fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                            d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                     </svg>
-                    <span class="ml-3 {{ $activemenu == 'mahasiswa' ? 'text-white' : 'text-gray-400' }}">Mahasiswa Bimbingan</span>
+                    <span class="ml-3 {{ $activemenu == 'mahasiswa' ? 'text-white' : 'text-gray-400' }}">Mahasiswa
+                        Bimbingan</span>
                 </a>
             </li>
 
-            <!-- Logout -->
+            <li>
+                <a href="{{ url('/monitoring/dosen') }}"
+                    class="flex items-center p-2 rounded-lg group {{ $activemenu == 'monitoring' ? 'text-white bg-blue-600' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
+                    <svg class="w-5 h-5 {{ $activemenu == 'monitoring' ? 'text-white' : 'text-gray-400 dark:text-white' }}"
+                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
+                    </svg>
+                    <span
+                        class="ml-3 {{ $activemenu == 'monitoring' ? 'text-white' : 'text-gray-400' }}">Monitoring</span>
+                </a>
+
+
+
+                <!-- Logout -->
             <li class="mt-4">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

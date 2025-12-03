@@ -19,7 +19,10 @@ class LowonganMahasiswaController extends Controller
         $search = $request->input('search');
         $category = $request->input('category', 'all');
 
-        $query = Lowongan::with(['perusahaan', 'jenismagang', 'prodi'])->withCount('pengajuan');
+        $query = Lowongan::with(['perusahaan', 'jenismagang', 'prodi'])
+            ->withCount('pengajuan')
+            ->where('jumlah_magang', '>', 0)
+            ->where('batas_pendaftaran', '>=', now());
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -28,37 +31,73 @@ class LowonganMahasiswaController extends Controller
             });
         }
 
-        if ($category !== 'all') {
-            $query->where('perusahaan_id', $category);
+        if ($category === 'terbaru') {
+            $query->orderBy('created_at', 'desc');
         }
 
-        $lowongan = $query->paginate(10)->appends([
-            'search' => $search,
-            'category' => $category
-        ]);
+        $lowongan = $query->get();
 
         $perusahaan = Perusahaan::all();
         $jenismagang = Jenismagang::all();
+        $prodi = Prodi::all();
 
         $mahasiswa = auth()->user()->mahasiswa;
         $pengajuan = null;
+        $profilLengkap = true;
+
         if ($mahasiswa) {
+            $profilLengkap = $mahasiswa->isCompleteProfile();
+
             $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
-                ->where('status', '!=', 'rejected')
+                ->whereNotIn('status', ['rejected', 'completed'])
                 ->latest()
                 ->first();
         }
-        $prodi = Prodi::all();
-        return view('mahasiswa.lowongan.index', compact('activemenu', 'lowongan', 'jenismagang', 'prodi', 'search', 'category', 'perusahaan', 'pengajuan'));
+
+        return view('mahasiswa.lowongan.index', compact(
+            'activemenu',
+            'lowongan',
+            'jenismagang',
+            'prodi',
+            'search',
+            'category',
+            'perusahaan',
+            'pengajuan',
+            'profilLengkap'
+        ));
     }
+
 
     public function show($id)
     {
         $activemenu = 'lowongan';
-        $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skill'])->withCount('pengajuan')->findOrFail($id);
+        $user = auth()->user();
+        $mahasiswa = $user->mahasiswa;
+
+        // Cek apakah mahasiswa tersedia
+        $pengajuan = $mahasiswa
+            ? Pengajuan::where('mahasiswa_id', $mahasiswa->id)->first()
+            : null;
+
+        $lowongan = Lowongan::with(['perusahaan', 'jenismagang', 'skills'])
+            ->withCount('pengajuan')
+            ->findOrFail($id);
+
+        $review = Pengajuan::
+            with('mahasiswa.user')->where('lowongan_id', $id)
+            ->where('status', 'completed')
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get();
+
+        $profilLengkap = $mahasiswa?->isCompleteProfile() ?? false;
+
         return view('mahasiswa.lowongan.show', [
             'activemenu' => $activemenu,
             'lowongan' => $lowongan,
+            'pengajuan' => $pengajuan,
+            'review' => $review,
+            'profilLengkap' => $profilLengkap,
         ]);
     }
 }

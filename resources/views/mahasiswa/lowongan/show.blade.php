@@ -1,9 +1,9 @@
 @extends('layouts.mahasiswa-app')
 
 @section('content')
-    <div class=" bg-white p-6 px-8 rounded-lg border border-gray-200 mt-4">
+    <div class="bg-white p-6 px-8 rounded-lg border border-gray-200 mt-4">
         <!-- Header -->
-        <div class="flex justify-between  items-center mb-8">
+        <div class="flex justify-between items-center mb-8">
             <div class="flex flex-col items-start gap-1">
                 <!-- Logo di atas -->
                 <img src="{{ asset('storage/' . $lowongan->perusahaan->foto) }}" alt="Logo {{ $lowongan->perusahaan->nama }}"
@@ -14,7 +14,6 @@
                     <div>
                         <h2 class="text-[26px] font-bold">{{ $lowongan->nama }}</h2>
                         <p class="text-[18px] text-gray-500 font-regular mt-1">{{ $lowongan->perusahaan->nama }}</p>
-
                         <div class="flex items-center text-sm text-gray-500 mt-4 gap-4">
                             <span class="flex items-center font-medium gap-1">
                                 <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" stroke-width="2"
@@ -42,20 +41,35 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Button -->
             <div class="text-right flex flex-col items-center">
-                <form action="{{route('mahasiswa.pengajuan.store')}}" method="POST">
-                    @csrf
-                    {{-- <input type="hidden" name="mahasiswa_id" value="{{ Auth::user()->id }}"> --}}
+                @if ($pengajuan && $pengajuan->status != 'rejected')
                     <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
                     <button type="submit"
-                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">Daftar Sekarang</button>
-                </form>
-                <p class="text-sm text-gray-500 mt-2">{{ $lowongan->jumlah_magang }} Posisi •
-                    {{ $lowongan->pengajuan_count }} Pelamar</p>
+                        class="bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition cursor-not-allowed disabled:">Daftar
+                        Sekarang</button>
+                    @if ($pengajuan->status == 'accepted' || $pengajuan->status == 'completed')
+                        <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
+                                class="font-medium text-green-600">{{ $pengajuan->status }}</span></p>
+                    @elseif ($pengajuan->status == 'pending')
+                        <p class="text-sm text-gray-500 mt-2">Status Pengajuan: <span
+                                class="font-medium text-yellow-600">{{ $pengajuan->status }}</span></p>
+                    @endif
+                @else
+                    <form action="{{ route('mahasiswa.pengajuan.store') }}" method="POST"
+                        id="daftar-form-{{ $lowongan->id }}">
+                        @csrf
+                        <input type="hidden" name="lowongan_id" value="{{ $lowongan->id }}">
+                        <button type="button"
+                            class="btn-daftar bg-blue-600 font-semibold text-white px-4 py-2 rounded-md hover:bg-blue-800 transition"
+                            data-id="{{ $lowongan->id }}">
+                            Daftar Sekarang
+                        </button>
+                    </form>
+                    <p class="text-sm text-gray-500 mt-2">{{ $lowongan->jumlah_magang }} Posisi •
+                        {{ $lowongan->pengajuan_count }} Pelamar</p>
+                @endif
             </div>
         </div>
 
@@ -66,20 +80,19 @@
                 <li class="me-2">
                     <button id="desc-tab" data-tabs-target="#desc" type="button" role="tab" aria-controls="desc"
                         aria-selected="true"
-                        class="inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
+                        class="cursor-pointer inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
                         Deskripsi
                     </button>
                 </li>
                 <li class="me-2">
                     <button id="company-tab" data-tabs-target="#company" type="button" role="tab"
                         aria-controls="company" aria-selected="false"
-                        class="inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
+                        class="cursor-pointer inline-block p-2 rounded-lg aria-selected:bg-blue-50 aria-selected:text-blue-600 aria-[selected=false]:bg-gray-100 aria-[selected=false]:text-gray-400">
                         Perusahaan
                     </button>
                 </li>
             </ul>
         </div>
-
 
         <hr class="mb-4 border-gray-200">
 
@@ -98,7 +111,9 @@
                             <h3 class="font-semibold  text-lg mb-1">Pendidikan</h3>
                             <p class="text-gray-500 mb-1">Jurusan: <span
                                     class="font-medium text-gray-950">{{ $lowongan->prodi->nama }}</span></p>
-                            <p class="text-gray-500">IPK Minimal: <span class="font-medium text-gray-950">3.0</span></p>
+                            <p class="text-gray-500">IPK Minimal: <span
+                                    class="font-medium text-gray-950">{{ $lowongan->ipk ?? 'Tidak ada IPK minimal' }}</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -113,17 +128,16 @@
                                 d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185" />
                         </svg>
                         <div>
-                            <h3 class="font-semibold text-gray-950  text-lg mb-1">Kemampuan Pendukung</h3>
-                            @if ($lowongan->skill->count() > 0)
+                            <h3 class="font-semibold text-gray-950 text-lg mb-1">Kemampuan Pendukung</h3>
+                            @if ($lowongan->skills->count() > 0)
                                 <ul class="list-disc list-inside font-medium text-[15px] text-gray-700 space-y-1 mt-2">
-                                    @foreach ($lowongan->skill as $skill)
+                                    @foreach ($lowongan->skills as $skill)
                                         <li>{{ $skill->nama }}</li>
                                     @endforeach
                                 </ul>
                             @else
                                 <p class="text-sm text-gray-400 italic">Belum ada kemampuan yang ditentukan.</p>
                             @endif
-
                         </div>
                     </div>
                 </div>
@@ -140,7 +154,6 @@
                         <div>
                             <h3 class="font-semibold text-blue-600 text-lg mb-1">Dokumen</h3>
                             <p class="font-medium text-gray-950">{{ $lowongan->persyaratan }}</p>
-
                         </div>
                     </div>
                 </div>
@@ -156,7 +169,6 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
-
                         <div>
                             <h3 class="font-semibold text-yellow-500  text-lg mb-1">Informasi Penting</h3>
                             <p class="text-gray-500 mb-1">Penutupan: <span
@@ -169,7 +181,6 @@
                     </div>
                 </div>
 
-
                 <!-- Rincian Lowongan -->
                 <div>
                     <h3 class="font-semibold text-lg mb-2">Rincian Lowongan</h3>
@@ -181,14 +192,13 @@
 
             <!-- Perusahaan -->
             <div id="company" class="hidden" role="tabpanel" aria-labelledby="company-tab">
-                <div class="  space-y-4">
+                <div class="space-y-4">
                     <h2 class="text-xl font-bold text-gray-900">Tentang Perusahaan</h2>
                     <!-- Deskripsi -->
                     <p class="text-gray-500 text-base">
                         Perusahaan teknologi terkemuka di Indonesia yang berfokus pada pengembangan software dan solusi
                         digital.
                     </p>
-
                     <!-- Info Tambahan -->
                     <div class="flex flex-col sm:flex-row sm:items-center gap-4 text-gray-600 text-sm">
                         <!-- Kategori -->
@@ -200,9 +210,8 @@
                                     stroke-width="2"
                                     d="M6 4h12M6 4v16M6 4H5m13 0v16m0-16h1m-1 16H6m12 0h1M6 20H5M9 7h1v1H9V7Zm5 0h1v1h-1V7Zm-5 4h1v1H9v-1Zm5 0h1v1h-1v-1Zm-3 4h2a1 1 0 0 1 1 1v4h-4v-4a1 1 0 0 1 1-1Z" />
                             </svg>
-                            <span>Cyber Security</span>
+                            <span>Website</span>
                         </div>
-
                         <!-- Link Website -->
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-gray-500 dark:text-white" aria-hidden="true"
@@ -212,16 +221,15 @@
                                     stroke-width="2"
                                     d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
                             </svg>
-
-                            <a href="https://KAIINDONESIA.co.id" target="_blank" class="text-blue-500 hover:underline">
-                                https://KAIINDONESIA.co.id
+                            <a href="{{ $lowongan->perusahaan->website }}" target="_blank"
+                                class="text-blue-500 hover:underline">
+                                {{ $lowongan->perusahaan->website }}
                             </a>
                         </div>
                     </div>
-
                     <!-- Tombol -->
-                    <a href="#"
-                        class="inline-flex items-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg mt-2">
+                    <a href="{{ $lowongan->perusahaan->website }}" target="_blank"
+                        class="inline-flex items-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 text-[12px] font-medium rounded-lg mt-2">
                         Lihat Profil Lengkap
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" stroke-width="3"
                             viewBox="0 0 24 24">
@@ -232,48 +240,83 @@
                 <hr class="mb-4 mt-4 border-gray-200">
 
                 <h2 class="text-xl font-bold text-gray-900 mb-4">Ulasan Pemagang</h2>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Farhan"
-                        class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Farhan Mawaludin</h3>
-                        <p class="text-sm text-gray-500">Internship KAI 2025 – IT Department</p>
-                        <p class="mt-2 text-gray-600 text-sm">senang dan alhamdulillah bisa berkembang dengan pengetahuan
-                            baru
-                            yang belum pernah saya dapatkan sebelumnya</p>
+                <p class="text-gray-500 text-sm mb-4">Berikan ulasan dan penilaian terhadap pengalaman magang Anda di
+                    perusahaan ini.</p>
+                @if ($review->isEmpty())
+                    <div class="flex items-center p-4 mb-4 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700"
+                        role="alert">
+                        <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <p class="font-medium">
+                                Belum ada ulasan untuk lowongan ini.
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Siti"
-                        class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Siti Markona</h3>
-                        <p class="text-sm text-gray-500">Internship KAI 2025 – IT Department</p>
-                        <p class="mt-2 text-gray-600 text-sm">senang dan alhamdulillah bisa berkembang dengan pengetahuan
-                            baru
-                            yang belum pernah saya dapatkan sebelumnya</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
-                    <img src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="Avatar Markova"
-                        class="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Markova</h3>
-                        <p class="text-sm text-gray-500">Internship KAI 2025 – IT Department</p>
-                        <p class="mt-2 text-gray-600 text-sm">senang dan alhamdulillah bisa berkembang dengan pengetahuan
-                            baru
-                            yang belum pernah saya dapatkan sebelumnya</p>
-                    </div>
-                </div>
-
-                <!-- Tombol -->
-                <div class="flex justify-center mt-6">
-                    <a href="#"
-                        class="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-                        Lihat Semua
-                    </a>
-                </div>
+                @else
+                    @foreach ($review as $item)
+                        <!-- Ulasan -->
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 mb-4 flex items-start space-x-4">
+                            @if ($item->mahasiswa->user->foto)
+                                <img class="w-10 h-10 rounded-full" src="{{ asset('storage/' . $item->mahasiswa->user->foto) }}"
+                                    alt="user photo">
+                            @else
+                                <img src="{{ asset('images/Profile.jpg') }}" alt="Foto Default"
+                                    class="w-10 h-10 rounded-full object-cover border border-gray-300">
+                            @endif
+                            <div>
+                                <h3 class="text-md font-semibold text-gray-900">{{ $item->mahasiswa->user->name }}</h3>
+                                <p class="text-sm text-gray-500">{{ $item->lowongan->nama }}</p>
+                                <p class="mt-2 text-gray-900 text-sm">{{ $item->mahasiswa_feedback }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.btn-daftar').forEach(button => {
+            button.addEventListener('click', function() {
+                const lowonganId = this.getAttribute('data-id');
+                const profilLengkap = @json($profilLengkap);
+
+                if (!profilLengkap) {
+                    Swal.fire({
+                        title: 'Profil Belum Lengkap',
+                        text: 'Silakan lengkapi profil Anda terlebih dahulu sebelum mendaftar.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Isi Sekarang',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ route('mahasiswa.profil.index') }}";
+                        }
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin ingin mendaftar?',
+                    text: 'Pastikan data Anda sudah benar.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Daftar',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('daftar-form-' + lowonganId).submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

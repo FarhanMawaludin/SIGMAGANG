@@ -81,11 +81,11 @@
                 @forelse ($jenismagang as $key => $item)
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $jenismagang->firstItem() + $key }}</td>
-                        <td class="px-6 py-4">{{ $item->jenis_magang }}</td>
+                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->jenis_magang }}</td>
                         <td class="px-6 py-4 space-x-2">
                             <!-- Edit -->
                             <a href="{{ route('jenismagang.edit', $item->id) }}"
-                                class="inline-flex items-center bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-700 text-sm cursor-pointer">
+                                class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-700 text-sm cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -99,7 +99,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="button"
-                                    class="inline-flex items-center bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 text-sm cursor-pointer btn-delete"
+                                    class="inline-flex items-center bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-700 text-sm cursor-pointer btn-delete"
                                     data-id="{{ $item->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">

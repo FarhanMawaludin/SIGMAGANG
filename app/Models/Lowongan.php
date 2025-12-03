@@ -27,6 +27,7 @@ class Lowongan extends Model
         'perusahaan_id',
         'periode_id',
         'prodi_id',
+        'jenis_magang_id'
     ];
 
     public function perusahaan(): BelongsTo
@@ -49,7 +50,7 @@ class Lowongan extends Model
         return $this->hasMany(DokumenLowongan::class);
     }
 
-    public function skill()
+    public function skills()
     {
         return $this->belongsToMany(Skill::class, 'lowongan_skill', 'lowongan_id', 'skill_id');
     }

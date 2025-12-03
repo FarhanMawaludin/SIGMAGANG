@@ -38,6 +38,7 @@ class AuthenticatedSessionController extends Controller
                 'user' => $user,
             ]);
         }
+
         session()->flash('auth_token', $token);
         if ($user->role == 'admin') {
             return redirect()->intended(route('dashboard'))->with('token', $token)->with('success', 'Login Berhasil');
@@ -46,7 +47,6 @@ class AuthenticatedSessionController extends Controller
         } elseif ($user->role == 'dosen_pembimbing') {
             return redirect()->intended(route('dashboard.dosen'))->with('token', $token)->with('success', 'Login Berhasil');
         }
-        return redirect()->intended(RouteServiceProvider::HOME)->with('token', $token)->with('success', 'Login Berhasil');
     }
 
     /**

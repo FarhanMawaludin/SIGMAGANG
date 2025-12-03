@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('criteria', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->enum('tipe', ['benefit', 'cost']);
-            $table->timestamps();
+        Schema::table('mahasiswa', function (Blueprint $table) {
+            $table->enum('tipe_magang', ['onsite', 'remote'])->default('onsite');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('criteria');
+        Schema::table('mahasiswa', function (Blueprint $table) {
+            $table->dropColumn('tipe_magang');
+        });
     }
 };

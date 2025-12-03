@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->intended(route('dashboard.mahasiswa'))->with('success', 'Login Berhasil');
     }
 }

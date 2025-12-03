@@ -84,7 +84,7 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
                                 @if ($userItem->foto)
-                                    <img src="{{ asset('images/logo/' . $userItem->foto) }}"
+                                    <img src="{{ asset('storage/' . $userItem->foto) }}"
                                         alt="Foto {{ $userItem->name }}"
                                         class="w-10 h-10 rounded-full object-cover shrink-0">
                                 @else
@@ -103,7 +103,7 @@
                         <td class="px-6 py-4 space-x-2">
                             <!-- Detail -->
                             <button
-                                class="inline-flex items-center bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm cursor-pointer" onclick="location.href='{{ route('admin.pengguna.show', $userItem->id) }}'">
+                                class="inline-flex items-center bg-blue-600 text-white  px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer" onclick="location.href='{{ route('admin.pengguna.show', $userItem->id) }}'">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -115,7 +115,7 @@
 
                             <!-- Edit -->
                             <a href="{{ route('admin.pengguna.edit', $userItem->id) }}"
-                                class="inline-flex items-center bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-700 text-sm cursor-pointer">
+                                class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -130,7 +130,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="button"
-                                    class="inline-flex items-center bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 text-sm cursor-pointer btn-delete"
+                                    class="inline-flex items-center  bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm cursor-pointer btn-delete"
                                     data-id="{{ $userItem->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">

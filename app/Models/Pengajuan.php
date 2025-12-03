@@ -11,12 +11,15 @@ class Pengajuan extends Model
 {
     use HasFactory;
     protected $table = 'pengajuan';
-    
+
     protected $fillable = [
         'mahasiswa_id',
         'lowongan_id',
         'status',
+        'kepuasan',
         'skor_spk',
+        'catatan_validasi',
+        'mahasiswa_feedback',
         'dosen_id'
     ];
 
@@ -25,13 +28,14 @@ class Pengajuan extends Model
         'skor_spk' => 'float'
     ];
 
-    public function mahasiswa(): BelongsTo
+    public function mahasiswa()
     {
-        return $this->belongsTo(Mahasiswa::class);
+        return $this->belongsTo(Mahasiswa::class, 'mahasiswa_id');
     }
+
     public function dosen(): BelongsTo
     {
-        return $this->belongsTo(DosenPembimbing::class);
+        return $this->belongsTo(DosenPembimbing::class, 'dosen_id');
     }
 
     public function lowongan(): BelongsTo
@@ -72,5 +76,9 @@ class Pengajuan extends Model
     public function scopeForLowongan($query, $lowonganId)
     {
         return $query->where('lowongan_id', $lowonganId);
+    }
+
+    public function logMingguan() {
+        return $this->hasMany(LogMingguan::class);
     }
 }

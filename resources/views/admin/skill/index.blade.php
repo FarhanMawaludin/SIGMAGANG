@@ -47,7 +47,7 @@
                 <div class="relative w-full">
                     <input type="search" id="search-dropdown" name="search"
                         class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                        placeholder="Cari Jenis Magang..." value="{{ $search ?? '' }}" />
+                        placeholder="Cari skill..." value="{{ $search ?? '' }}" />
                     <button type="submit"
                         class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -80,11 +80,11 @@
                 @forelse ($skill as $key => $item)
                     <tr class="bg-white border-b border-gray-200">
                         <td class="px-6 py-4">{{ $skill->firstItem() + $key }}</td>
-                        <td class="px-6 py-4">{{ $item->nama }}</td>
+                        <td class="font-medium md:text-base break-words truncate md:whitespace-normal px-6 py-4">{{ $item->nama }}</td>
                         <td class="px-6 py-4 space-x-2">
                             <!-- Edit -->
                             <a href="{{ route('skill.edit', $item->id) }}"
-                                class="inline-flex items-center bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-700 text-sm cursor-pointer">
+                                class="inline-flex items-center bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-700 text-sm cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -98,7 +98,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="button"
-                                    class="inline-flex items-center bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 text-sm cursor-pointer btn-delete"
+                                    class="inline-flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm cursor-pointer btn-delete"
                                     data-id="{{ $item->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">

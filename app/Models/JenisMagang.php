@@ -18,4 +18,7 @@ class JenisMagang extends Model
     public function lowongan() {
         return $this->hasmany(Lowongan::class);
     }
+    public function dosenPembimbing() {
+        return $this->hasmany(DosenPembimbing::class);
+    }
 }

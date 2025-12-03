@@ -12,25 +12,25 @@ class DosenPembimbingSkillSeeder extends Seeder
      */
     public function run(): void
     {
-        // DB::table('dosen_pembimbing_skill')->insert([
-        //     [
-        //         'dosen_pembimbing_id' => 1,
-        //         'skill_id' => 1,
-        //         'created_at' => now(),
-        //         'updated_at' => now()
-        //     ],
-        //     [
-        //         'dosen_pembimbing_id' => 1,
-        //         'skill_id' => 2,
-        //         'created_at' => now(),
-        //         'updated_at' => now()
-        //     ],
-        //     [
-        //         'dosen_pembimbing_id' => 2,
-        //         'skill_id' => 3,
-        //         'created_at' => now(),
-        //         'updated_at' => now()
-        //     ],
-        // ]);
+        DB::table('dosen_pembimbing_skill')->insert([
+            [
+                'dosen_pembimbing_id' => 1,
+                'skill_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'dosen_pembimbing_id' => 1,
+                'skill_id' => 2,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'dosen_pembimbing_id' => 1,
+                'skill_id' => 3,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+        ]);
     }
 }
