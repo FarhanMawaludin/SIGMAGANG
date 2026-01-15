@@ -11,10 +11,56 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+<<<<<<< Updated upstream
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+=======
+    <!-- Scripts -->
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script> --}}
+
+    <!-- Flowbite CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
+    {{-- Tailwind --}}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+
+    <!-- Flowbite JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    {{-- <!-- Vite Assets (Simulated) -->
+    <link href="/dist/app.css" rel="stylesheet" />
+    <script src="/dist/app.js"></script> --}}
+</head>
+
+<body>
+    {{-- Navigation --}}
+    @include('layouts.navigation')
+
+    {{-- Sidebar --}}
+    @include('layouts.sidebar')
+
+
+    {{-- <!-- Content --> --}}
+    <div class="p-4 sm:ml-64">
+        <div class="p-4 mt-14">
+            @yield('content')
+        </div>
+    </div>
+
+    @stack('scripts')
+    <x-alert />
+</body>
+{{-- <body class="font-sans antialiased">
+>>>>>>> Stashed changes
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 

@@ -128,6 +128,52 @@
                     </div>
                 </div>
             </div>
+<<<<<<< Updated upstream
         </div>
     </body>
 </html>
+=======
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-gray-500 py-6 border-t mt-16">
+        © 2025 Sigmagang. Semua hak dilindungi.
+    </footer>
+
+    <script>
+        const links = document.querySelectorAll('#menu a');
+
+        links.forEach(link => {
+            link.addEventListener('click', function() {
+                // Reset semua ke style nonaktif
+                links.forEach(l => {
+                    l.classList.remove('text-blue-600', 'md:text-blue-600',
+                    'md:dark:text-blue-500');
+                    l.classList.add('text-gray-400');
+                });
+
+                // Tambah class aktif ke yang diklik
+                this.classList.add('text-blue-600', 'md:text-blue-600', 'md:dark:text-blue-500');
+                this.classList.remove('text-gray-400');
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            offset: 100,
+            once: false // agar animasi bisa muncul lagi saat discroll naik turun
+        });
+    </script>
+
+
+
+</body>
+
+</html>
+>>>>>>> Stashed changes
